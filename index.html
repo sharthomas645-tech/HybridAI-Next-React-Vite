@@ -246,10 +246,11 @@ grad.addColorStop(0.5, this.colors[1]);
 grad.addColorStop(1, this.colors[2]);
 
 ctx.beginPath();
-ctx.moveTo(0,this.baseY);
 for(let x=0; x<=width; x+=2){
-let y = this.baseY + Math.sin((x + this.offsetX)*0.01 + time*this.speed + this.offset) * this.amplitude;
-ctx.lineTo(x,y);
+let y = this.baseY + Math.sin((x*0.015 + time*this.speed + this.offset)) * this.amplitude +
+Math.sin((x*0.03 + time*this.speed*0.7)) * this.amplitude*0.3;
+if(x===0) ctx.moveTo(x,y);
+else ctx.lineTo(x,y);
 }
 ctx.lineTo(width,height);
 ctx.lineTo(0,height);
@@ -268,13 +269,13 @@ setTimeout(()=>{this.amplitude = this.baseAmplitude;}, 300);
 }
 }
 
-// Vibrant ribbons array
+// Overlapping ribbons, tighter and more purple
 const ribbons = [
-new Ribbon(["rgba(153,102,255,0.5)","rgba(102,204,255,0.4)","rgba(102,255,204,0.35)"], height*0.2, 50, 0.00045, 0),
-new Ribbon(["rgba(204,153,255,0.48)","rgba(102,178,255,0.42)","rgba(51,255,204,0.37)"], height*0.35, 60, 0.00025, 200),
-new Ribbon(["rgba(178,102,255,0.46)","rgba(102,153,255,0.4)","rgba(0,255,255,0.35)"], height*0.5, 55, 0.00035, 500),
-new Ribbon(["rgba(153,102,204,0.44)","rgba(102,102,255,0.38)","rgba(51,255,255,0.33)"], height*0.65, 70, 0.0005, 800),
-new Ribbon(["rgba(102,153,255,0.42)","rgba(51,204,255,0.36)","rgba(102,255,204,0.31)"], height*0.8, 60, 0.0004, 1000)
+new Ribbon(["rgba(178,102,255,0.55)","rgba(153,102,255,0.5)","rgba(102,204,255,0.35)"], height*0.25, 35, 0.00045, 0),
+new Ribbon(["rgba(204,153,255,0.5)","rgba(178,102,255,0.45)","rgba(51,255,204,0.32)"], height*0.35, 40, 0.00025, 200),
+new Ribbon(["rgba(153,102,255,0.48)","rgba(102,153,255,0.4)","rgba(0,255,255,0.3)"], height*0.45, 38, 0.00035, 500),
+new Ribbon(["rgba(153,102,204,0.45)","rgba(102,102,255,0.38)","rgba(51,255,255,0.3)"], height*0.55, 42, 0.0005, 800),
+new Ribbon(["rgba(102,102,255,0.42)","rgba(51,153,255,0.36)","rgba(102,255,204,0.28)"], height*0.65, 40, 0.0004, 1000)
 ];
 
 function animate(time=0){
@@ -288,8 +289,8 @@ window.addEventListener('resize',()=>{
 width = canvas.width = window.innerWidth;
 height = canvas.height = window.innerHeight;
 ribbons.forEach((r,i)=>{
-r.baseY = height*0.2 + i*height*0.15;
-r.amplitude = (height/20)+i*5;
+r.baseY = height*0.2 + i*height*0.1;
+r.amplitude = 35 + i*3;
 r.offsetX = i*300;
 });
 });
@@ -315,7 +316,7 @@ export:"ExportCaseChronologyAPI"
 // ---------- File Upload ----------
 const fileInput=document.getElementById('fileInput');
 const oceanSound=document.getElementById('oceanSound');
-oceanSound.volume=0.35; // louder ocean
+oceanSound.volume=0.35;
 
 fileInput.addEventListener('change',async(event)=>{
 const file=event.target.files[0];
@@ -332,7 +333,6 @@ alert(`PDF uploaded: ${file.name}`);
 ribbons.forEach(r=>r.pulse());
 pulseSubtitle();
 oceanSound.volume=0.45; setTimeout(()=>oceanSound.volume=0.35,500);
-
 if(result.highRiskCount!==undefined){
 document.getElementById('highRisk').innerText=result.highRiskCount;
 }
@@ -351,7 +351,6 @@ alert("Chronology built successfully!");
 ribbons.forEach(r=>r.pulse());
 pulseSubtitle();
 oceanSound.volume=0.45; setTimeout(()=>oceanSound.volume=0.35,500);
-
 if(result.highRiskCount!==undefined){
 document.getElementById('highRisk').innerText=result.highRiskCount;
 }
@@ -370,7 +369,6 @@ alert("RN Review request sent!");
 ribbons.forEach(r=>r.pulse());
 pulseSubtitle();
 oceanSound.volume=0.45; setTimeout(()=>oceanSound.volume=0.35,500);
-
 if(result.highRiskCount!==undefined){
 document.getElementById('highRisk').innerText=result.highRiskCount;
 }
