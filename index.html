@@ -2,134 +2,141 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>HybridAI</title>
-
+<title>HybridAI – Chronology Builder & Analyzer</title>
 <style>
 
+/* ---------------- Body ---------------- */
 body{
 margin:0;
-font-family: "Segoe UI", system-ui;
+font-family:"Segoe UI", system-ui, sans-serif;
 background:#040915;
 color:white;
 overflow-x:hidden;
 }
 
-/* -------- Aurora Background -------- */
-
-.aurora-background{
+/* ---------------- Aurora ---------------- */
+.aurora-sky{
 position:fixed;
 top:0;
 left:0;
 width:100%;
 height:100%;
-z-index:-1;
 overflow:hidden;
+z-index:-1;
+background:#040915;
 }
 
-.aurora{
+.aurora-layer{
 position:absolute;
-width:160%;
-height:160%;
-filter:blur(120px);
+width:200%;
+height:200%;
+filter:blur(80px);
 opacity:.45;
 mix-blend-mode:screen;
 }
 
-.aurora1{
-background:radial-gradient(circle at 40% 40%, #7A5FFF, transparent 60%);
-animation:flow1 80s ease-in-out infinite alternate;
+.aurora-purple{
+background:linear-gradient(120deg, transparent 20%, #7A5FFF 40%, transparent 60%);
+animation:auroraMove1 70s ease-in-out infinite alternate;
 }
 
-.aurora2{
-background:radial-gradient(circle at 60% 60%, #3AA6FF, transparent 60%);
-animation:flow2 100s ease-in-out infinite alternate;
+.aurora-blue{
+background:linear-gradient(140deg, transparent 25%, #3AA6FF 50%, transparent 70%);
+animation:auroraMove2 90s ease-in-out infinite alternate;
 }
 
-.aurora3{
-background:radial-gradient(circle at 50% 20%, #3DFFB3, transparent 60%);
-animation:flow3 120s ease-in-out infinite alternate;
+.aurora-green{
+background:linear-gradient(160deg, transparent 30%, #3DFFB3 55%, transparent 75%);
+animation:auroraMove3 110s ease-in-out infinite alternate;
 }
 
-@keyframes flow1{
-0%{transform:translate(-10%,-10%) scale(1);}
-50%{transform:translate(5%,10%) scale(1.2);}
-100%{transform:translate(-5%,5%) scale(1.1);}
+@keyframes auroraMove1{
+0%{transform:translate(-20%,-10%) rotate(-5deg);}
+50%{transform:translate(10%,5%) rotate(5deg);}
+100%{transform:translate(-10%,10%) rotate(-3deg);}
 }
 
-@keyframes flow2{
-0%{transform:translate(10%,-5%) scale(1.1);}
-50%{transform:translate(-10%,10%) scale(1.3);}
-100%{transform:translate(5%,-10%) scale(1.2);}
+@keyframes auroraMove2{
+0%{transform:translate(10%,-15%) rotate(6deg);}
+50%{transform:translate(-15%,5%) rotate(-6deg);}
+100%{transform:translate(5%,10%) rotate(4deg);}
 }
 
-@keyframes flow3{
-0%{transform:translate(-5%,5%) scale(1.2);}
-50%{transform:translate(10%,-10%) scale(1.4);}
-100%{transform:translate(-10%,10%) scale(1.3);}
+@keyframes auroraMove3{
+0%{transform:translate(-10%,10%) rotate(-4deg);}
+50%{transform:translate(15%,-10%) rotate(6deg);}
+100%{transform:translate(-5%,5%) rotate(-5deg);}
 }
 
-/* -------- Layout -------- */
-
+/* ---------------- Layout ---------------- */
 .container{
 padding:40px;
 text-align:center;
+max-width:1200px;
+margin:auto;
 }
 
+/* ---------------- Header ---------------- */
 .title{
-font-size:40px;
-font-weight:600;
+font-size:44px;
+font-weight:700;
 letter-spacing:1px;
 }
 
 .subtitle{
-opacity:.8;
-margin-bottom:40px;
+font-size:18px;
+opacity:.75;
+margin-bottom:50px;
 }
 
-/* -------- Buttons -------- */
-
+/* ---------------- Buttons ---------------- */
 .actions{
 display:flex;
 justify-content:center;
 gap:20px;
 flex-wrap:wrap;
-margin-bottom:40px;
+margin-bottom:50px;
 }
 
 button{
-padding:14px 24px;
-border-radius:14px;
+padding:16px 28px;
+border-radius:16px;
 border:1px solid rgba(255,255,255,.2);
 background:rgba(255,255,255,.08);
 backdrop-filter:blur(10px);
 color:white;
-font-size:15px;
+font-size:16px;
 cursor:pointer;
-transition:.25s;
+transition:.3s;
 }
 
 button:hover{
 transform:translateY(-4px);
-box-shadow:0 0 20px rgba(122,95,255,.5);
+box-shadow:0 0 25px rgba(122,95,255,.6);
 }
 
-/* -------- Cards -------- */
-
+/* ---------------- Cards ---------------- */
 .cards{
 display:flex;
 justify-content:center;
-gap:25px;
+gap:30px;
 flex-wrap:wrap;
-margin-bottom:40px;
+margin-bottom:50px;
 }
 
 .card{
 width:220px;
-padding:22px;
-border-radius:16px;
+padding:26px;
+border-radius:18px;
 background:rgba(255,255,255,.06);
 border:1px solid rgba(255,255,255,.15);
 backdrop-filter:blur(12px);
+transition:.3s;
+}
+
+.card:hover{
+transform:scale(1.05);
+box-shadow:0 0 25px rgba(61,255,179,.3);
 }
 
 .card h3{
@@ -139,36 +146,38 @@ opacity:.7;
 }
 
 .value{
-font-size:30px;
-margin-top:8px;
+font-size:32px;
+margin-top:10px;
+font-weight:600;
 }
 
-/* -------- Upload -------- */
-
+/* ---------------- Upload ---------------- */
 .upload{
 margin:auto;
-width:520px;
+width:540px;
 max-width:90%;
-padding:30px;
-border-radius:16px;
+padding:32px;
+border-radius:18px;
 border:2px dashed rgba(255,255,255,.2);
 background:rgba(255,255,255,.05);
 cursor:pointer;
-margin-bottom:40px;
+margin-bottom:50px;
+transition:.3s;
+font-size:16px;
 }
 
 .upload:hover{
 border-color:#7A5FFF;
+background:rgba(255,255,255,.06);
 }
 
-/* -------- Workspace -------- */
-
+/* ---------------- Workspace ---------------- */
 .workspace{
-width:800px;
+width:850px;
 max-width:95%;
 margin:auto;
-padding:30px;
-border-radius:18px;
+padding:32px;
+border-radius:20px;
 background:rgba(255,255,255,.05);
 border:1px solid rgba(255,255,255,.12);
 backdrop-filter:blur(14px);
@@ -181,24 +190,24 @@ font-weight:500;
 }
 
 .log{
-margin-top:15px;
-height:150px;
+margin-top:18px;
+height:180px;
 overflow:auto;
 font-size:14px;
 background:rgba(0,0,0,.4);
 padding:15px;
-border-radius:10px;
+border-radius:12px;
 }
 
 </style>
 </head>
-
 <body>
 
-<div class="aurora-background">
-<div class="aurora aurora1"></div>
-<div class="aurora aurora2"></div>
-<div class="aurora aurora3"></div>
+<!-- Aurora Background -->
+<div class="aurora-sky">
+<div class="aurora-layer aurora-purple"></div>
+<div class="aurora-layer aurora-blue"></div>
+<div class="aurora-layer aurora-green"></div>
 </div>
 
 <div class="container">
@@ -206,130 +215,18 @@ border-radius:10px;
 <div class="title">HybridAI</div>
 <div class="subtitle">Chronology Builder & Analyzer</div>
 
+<!-- Action Buttons -->
 <div class="actions">
-
 <button onclick="buildChronology()">Build Chronology</button>
 <button onclick="rnReview()">Request RN Review</button>
 <button onclick="exportCase()">Ready for Export</button>
-
 </div>
 
+<!-- Status Cards -->
 <div class="cards">
-
 <div class="card">
 <h3>Case Status</h3>
 <div id="status" class="value">Idle</div>
 </div>
-
 <div class="card">
-<h3>High Risk Items</h3>
-<div id="risk" class="value">0</div>
-</div>
-
-<div class="card">
-<h3>Cases Uploaded</h3>
-<div id="cases" class="value">0</div>
-</div>
-
-</div>
-
-<div class="upload" onclick="uploadFiles()">
-Drag & Drop or Click to Upload Medical Records
-<input type="file" id="fileInput" multiple accept=".pdf" hidden>
-</div>
-
-<div class="workspace">
-
-<h2>Chronology Builder Workspace</h2>
-
-<div class="log" id="log">
-HybridAI system ready...
-</div>
-
-</div>
-
-</div>
-
-<script>
-
-let caseCount=0
-let risks=0
-
-function log(msg){
-let box=document.getElementById("log")
-box.innerHTML += "<br>"+msg
-box.scrollTop=box.scrollHeight
-}
-
-function uploadFiles(){
-document.getElementById("fileInput").click()
-}
-
-document.getElementById("fileInput").addEventListener("change",e=>{
-
-let files=e.target.files
-caseCount += files.length
-
-document.getElementById("cases").innerText=caseCount
-document.getElementById("status").innerText="Records Uploaded"
-
-log(files.length+" records uploaded")
-
-})
-
-function buildChronology(){
-
-if(caseCount===0){
-log("Upload records first")
-return
-}
-
-document.getElementById("status").innerText="Analyzing"
-
-log("HybridAI analyzing records...")
-
-setTimeout(()=>{
-
-risks=Math.floor(Math.random()*5)
-
-document.getElementById("risk").innerText=risks
-document.getElementById("status").innerText="Chronology Built"
-
-log("Chronology analysis complete")
-
-if(risks>0){
-log(risks+" potential risk items detected")
-}
-
-},2500)
-
-}
-
-function rnReview(){
-
-document.getElementById("status").innerText="RN Review Requested"
-
-log("Case sent to RN review")
-
-}
-
-function exportCase(){
-
-document.getElementById("status").innerText="Exporting"
-
-log("Preparing export package")
-
-setTimeout(()=>{
-
-document.getElementById("status").innerText="Ready"
-
-log("Export complete")
-
-},2000)
-
-}
-
-</script>
-
-</body>
-</html>
+<
