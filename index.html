@@ -7,15 +7,17 @@ body{
 margin:0;
 font-family:"Segoe UI",sans-serif;
 overflow:hidden;
-background:#020617;
+background:#020617; /* Black background */
 color:white;
 }
+
+/* Aurora Canvas */
 #auroraCanvas {
 position:fixed;
 top:0;
 left:0;
-width:100%;
-height:100%;
+width:100vw;
+height:100vh;
 z-index:-1;
 }
 
@@ -36,25 +38,39 @@ text-shadow: 0 0 35px rgba(100,160,255,0.9);
 animation: logoGradient 15s ease infinite;
 }
 
-.header{
-text-align:center;
-padding-top:40px;
+/* Animated Subtitle with pulse class */
+@keyframes subtitleGradient {
+0% { background-position: 0% 50%; }
+50% { background-position: 100% 50%; }
+100% { background-position: 0% 50%; }
 }
 .subtitle{
 font-size:24px;
 opacity:.85;
 margin-top:10px;
+background: linear-gradient(270deg,#4361ee,#7209b7,#4cc9f0,#00ff99);
+background-size: 800% 800%;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+animation: subtitleGradient 25s ease infinite;
+transition: transform 0.3s ease, text-shadow 0.3s ease;
+}
+.subtitle.pulse{
+transform: scale(1.1);
+text-shadow: 0 0 20px rgba(255,255,255,0.9);
 }
 
 /* Panel */
 .panel{
 max-width:1100px;
 margin:40px auto;
-background:rgba(255,255,255,.08);
+background:rgba(255,255,255,.08); /* semi-transparent to see aurora */
 padding:40px;
 border-radius:20px;
 backdrop-filter:blur(12px);
 box-shadow:0 15px 50px rgba(0,0,0,.6);
+position: relative;
+z-index:1;
 }
 
 /* Buttons */
@@ -90,13 +106,14 @@ grid-template-columns:1fr 1fr 1fr;
 gap:20px;
 }
 .card{
-background:rgba(255,255,255,.08);
+background: rgba(255,255,255,.08); /* transparent to show aurora */
 padding:30px;
 border-radius:15px;
 backdrop-filter:blur(12px);
 box-shadow:0 0 35px rgba(76,201,240,0.45);
 text-align:center;
 transition:0.3s;
+z-index:1;
 }
 .card h3{
 font-size:24px;
@@ -148,12 +165,11 @@ margin-top:8px;
 
 <audio id="oceanSound" autoplay loop>
 <source src="soft_ocean_waves.mp3" type="audio/mpeg">
-Your browser does not support the audio element.
 </audio>
 
 <div class="header">
 <div class="logoText">HybridAI</div>
-<div class="subtitle">Medical Chronology Builder & Analyzer</div>
+<div class="subtitle" id="subtitleText">Medical Chronology Builder & Analyzer</div>
 </div>
 
 <div class="panel">
@@ -220,9 +236,14 @@ pulse(strength=15){
 this.amplitude=this.baseAmplitude+strength;
 setTimeout(()=>{this.amplitude=this.baseAmplitude;},300);
 }
+shiftHue(amount){
+this.color=this.color.replace(/rgba\((\d+),(\d+),(\d+),([0-9.]+)\)/, (m,r,g,b,a)=>{
+r=(parseInt(r)+amount)%256; g=(parseInt(g)+amount)%256; b=(parseInt(b)+amount)%256;
+return `rgba(${r},${g},${b},${a})`;
+});
+}
 }
 
-// Ribbons spaced apart and flowing at different speeds
 const ribbons=[
 new Ribbon("rgba(114,9,183,0.4)",50,0.00045,0),
 new Ribbon("rgba(67,97,238,0.38)",60,0.00025,300),
@@ -237,13 +258,24 @@ requestAnimationFrame(animate);
 }
 animate();
 
-window.addEventListener('resize', ()=>{ width=canvas.width=window.innerWidth; height=canvas.height=window.innerHeight; });
+window.addEventListener('resize', ()=>{
+width=canvas.width=window.innerWidth;
+height=canvas.height=window.innerHeight;
+ribbons.forEach((r,i) => { r.amplitude = (height/20)+i*5; r.offsetX = i*300; });
+});
 
 // ---------- Case Status ----------
 let uploadedCases=5;
 const statusSpans=document.querySelectorAll('.status span');
 let currentStatusIndex=0;
 function updateStatus(index){ statusSpans.forEach((span,i)=>span.classList.toggle('active',i===index)); }
+
+// ---------- Subtitle Pulse ----------
+const subtitle=document.getElementById('subtitleText');
+function pulseSubtitle(){
+subtitle.classList.add('pulse');
+setTimeout(()=>subtitle.classList.remove('pulse'),300);
+}
 
 // ---------- API Endpoints ----------
 const apiEndpoints={
@@ -271,6 +303,8 @@ uploadedCases++; document.getElementById('casesUploaded').innerText=uploadedCase
 currentStatusIndex=0; updateStatus(currentStatusIndex);
 alert(`PDF uploaded: ${file.name}`);
 ribbons.forEach(r=>r.pulse());
+ribbons.forEach(r=>r.shiftHue(20)); // hue shift effect
+pulseSubtitle(); // pulse subtitle
 oceanSound.volume=0.25; setTimeout(()=>oceanSound.volume=0.15,500);
 updateHighRiskAlerts();
 } else { alert(`Upload failed: ${result.message}`); }
@@ -286,6 +320,8 @@ const result=await response.json();
 if(result.success){
 alert("Chronology built successfully!");
 ribbons.forEach(r=>r.pulse());
+ribbons.forEach(r=>r.shiftHue(15));
+pulseSubtitle();
 oceanSound.volume=0.25; setTimeout(()=>oceanSound.volume=0.15,500);
 updateHighRiskAlerts();
 } else { alert("Error: "+result.message); }
@@ -301,6 +337,8 @@ const result=await response.json();
 if(result.success){
 alert("RN Review request sent!");
 ribbons.forEach(r=>r.pulse());
+ribbons.forEach(r=>r.shiftHue(10));
+pulseSubtitle();
 oceanSound.volume=0.25; setTimeout(()=>oceanSound.volume=0.15,500);
 } else { alert("Error: "+result.message); }
 } catch(err){ console.error(err); alert("Error calling API."); }
@@ -316,6 +354,8 @@ const url=window.URL.createObjectURL(blob);
 const a=document.createElement("a"); a.href=url; a.download="exported_files.zip";
 document.body.appendChild(a); a.click(); a.remove();
 ribbons.forEach(r=>r.pulse());
+ribbons.forEach(r=>r.shiftHue(25));
+pulseSubtitle();
 oceanSound.volume=0.25; setTimeout(()=>oceanSound.volume=0.15,500);
 } catch(err){ console.error(err); alert("Error exporting files."); }
 }
