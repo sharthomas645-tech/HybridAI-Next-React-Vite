@@ -7,7 +7,7 @@ body{
 margin:0;
 font-family:"Segoe UI",sans-serif;
 overflow:hidden;
-background:#020617; /* Black background */
+background:#020617;
 color:white;
 }
 
@@ -21,7 +21,7 @@ height:100vh;
 z-index:-1;
 }
 
-/* Animated HybridAI Logo */
+/* Animated Logo */
 @keyframes logoGradient {
 0% { background-position: 0% 50%; }
 50% { background-position: 100% 50%; }
@@ -40,8 +40,13 @@ text-shadow: 0 0 35px rgba(100,160,255,0.9);
 animation: logoGradient 15s ease infinite;
 }
 
-/* Animated Subtitle */
-@keyframes subtitleGradient {
+/* Subtitle Lines */
+@keyframes subtitleGradient1 {
+0% { background-position: 0% 50%; }
+50% { background-position: 100% 50%; }
+100% { background-position: 0% 50%; }
+}
+@keyframes subtitleGradient2 {
 0% { background-position: 0% 50%; }
 50% { background-position: 100% 50%; }
 100% { background-position: 0% 50%; }
@@ -49,15 +54,24 @@ animation: logoGradient 15s ease infinite;
 .subtitle{
 font-size:24px;
 opacity:.85;
-margin-top:10px;
 text-align:center;
 display:block;
+margin-top:10px;
+}
+.subtitle.main{
 background: linear-gradient(270deg,#4361ee,#7209b7,#4cc9f0,#00ff99);
 background-size: 800% 800%;
 -webkit-background-clip: text;
 -webkit-text-fill-color: transparent;
-animation: subtitleGradient 25s ease infinite;
-transition: transform 0.3s ease, text-shadow 0.3s ease;
+animation: subtitleGradient1 25s ease infinite;
+}
+.subtitle.quote{
+font-size:22px;
+background: linear-gradient(270deg,#7209b7,#4cc9f0,#00ff99,#4361ee);
+background-size: 800% 800%;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+animation: subtitleGradient2 30s ease infinite;
 }
 .subtitle.pulse{
 transform: scale(1.1);
@@ -68,7 +82,7 @@ text-shadow: 0 0 20px rgba(255,255,255,0.9);
 .panel{
 max-width:1100px;
 margin:40px auto;
-background:rgba(255,255,255,.08); /* semi-transparent to see aurora */
+background:rgba(255,255,255,.08);
 padding:40px;
 border-radius:20px;
 backdrop-filter:blur(12px);
@@ -110,7 +124,7 @@ grid-template-columns:1fr 1fr 1fr;
 gap:20px;
 }
 .card{
-background: rgba(255,255,255,.08); /* transparent to show aurora */
+background: rgba(255,255,255,.08);
 padding:30px;
 border-radius:15px;
 backdrop-filter:blur(12px);
@@ -151,11 +165,11 @@ margin-top:10px;
 color:#dbe9ff;
 text-shadow:0 0 15px rgba(120,150,255,0.4);
 }
-/* Highlight Needs Attention in soft yellow */
+/* Needs Attention soft yellow */
 .subtext{
 font-size:20px;
 font-weight:600;
-color:#f4e285; /* soft yellow */
+color:#f4e285;
 text-shadow:0 0 12px rgba(255,255,150,0.7);
 margin-top:8px;
 }
@@ -173,7 +187,8 @@ margin-top:8px;
 
 <div class="header">
 <div class="logoText">HybridAI</div>
-<div class="subtitle" id="subtitleText">Medical Chronology Builder & Analyzer – We Make It Make Sense</div>
+<div class="subtitle main" id="subtitleText">Medical Chronology Builder & Analyzer</div>
+<div class="subtitle quote">“We Make It Make Sense”</div>
 </div>
 
 <div class="panel">
@@ -286,8 +301,7 @@ const apiEndpoints={
 upload:"AttorneyUploadAPI",
 buildChron:"BuildChronologyAPI",
 rn:"RNVerificationRequestAPI",
-export:"ExportCaseChronologyAPI",
-highRiskCount:"/api/highRiskCount"
+export:"ExportCaseChronologyAPI"
 };
 
 // ---------- File Upload ----------
@@ -303,14 +317,19 @@ const formData=new FormData(); formData.append("pdf",file);
 const response=await fetch(apiEndpoints.upload,{method:"POST",body:formData});
 const result=await response.json();
 if(result.success){
-uploadedCases++; document.getElementById('casesUploaded').innerText=uploadedCases;
+uploadedCases++;
+document.getElementById('casesUploaded').innerText=uploadedCases;
 currentStatusIndex=0; updateStatus(currentStatusIndex);
 alert(`PDF uploaded: ${file.name}`);
 ribbons.forEach(r=>r.pulse());
-ribbons.forEach(r=>r.shiftHue(20)); // hue shift effect
-pulseSubtitle(); // pulse subtitle
+ribbons.forEach(r=>r.shiftHue(20));
+pulseSubtitle();
 oceanSound.volume=0.25; setTimeout(()=>oceanSound.volume=0.15,500);
-updateHighRiskAlerts();
+
+// Update High-Risk Alerts from API response
+if(result.highRiskCount!==undefined){
+document.getElementById('highRisk').innerText=result.highRiskCount;
+}
 } else { alert(`Upload failed: ${result.message}`); }
 } catch(err){ console.error(err); alert("Error uploading PDF."); }
 });
@@ -327,7 +346,10 @@ ribbons.forEach(r=>r.pulse());
 ribbons.forEach(r=>r.shiftHue(15));
 pulseSubtitle();
 oceanSound.volume=0.25; setTimeout(()=>oceanSound.volume=0.15,500);
-updateHighRiskAlerts();
+
+if(result.highRiskCount!==undefined){
+document.getElementById('highRisk').innerText=result.highRiskCount;
+}
 } else { alert("Error: "+result.message); }
 } catch(err){ console.error(err); alert("Error calling API."); }
 }
@@ -344,6 +366,10 @@ ribbons.forEach(r=>r.pulse());
 ribbons.forEach(r=>r.shiftHue(10));
 pulseSubtitle();
 oceanSound.volume=0.25; setTimeout(()=>oceanSound.volume=0.15,500);
+
+if(result.highRiskCount!==undefined){
+document.getElementById('highRisk').innerText=result.highRiskCount;
+}
 } else { alert("Error: "+result.message); }
 } catch(err){ console.error(err); alert("Error calling API."); }
 }
@@ -364,23 +390,11 @@ oceanSound.volume=0.25; setTimeout(()=>oceanSound.volume=0.15,500);
 } catch(err){ console.error(err); alert("Error exporting files."); }
 }
 
-// ---------- High-Risk Alerts ----------
-async function updateHighRiskAlerts(){
-try{
-const response=await fetch(apiEndpoints.highRiskCount);
-const result=await response.json();
-if(result.success) document.getElementById('highRisk').innerText=result.count;
-else console.error("Failed fetching High-Risk Alerts:",result.message);
-} catch(err){ console.error("Error fetching High-Risk Alerts:",err); }
-}
-updateHighRiskAlerts();
-
 // ---------- Button Hooks ----------
 document.getElementById('uploadBtn').addEventListener('click',()=>fileInput.click());
 document.getElementById('buildChronBtn').addEventListener('click',callBuildChronology);
 document.getElementById('rnReviewBtn').addEventListener('click',callRNReview);
 document.getElementById('exportBtn').addEventListener('click',callExport);
 </script>
-
 </body>
 </html>
