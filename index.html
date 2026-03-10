@@ -172,6 +172,7 @@ margin-top:8px;
 </head>
 <body>
 
+<!-- Hidden file input -->
 <input type="file" id="fileInput" accept=".pdf" style="display:none">
 
 <canvas id="auroraCanvas"></canvas>
@@ -188,7 +189,7 @@ margin-top:8px;
 
 <div class="panel">
 <div class="button-row">
-<button id="uploadBtn">Upload PDF</button>
+<button id="uploadBtn">Click to Upload PDF</button>
 <button id="buildChronBtn">Build Chronology</button>
 <button id="rnReviewBtn">RN Review Request</button>
 <button id="exportBtn">Export Files</button>
@@ -330,22 +331,42 @@ const fileInput=document.getElementById('fileInput');
 fileInput.addEventListener('change',async(event)=>{
 const file = event.target.files[0];
 if(!file) return;
+
 try{
-const formData = new FormData(); formData.append("pdf",file);
-const response = await fetch(apiEndpoints.upload,{method:"POST",body:formData});
+const arrayBuffer = await file.arrayBuffer();
+const base64 = btoa(new Uint8Array(arrayBuffer).reduce((data,byte)=>data+String.fromCharCode(byte),""));
+
+const payload={
+firmId:"a1",
+caseId:"b1",
+fileName:file.name,
+content:base64
+};
+
+const response = await fetch(apiEndpoints.upload,{
+method:"PUT",
+headers:{ "Content-Type":"application/json" },
+body:JSON.stringify(payload)
+});
+
 const result = await response.json();
-if(result.success){
+
+if(result.ok){
 uploadedCases++;
 document.getElementById('casesUploaded').innerText=uploadedCases;
 currentStatusIndex=0; updateStatus(currentStatusIndex);
-alert(`PDF uploaded: ${file.name}`);
+alert(`PDF uploaded successfully: ${file.name}`);
 ribbons.forEach(r=>r.pulse());
-ribbons.forEach(r=>r.shiftHue? r.shiftHue(20) : null);
 pulseSubtitle();
 pulseSound(0.15,500);
 updateHighRiskAlerts();
-} else { alert(`Upload failed: ${result.message}`); }
-} catch(err){ console.error(err); alert("Error uploading PDF."); }
+} else {
+alert(`Upload failed: ${result.error || "Unknown error"}`);
+}
+}catch(err){
+console.error(err);
+alert("Error uploading PDF.");
+}
 });
 
 // ---------- Build Chronology ----------
