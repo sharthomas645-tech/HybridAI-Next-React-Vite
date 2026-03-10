@@ -22,13 +22,14 @@ z-index:-1;
 text-align:center;
 padding-top:40px;
 }
+/* HybridAI Logo with button-like gradient */
 .logoText{
 font-size:60px;
 font-weight:700;
-background:linear-gradient(90deg,#4361ee,#7209b7);
+background:linear-gradient(90deg,#4361ee,#7209b7,#4cc9f0);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-text-shadow:0 0 35px rgba(100,160,255,.9);
+text-shadow:0 0 35px rgba(100,160,255,0.9);
 }
 .subtitle{
 font-size:24px;
@@ -92,15 +93,17 @@ padding:10px;
 margin:8px 0;
 border-radius:8px;
 font-size:18px;
-color:#8fb6ff;
-opacity:0.6;
+color:#cfdfff;
+opacity:0.7;
 transition:.3s;
+text-shadow: 0 0 5px rgba(255,255,255,0.3);
 }
 .active{
-background:linear-gradient(90deg,#4361ee,#7209b7);
-color:white;
-box-shadow:0 0 20px rgba(130,130,255,.9);
+background:linear-gradient(90deg,#7209b7,#4361ee,#4cc9f0);
+color:#ffffff;
+box-shadow:0 0 25px rgba(120,120,255,0.9);
 opacity:1;
+text-shadow:0 0 20px rgba(255,255,255,0.7);
 }
 .metric{
 font-size:50px;
@@ -114,6 +117,8 @@ color:#ff4d6d;
 </style>
 </head>
 <body>
+
+<input type="file" id="fileInput" accept=".pdf" style="display:none">
 
 <canvas id="auroraCanvas"></canvas>
 
@@ -151,7 +156,7 @@ color:#ff4d6d;
 </div>
 
 <script>
-// Aurora Ribbons
+// ---------- Aurora Ribbons ----------
 const canvas = document.getElementById("auroraCanvas");
 const ctx = canvas.getContext("2d");
 let width = canvas.width = window.innerWidth;
@@ -175,7 +180,7 @@ ctx.lineTo(width, height);
 ctx.lineTo(0, height);
 ctx.closePath();
 ctx.fillStyle = this.color;
-ctx.shadowBlur = 80;
+ctx.shadowBlur = 100;
 ctx.shadowColor = this.color;
 ctx.fill();
 ctx.shadowBlur = 0;
@@ -183,10 +188,10 @@ ctx.shadowBlur = 0;
 }
 
 const ribbons = [
-new Ribbon("rgba(114,9,183,0.25)",50,0.0003), // purple
-new Ribbon("rgba(67,97,238,0.2)",70,0.00025), // blue
-new Ribbon("rgba(0,220,200,0.18)",60,0.0002), // teal/green
-new Ribbon("rgba(114,9,183,0.15)",90,0.00035), // purple
+new Ribbon("rgba(114,9,183,0.38)",50,0.00035),
+new Ribbon("rgba(67,97,238,0.35)",60,0.0003),
+new Ribbon("rgba(76,201,240,0.28)",55,0.00025),
+new Ribbon("rgba(114,9,183,0.2)",70,0.0004),
 ];
 
 function animate(time=0){
@@ -201,43 +206,102 @@ width = canvas.width = window.innerWidth;
 height = canvas.height = window.innerHeight;
 });
 
-// Case Status Logic
+// ---------- Case Status ----------
 let uploadedCases = 5;
 const statusSpans = document.querySelectorAll('.status span');
 let currentStatusIndex = 0;
-
 function updateStatus(index){
 statusSpans.forEach((span,i)=>span.classList.toggle('active', i===index));
 }
 
-function handleClick(action){
-switch(action){
-case 'upload':
+// ---------- API Endpoints ----------
+const apiEndpoints = {
+upload: "AttorneyUploadAPI",
+buildChron: "BuildChronologyAPI",
+rn: "RNVerificationRequestAPI",
+export: "ExportCaseChronologyAPI"
+};
+
+// ---------- File Upload ----------
+const fileInput = document.getElementById('fileInput');
+fileInput.addEventListener('change', async (event)=>{
+const file = event.target.files[0];
+if(!file) return;
+
+try{
+const formData = new FormData();
+formData.append("pdf", file);
+
+const response = await fetch(apiEndpoints.upload, {
+method:"POST",
+body: formData
+});
+const result = await response.json();
+if(result.success){
 uploadedCases++;
 document.getElementById('casesUploaded').innerText = uploadedCases;
 currentStatusIndex = 0;
 updateStatus(currentStatusIndex);
-break;
-case 'chron':
+alert(`PDF uploaded: ${file.name}`);
+} else {
+alert(`Upload failed: ${result.message}`);
+}
+} catch(err){
+console.error(err);
+alert("Error uploading PDF.");
+}
+});
+
+// ---------- Button Handlers ----------
+async function callBuildChronology(){
+try {
 currentStatusIndex = 1;
 updateStatus(currentStatusIndex);
-break;
-case 'rn':
-currentStatusIndex = 2;
-updateStatus(currentStatusIndex);
-break;
-case 'export':
-currentStatusIndex = 3;
-updateStatus(currentStatusIndex);
-break;
+const response = await fetch(apiEndpoints.buildChron,{method:"POST"});
+const result = await response.json();
+if(result.success){
+alert("Chronology built successfully!");
+} else {
+alert("Error: "+result.message);
 }
+} catch(err){ console.error(err); alert("Error calling API."); }
 }
 
-['uploadBtn','buildChronBtn','rnReviewBtn','exportBtn'].forEach(id=>{
-document.getElementById(id).addEventListener('click', ()=>{
-handleClick(id.replace('Btn','').toLowerCase());
-});
-});
+async function callRNReview(){
+try {
+currentStatusIndex = 2;
+updateStatus(currentStatusIndex);
+const response = await fetch(apiEndpoints.rn,{method:"POST"});
+const result = await response.json();
+if(result.success){
+alert("RN Review request sent!");
+} else {
+alert("Error: "+result.message);
+}
+} catch(err){ console.error(err); alert("Error calling API."); }
+}
+
+async function callExport(){
+try{
+currentStatusIndex = 3;
+updateStatus(currentStatusIndex);
+const response = await fetch(apiEndpoints.export);
+const blob = await response.blob();
+const url = window.URL.createObjectURL(blob);
+const a = document.createElement("a");
+a.href = url;
+a.download = "exported_files.zip";
+document.body.appendChild(a);
+a.click();
+a.remove();
+} catch(err){ console.error(err); alert("Error exporting files."); }
+}
+
+// ---------- Hook Buttons ----------
+document.getElementById('uploadBtn').addEventListener('click', ()=> fileInput.click());
+document.getElementById('buildChronBtn').addEventListener('click', callBuildChronology);
+document.getElementById('rnReviewBtn').addEventListener('click', callRNReview);
+document.getElementById('exportBtn').addEventListener('click', callExport);
 </script>
 
 </body>
