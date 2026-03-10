@@ -1,251 +1,335 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>HybridAI Dashboard</title>
+<meta charset="UTF-8">
+<title>HybridAI</title>
+
 <style>
+
 body{
 margin:0;
-font-family:"Segoe UI",sans-serif;
-overflow:hidden;
-background:#020617;
+font-family: "Segoe UI", system-ui;
+background:#040915;
 color:white;
+overflow-x:hidden;
 }
 
-/* Aurora canvas */
-#auroraCanvas {
+/* -------- Aurora Background -------- */
+
+.aurora-background{
 position:fixed;
 top:0;
 left:0;
 width:100%;
 height:100%;
 z-index:-1;
+overflow:hidden;
 }
 
-/* Header */
-.header{
-text-align:center;
-padding-top:40px;
-}
-.logoText{
-font-size:60px;
-font-weight:700;
-background:linear-gradient(90deg,#4cc9f0,#7209b7);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-text-shadow:0 0 35px rgba(100,160,255,.9);
-}
-.subtitle{
-font-size:24px;
-opacity:.85;
-margin-top:10px;
+.aurora{
+position:absolute;
+width:160%;
+height:160%;
+filter:blur(120px);
+opacity:.45;
+mix-blend-mode:screen;
 }
 
-/* Panel */
-.panel{
-max-width:1100px;
-margin:40px auto;
-background:rgba(255,255,255,.05);
+.aurora1{
+background:radial-gradient(circle at 40% 40%, #7A5FFF, transparent 60%);
+animation:flow1 80s ease-in-out infinite alternate;
+}
+
+.aurora2{
+background:radial-gradient(circle at 60% 60%, #3AA6FF, transparent 60%);
+animation:flow2 100s ease-in-out infinite alternate;
+}
+
+.aurora3{
+background:radial-gradient(circle at 50% 20%, #3DFFB3, transparent 60%);
+animation:flow3 120s ease-in-out infinite alternate;
+}
+
+@keyframes flow1{
+0%{transform:translate(-10%,-10%) scale(1);}
+50%{transform:translate(5%,10%) scale(1.2);}
+100%{transform:translate(-5%,5%) scale(1.1);}
+}
+
+@keyframes flow2{
+0%{transform:translate(10%,-5%) scale(1.1);}
+50%{transform:translate(-10%,10%) scale(1.3);}
+100%{transform:translate(5%,-10%) scale(1.2);}
+}
+
+@keyframes flow3{
+0%{transform:translate(-5%,5%) scale(1.2);}
+50%{transform:translate(10%,-10%) scale(1.4);}
+100%{transform:translate(-10%,10%) scale(1.3);}
+}
+
+/* -------- Layout -------- */
+
+.container{
 padding:40px;
-border-radius:20px;
-backdrop-filter:blur(18px);
-box-shadow:0 15px 50px rgba(0,0,0,.6);
+text-align:center;
 }
 
-/* Buttons */
-.button-row{
+.title{
+font-size:40px;
+font-weight:600;
+letter-spacing:1px;
+}
+
+.subtitle{
+opacity:.8;
+margin-bottom:40px;
+}
+
+/* -------- Buttons -------- */
+
+.actions{
 display:flex;
 justify-content:center;
 gap:20px;
+flex-wrap:wrap;
 margin-bottom:40px;
 }
+
 button{
-flex:1;
-padding:18px;
-min-width:150px;
-border:none;
-border-radius:12px;
-font-size:18px;
-font-weight:600;
-cursor:pointer;
-background:linear-gradient(90deg,#4361ee,#7209b7);
+padding:14px 24px;
+border-radius:14px;
+border:1px solid rgba(255,255,255,.2);
+background:rgba(255,255,255,.08);
+backdrop-filter:blur(10px);
 color:white;
-box-shadow:0 0 15px rgba(120,120,255,.5);
-transition:.3s;
-}
-button:hover{
-transform:translateY(-2px);
-box-shadow:0 0 30px rgba(150,130,255,1);
+font-size:15px;
+cursor:pointer;
+transition:.25s;
 }
 
-/* Cards */
+button:hover{
+transform:translateY(-4px);
+box-shadow:0 0 20px rgba(122,95,255,.5);
+}
+
+/* -------- Cards -------- */
+
 .cards{
-display:grid;
-grid-template-columns:1fr 1fr 1fr;
-gap:20px;
+display:flex;
+justify-content:center;
+gap:25px;
+flex-wrap:wrap;
+margin-bottom:40px;
 }
+
 .card{
-background:rgba(255,255,255,.05);
-padding:30px;
-border-radius:15px;
-backdrop-filter:blur(10px);
-box-shadow:0 0 25px rgba(76,201,240,0.25);
-text-align:center;
+width:220px;
+padding:22px;
+border-radius:16px;
+background:rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.15);
+backdrop-filter:blur(12px);
 }
+
 .card h3{
-font-size:24px;
-color:#9fb7ff;
-margin-bottom:20px;
+margin:0;
+font-size:16px;
+opacity:.7;
 }
-.status span{
-display:block;
-padding:10px;
-margin:8px 0;
-border-radius:8px;
-font-size:18px;
-color:#8fb6ff;
+
+.value{
+font-size:30px;
+margin-top:8px;
 }
-.active{
-background:linear-gradient(90deg,#4361ee,#7209b7);
-color:white;
-box-shadow:0 0 15px rgba(130,130,255,.9);
+
+/* -------- Upload -------- */
+
+.upload{
+margin:auto;
+width:520px;
+max-width:90%;
+padding:30px;
+border-radius:16px;
+border:2px dashed rgba(255,255,255,.2);
+background:rgba(255,255,255,.05);
+cursor:pointer;
+margin-bottom:40px;
 }
-.metric{
-font-size:50px;
-font-weight:700;
-text-align:center;
-margin-top:10px;
+
+.upload:hover{
+border-color:#7A5FFF;
 }
-.alert{
-color:#ff4d6d;
+
+/* -------- Workspace -------- */
+
+.workspace{
+width:800px;
+max-width:95%;
+margin:auto;
+padding:30px;
+border-radius:18px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.12);
+backdrop-filter:blur(14px);
+text-align:left;
 }
+
+.workspace h2{
+margin-top:0;
+font-weight:500;
+}
+
+.log{
+margin-top:15px;
+height:150px;
+overflow:auto;
+font-size:14px;
+background:rgba(0,0,0,.4);
+padding:15px;
+border-radius:10px;
+}
+
 </style>
 </head>
+
 <body>
 
-<canvas id="auroraCanvas"></canvas>
-
-<!-- Optional water sound -->
-<audio id="waterSound" autoplay loop>
-<source src="soft_water.mp3" type="audio/mpeg">
-</audio>
-
-<div class="header">
-<div class="logoText">HybridAI</div>
-<div class="subtitle">Medical Chronology Builder & Analyzer</div>
+<div class="aurora-background">
+<div class="aurora aurora1"></div>
+<div class="aurora aurora2"></div>
+<div class="aurora aurora3"></div>
 </div>
 
-<div class="panel">
-<div class="button-row">
-<button id="uploadBtn">Upload PDF</button>
-<button id="buildChronBtn">Build Chronology</button>
-<button id="rnReviewBtn">RN Review Request</button>
-<button id="exportBtn">Export Files</button>
+<div class="container">
+
+<div class="title">HybridAI</div>
+<div class="subtitle">Chronology Builder & Analyzer</div>
+
+<div class="actions">
+
+<button onclick="buildChronology()">Build Chronology</button>
+<button onclick="rnReview()">Request RN Review</button>
+<button onclick="exportCase()">Ready for Export</button>
+
 </div>
 
 <div class="cards">
+
 <div class="card">
 <h3>Case Status</h3>
-<div class="status">
-<span class="active">Uploaded</span>
-<span>Processing</span>
-<span>Under RN Review</span>
-<span>Ready for Export</span>
-</div>
+<div id="status" class="value">Idle</div>
 </div>
 
 <div class="card">
-<h3>High-Risk Alerts</h3>
-<div class="metric alert" id="highRisk">2</div>
+<h3>High Risk Items</h3>
+<div id="risk" class="value">0</div>
 </div>
 
 <div class="card">
 <h3>Cases Uploaded</h3>
-<div class="metric" id="casesUploaded">5</div>
+<div id="cases" class="value">0</div>
 </div>
+
 </div>
+
+<div class="upload" onclick="uploadFiles()">
+Drag & Drop or Click to Upload Medical Records
+<input type="file" id="fileInput" multiple accept=".pdf" hidden>
+</div>
+
+<div class="workspace">
+
+<h2>Chronology Builder Workspace</h2>
+
+<div class="log" id="log">
+HybridAI system ready...
+</div>
+
+</div>
+
 </div>
 
 <script>
-// ===== Aurora Canvas =====
-const canvas = document.getElementById("auroraCanvas");
-const ctx = canvas.getContext("2d");
-let width = canvas.width = window.innerWidth;
-let height = canvas.height = window.innerHeight;
 
-// Aurora ribbons
-const ribbons = [];
-const colors = [
-'rgba(114,9,183,0.25)', // purple
-'rgba(76,201,240,0.25)', // blue
-'rgba(0,255,204,0.25)' // green
-];
-for(let i=0;i<12;i++){
-ribbons.push({
-x: Math.random()*width,
-y: Math.random()*height*0.5,
-amplitude: 80+Math.random()*40,
-wavelength: 200+Math.random()*200,
-speed: 0.0005 + Math.random()*0.0005,
-color: colors[i%colors.length],
-offset: Math.random()*Math.PI*2
-});
+let caseCount=0
+let risks=0
+
+function log(msg){
+let box=document.getElementById("log")
+box.innerHTML += "<br>"+msg
+box.scrollTop=box.scrollHeight
 }
 
-function drawAuroras(){
-ctx.clearRect(0,0,width,height);
-ribbons.forEach(r => {
-ctx.beginPath();
-for(let x=0;x<width;x+=2){
-let y = r.y + Math.sin((x/r.wavelength)+r.offset + Date.now()*r.speed)*r.amplitude;
-ctx.lineTo(x,y);
-}
-ctx.strokeStyle = r.color;
-ctx.lineWidth = 60;
-ctx.shadowBlur = 50;
-ctx.shadowColor = r.color;
-ctx.stroke();
-ctx.shadowBlur = 0;
-});
-requestAnimationFrame(drawAuroras);
-}
-drawAuroras();
-
-window.addEventListener('resize', ()=>{
-width = canvas.width = window.innerWidth;
-height = canvas.height = window.innerHeight;
-});
-
-// ===== Buttons logic =====
-let uploadedCases = 5;
-const waterAudio = document.getElementById('waterSound');
-waterAudio.volume = 0.15;
-
-function handleClick(action){
-waterAudio.volume = 0.2;
-setTimeout(()=>waterAudio.volume = 0.15,800);
-switch(action){
-case 'upload':
-uploadedCases++;
-document.getElementById('casesUploaded').innerText = uploadedCases;
-alert('PDF uploaded! Total: '+uploadedCases);
-break;
-case 'chron':
-alert('Chronology built!');
-break;
-case 'rn':
-alert('RN Review Request sent!');
-break;
-case 'export':
-alert('Files ready for export!');
-break;
-}
+function uploadFiles(){
+document.getElementById("fileInput").click()
 }
 
-['uploadBtn','buildChronBtn','rnReviewBtn','exportBtn'].forEach(id=>{
-document.getElementById(id).addEventListener('click', ()=>{
-handleClick(id);
-});
-});
+document.getElementById("fileInput").addEventListener("change",e=>{
+
+let files=e.target.files
+caseCount += files.length
+
+document.getElementById("cases").innerText=caseCount
+document.getElementById("status").innerText="Records Uploaded"
+
+log(files.length+" records uploaded")
+
+})
+
+function buildChronology(){
+
+if(caseCount===0){
+log("Upload records first")
+return
+}
+
+document.getElementById("status").innerText="Analyzing"
+
+log("HybridAI analyzing records...")
+
+setTimeout(()=>{
+
+risks=Math.floor(Math.random()*5)
+
+document.getElementById("risk").innerText=risks
+document.getElementById("status").innerText="Chronology Built"
+
+log("Chronology analysis complete")
+
+if(risks>0){
+log(risks+" potential risk items detected")
+}
+
+},2500)
+
+}
+
+function rnReview(){
+
+document.getElementById("status").innerText="RN Review Requested"
+
+log("Case sent to RN review")
+
+}
+
+function exportCase(){
+
+document.getElementById("status").innerText="Exporting"
+
+log("Preparing export package")
+
+setTimeout(()=>{
+
+document.getElementById("status").innerText="Ready"
+
+log("Export complete")
+
+},2000)
+
+}
+
 </script>
+
 </body>
 </html>
