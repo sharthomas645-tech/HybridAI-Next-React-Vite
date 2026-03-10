@@ -3,7 +3,6 @@
 <head>
 <title>HybridAI Dashboard</title>
 <style>
-/* -------- Body -------- */
 body{
 margin:0;
 font-family:"Segoe UI",sans-serif;
@@ -11,8 +10,6 @@ overflow:hidden;
 background:#020617;
 color:white;
 }
-
-/* -------- Aurora Canvas -------- */
 #auroraCanvas {
 position:fixed;
 top:0;
@@ -21,8 +18,6 @@ width:100%;
 height:100%;
 z-index:-1;
 }
-
-/* -------- Header -------- */
 .header{
 text-align:center;
 padding-top:40px;
@@ -30,7 +25,7 @@ padding-top:40px;
 .logoText{
 font-size:60px;
 font-weight:700;
-background:linear-gradient(90deg,#4cc9f0,#7209b7);
+background:linear-gradient(90deg,#4361ee,#7209b7);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 text-shadow:0 0 35px rgba(100,160,255,.9);
@@ -40,8 +35,6 @@ font-size:24px;
 opacity:.85;
 margin-top:10px;
 }
-
-/* -------- Panel -------- */
 .panel{
 max-width:1100px;
 margin:40px auto;
@@ -51,8 +44,6 @@ border-radius:20px;
 backdrop-filter:blur(18px);
 box-shadow:0 15px 50px rgba(0,0,0,.6);
 }
-
-/* -------- Buttons -------- */
 .button-row{
 display:flex;
 justify-content:center;
@@ -77,8 +68,6 @@ button:hover{
 transform:translateY(-2px);
 box-shadow:0 0 30px rgba(150,130,255,1);
 }
-
-/* -------- Cards -------- */
 .cards{
 display:grid;
 grid-template-columns:1fr 1fr 1fr;
@@ -97,8 +86,6 @@ font-size:24px;
 color:#9fb7ff;
 margin-bottom:20px;
 }
-
-/* -------- Case Status -------- */
 .status span{
 display:block;
 padding:10px;
@@ -115,8 +102,6 @@ color:white;
 box-shadow:0 0 20px rgba(130,130,255,.9);
 opacity:1;
 }
-
-/* -------- Metrics -------- */
 .metric{
 font-size:50px;
 font-weight:700;
@@ -130,7 +115,6 @@ color:#ff4d6d;
 </head>
 <body>
 
-<!-- Aurora Background -->
 <canvas id="auroraCanvas"></canvas>
 
 <div class="header">
@@ -139,15 +123,12 @@ color:#ff4d6d;
 </div>
 
 <div class="panel">
-<!-- Action Buttons -->
 <div class="button-row">
 <button id="uploadBtn">Upload PDF</button>
 <button id="buildChronBtn">Build Chronology</button>
 <button id="rnReviewBtn">RN Review Request</button>
 <button id="exportBtn">Export Files</button>
 </div>
-
-<!-- Cards -->
 <div class="cards">
 <div class="card">
 <h3>Case Status</h3>
@@ -170,73 +151,57 @@ color:#ff4d6d;
 </div>
 
 <script>
-// ===== Aurora Canvas Realistic =====
+// Aurora Ribbons
 const canvas = document.getElementById("auroraCanvas");
 const ctx = canvas.getContext("2d");
 let width = canvas.width = window.innerWidth;
 let height = canvas.height = window.innerHeight;
 
-class AuroraLayer{
-constructor(color){
+class Ribbon{
+constructor(color, amplitude, speed){
 this.color = color;
-this.points = [];
-this.offset = Math.random()*height*0.5;
-for(let i=0;i<=width;i+=20){
-this.points.push({x:i, y:Math.random()*200});
+this.amplitude = amplitude;
+this.speed = speed;
+this.offset = Math.random()*1000;
 }
-this.speed = 0.00003 + Math.random()*0.00003;
-}
-update(time, mouseX){
-this.points.forEach(p=>{
-p.y += Math.sin(time*0.0005 + p.x*0.01 + this.offset*0.01)*0.3;
-if(mouseX) p.y += (mouseX-width/2)*0.0002;
-});
-}
-draw(){
+draw(time){
 ctx.beginPath();
-ctx.moveTo(0,height);
-this.points.forEach(p=>{
-ctx.lineTo(p.x, p.y+this.offset);
-});
-ctx.lineTo(width,height);
+ctx.moveTo(0, height/2);
+for(let x=0;x<=width;x+=2){
+let y = height/2 + Math.sin(x*0.01 + time*this.speed + this.offset)*this.amplitude;
+ctx.lineTo(x, y);
+}
+ctx.lineTo(width, height);
+ctx.lineTo(0, height);
 ctx.closePath();
 ctx.fillStyle = this.color;
+ctx.shadowBlur = 80;
+ctx.shadowColor = this.color;
 ctx.fill();
+ctx.shadowBlur = 0;
 }
 }
 
-// Aurora layers with different vibrant hues
-const layers = [
-new AuroraLayer("rgba(114,9,183,0.3)"), // purple
-new AuroraLayer("rgba(76,201,240,0.25)"), // blue
-new AuroraLayer("rgba(0,255,204,0.2)") // green
+const ribbons = [
+new Ribbon("rgba(114,9,183,0.25)",50,0.0003), // purple
+new Ribbon("rgba(67,97,238,0.2)",70,0.00025), // blue
+new Ribbon("rgba(0,220,200,0.18)",60,0.0002), // teal/green
+new Ribbon("rgba(114,9,183,0.15)",90,0.00035), // purple
 ];
 
-let mouseX = 0;
-window.addEventListener('mousemove', e=>{mouseX = e.clientX;});
-
-function drawAurora(time=0){
+function animate(time=0){
 ctx.clearRect(0,0,width,height);
-layers.forEach(layer=>{
-layer.update(time, mouseX);
-layer.draw();
-});
-requestAnimationFrame(drawAurora);
+ribbons.forEach(r=>r.draw(time));
+requestAnimationFrame(animate);
 }
-drawAurora();
+animate();
 
 window.addEventListener('resize', ()=>{
 width = canvas.width = window.innerWidth;
 height = canvas.height = window.innerHeight;
-layers.forEach(layer=>{
-layer.points = [];
-for(let i=0;i<=width;i+=20){
-layer.points.push({x:i, y:Math.random()*200});
-}
-});
 });
 
-// ===== Case Status and Buttons =====
+// Case Status Logic
 let uploadedCases = 5;
 const statusSpans = document.querySelectorAll('.status span');
 let currentStatusIndex = 0;
@@ -268,7 +233,6 @@ break;
 }
 }
 
-// Attach click events
 ['uploadBtn','buildChronBtn','rnReviewBtn','exportBtn'].forEach(id=>{
 document.getElementById(id).addEventListener('click', ()=>{
 handleClick(id.replace('Btn','').toLowerCase());
