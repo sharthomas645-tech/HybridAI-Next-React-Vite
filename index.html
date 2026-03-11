@@ -262,26 +262,66 @@ function pulseSound(strength=0.1,duration=400){ const original=oceanSound.volume
 const subtitle=document.getElementById('subtitleText');
 function pulseSubtitle(){ subtitle.classList.add('pulse'); setTimeout(()=>subtitle.classList.remove('pulse'),300); }
 
-// ---------------- File Upload ----------------
-const fileInput=document.getElementById('fileInput');
-fileInput.addEventListener('change',async(event)=>{
-const file=event.target.files[0];
-if(!file) return;
-try{
-const arrayBuffer=await file.arrayBuffer();
-const base64=btoa(new Uint8Array(arrayBuffer).reduce((data,byte)=>data+String.fromCharCode(byte),""));
-const payload={fileName:file.name,fileContentBase64:base64};
-const response=await fetch(apiEndpoints.upload,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
-const result=await response.json();
-if(result.firmId && result.caseId && result.fileId){
-uploadedCases++; document.getElementById('casesUploaded').innerText=uploadedCases;
-currentStatusIndex=0; updateStatus(currentStatusIndex);
-alert(`PDF uploaded successfully: ${file.name}`);
-ribbons.forEach(r=>r.pulse()); pulseSubtitle(); pulseSound(0.15,500); updateHighRiskAlerts();
-} else alert(`Upload failed: ${result.error || "Unknown error"}`);
-} catch(err){ console.error(err); alert("Error uploading PDF."); }
+// ---------------- File Upload (Fixed for IAM & Encryption) ----------------
+const fileInput = document.getElementById('fileInput');
+
+fileInput.addEventListener('change', async (event) => {
+const file = event.target.files[0];
+if (!file) return;
+
+try {
+// STEP 1: Get the Presigned URL from your Lambda
+const payload = { fileName: file.name };
+
+const response = await fetch(apiEndpoints.upload, {
+method: "POST", // Your Lambda handler uses POST to generate the link
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify(payload)
 });
-document.getElementById('uploadBtn').addEventListener('click',()=>fileInput.click());
+
+const { uploadUrl, key } = await response.json();
+
+if (!uploadUrl) {
+throw new Error("Could not generate upload URL");
+}
+
+// STEP 2: Upload the actual file directly to S3 using the Presigned URL
+// THIS IS WHERE WE ADD THE ENCRYPTION HEADER FROM YOUR IAM POLICY
+const s3Response = await fetch(uploadUrl, {
+method: "PUT",
+body: file, // Send the raw file, not Base64
+headers: {
+"Content-Type": "application/pdf",
+"x-amz-server-side-encryption": "AES256" // MANDATORY for your IAM Policy
+}
+});
+
+if (s3Response.ok) {
+uploadedCases++;
+document.getElementById('casesUploaded').innerText = uploadedCases;
+currentStatusIndex = 0;
+updateStatus(currentStatusIndex);
+
+alert(`PDF uploaded successfully: ${file.name}`);
+
+// UI Effects
+ribbons.forEach(r => r.pulse());
+pulseSubtitle();
+pulseSound(0.15, 500);
+updateHighRiskAlerts();
+} else {
+const errorText = await s3Response.text();
+console.error("S3 Upload Error:", errorText);
+alert(`Upload failed: S3 rejected the request. Check encryption headers.`);
+}
+
+} catch (err) {
+console.error("Upload process error:", err);
+alert("Error uploading PDF. See console for details.");
+}
+});
+
+
 
 
 // ---------------- Build ----------------
