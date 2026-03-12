@@ -14,11 +14,7 @@ const CORS_HEADERS = [
   "x-amz-server-side-encryption",
 ].join(", ");
 
-export const handler = async (event: {
-  requestContext?: { http?: { method?: string } };
-  httpMethod?: string;
-  body?: string | Record<string, unknown> | null;
-}) => {
+export const handler = async (event) => {
   const ALLOWED_ORIGIN =
     process.env.FRONTEND_DOMAIN || "https://hybridaimedlegal.com";
   const BUCKET_NAME = process.env.BUCKET_NAME;
@@ -27,7 +23,7 @@ export const handler = async (event: {
   const KMS_KEY_ID = process.env.KMS_KEY_ID;
   const ALLOWED_EXTENSIONS = (process.env.ALLOWED_EXTENSIONS || "pdf")
     .split(",")
-    .map((e: string) => e.trim().toLowerCase());
+    .map((e) => e.trim().toLowerCase());
   const MAX_FILE_SIZE_MB = parseInt(process.env.MAX_FILE_SIZE_MB || "250", 10);
   const ENABLE_CASE_FOLDERS = process.env.ENABLE_CASE_FOLDERS === "true";
 
@@ -76,16 +72,12 @@ export const handler = async (event: {
   }
 
   // Parse body
-  let body: { fileName?: string; caseId?: string; fileSizeMB?: number } = {};
+  let body = {};
   try {
     body =
       typeof event.body === "string"
         ? JSON.parse(event.body)
-        : (event.body as {
-            fileName?: string;
-            caseId?: string;
-            fileSizeMB?: number;
-          }) || {};
+        : event.body || {};
   } catch (e) {
     return {
       statusCode: 400,
@@ -141,7 +133,6 @@ export const handler = async (event: {
     ? `${UPLOAD_PATH}${caseId}/${timestamp}-${fileName}`
     : `${UPLOAD_PATH}${timestamp}-${fileName}`;
 
-
   // S3 Put Command with metadata
   const command = new PutObjectCommand({
     Bucket: BUCKET_NAME,
@@ -160,7 +151,6 @@ export const handler = async (event: {
     const uploadUrl = await getSignedUrl(s3Client, command, {
       expiresIn: 900,
     });
-
 
     return {
       statusCode: 200,
@@ -188,7 +178,7 @@ export const handler = async (event: {
       },
       body: JSON.stringify({
         error: "Upload Initialization Failed",
-        details: (err as Error).message,
+        details: err.message,
       }),
     };
   }
