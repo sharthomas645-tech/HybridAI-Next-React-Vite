@@ -1,0 +1,5 @@
+{
+  "platform": "node",
+  "target": "node20",
+  "format": "cjs"
+}
