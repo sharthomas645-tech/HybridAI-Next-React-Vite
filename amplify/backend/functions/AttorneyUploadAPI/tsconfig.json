@@ -1,19 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es2022",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
     "strict": true,
     "skipLibCheck": true,
-    "lib": ["es2022", "node"],
+    "noEmit": true,
     "types": ["node"],
-    "paths": {
-      "$amplify/*": [
-        "../.amplify/generated/*"
-      ]
-    }
+    "lib": ["ES2020", "node"]
   }
 }
