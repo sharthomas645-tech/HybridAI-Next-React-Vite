@@ -220,10 +220,11 @@
 
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1201.0.min.js"></script>
 <script>
-// CORRECT Cognito Domain
+// CORRECT Cognito Configuration
 const COGNITO_DOMAIN = 'https://us-west-2o3tpxrglb.auth.us-west-2.amazoncognito.com';
 const CLIENT_ID = '5dm1etldt5tea0olbf4k8r67jh';
-const REDIRECT_URI = 'https://hybridaimedlegal.com/callback';
+const REDIRECT_URI = 'https://hybridaimedlegal.com'; // FIXED: removed /callback
+const SCOPES = 'email openid'; // FIXED: only email and openid (profile not configured)
 
 // Store authentication state
 let currentUser = null;
@@ -243,8 +244,8 @@ window.addEventListener('load', function() {
             e.stopPropagation();
             console.log('Sign in button clicked - redirecting to Cognito');
             
-            // Direct OAuth redirect with CORRECT domain
-            const authUrl = `${COGNITO_DOMAIN}/oauth2/authorize?client_id=${CLIENT_ID}&response_type=code&scope=email+openid+profile&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
+            // Direct OAuth redirect with CORRECT scopes
+            const authUrl = `${COGNITO_DOMAIN}/oauth2/authorize?client_id=${CLIENT_ID}&response_type=code&scope=${encodeURIComponent(SCOPES)}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
             console.log('Redirecting to:', authUrl);
             window.location.href = authUrl;
         };
