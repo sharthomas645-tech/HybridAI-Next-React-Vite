@@ -2,7 +2,7 @@ import { defineFunction } from "@aws-amplify/backend";
 
 export const AttorneyUploadAPI = defineFunction({
   name: "AttorneyUploadAPI",
-  entry: "./src/index.js",
+  entry: "./src/index.ts",
   runtime: 20,
   environment: {
     BUCKET_NAME: "medlegaldocuments-west2",
