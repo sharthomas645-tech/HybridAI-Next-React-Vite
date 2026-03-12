@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HybridAI - Medical Chronology Builder</title>
-    <script src="https://unpkg.com/oidc-client-ts@latest/dist/oidc-client.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -221,31 +220,26 @@
 
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1201.0.min.js"></script>
 <script>
-// OIDC Configuration
-const userManager = new Oidc.UserManager({
-    authority: 'https://cognito-idp.us-west-2.amazonaws.com/us-west-2_O3TpxRglB',
-    client_id: '5dm1etldt5tea0olbf4k8r67jh',
-    redirect_uri: 'https://hybridaimedlegal.com/callback',
-    response_type: 'code',
-    scope: 'email openid profile',
-    userStore: new Oidc.WebStorageStateStore({ prefix: 'oidc.client' })
-});
+// Store authentication state
+let currentUser = null;
 
-console.log('UserManager initialized with redirect_uri:', 'https://hybridaimedlegal.com/callback');
+console.log('HybridAI app initializing...');
 
-// Initialize on DOMContentLoaded
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, setting up event listeners');
+// Initialize on page load
+window.addEventListener('load', function() {
+    console.log('Page loaded, setting up event listeners');
     
-    // Sign in button - using onclick
+    // Sign in button - DIRECT REDIRECT
     const signinBtn = document.getElementById('signinBtn');
     if (signinBtn) {
         signinBtn.onclick = function(e) {
             e.preventDefault();
-            console.log('Sign in button clicked');
-            userManager.signinRedirect().catch(err => {
-                console.error('SigninRedirect error:', err);
-            });
+            e.stopPropagation();
+            console.log('Sign in button clicked - redirecting to Cognito');
+            
+            // Direct OAuth redirect
+            const authUrl = 'https://hybridai-auth.auth.us-west-2.amazoncognito.com/oauth2/authorize?client_id=5dm1etldt5tea0olbf4k8r67jh&response_type=code&scope=email+openid+profile&redirect_uri=https://hybridaimedlegal.com/callback';
+            window.location.href = authUrl;
         };
     }
     
@@ -255,30 +249,34 @@ document.addEventListener('DOMContentLoaded', function() {
         logoutBtn.onclick = function(e) {
             e.preventDefault();
             console.log('Logout button clicked');
-            userManager.signoutRedirect();
+            currentUser = null;
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.href = 'https://hybridai-auth.auth.us-west-2.amazoncognito.com/logout?client_id=5dm1etldt5tea0olbf4k8r67jh&logout_uri=https://hybridaimedlegal.com';
         };
     }
     
-    // Check if user is already logged in
-    userManager.getUser().then(user => {
-        console.log('Current user:', user);
-        if (user && !user.expired) {
-            showDashboard(user);
+    // Check for auth code in URL (callback from Cognito)
+    const urlParams = new URLSearchParams(window.location.search);
+    const authCode = urlParams.get('code');
+    
+    if (authCode) {
+        console.log('Auth code found in URL, exchanging for token...');
+        exchangeCodeForToken(authCode);
+    } else {
+        // Check if we have a stored token
+        const storedToken = localStorage.getItem('access_token');
+        if (storedToken) {
+            console.log('Found stored token, showing dashboard');
+            showDashboard();
         } else {
+            console.log('No auth, showing login screen');
             showLoginScreen();
         }
-    }).catch(err => {
-        console.error('Error getting user:', err);
-        showLoginScreen();
-    });
-
-    // Handle redirect from Cognito
-    userManager.signinCallback().then(user => {
-        console.log('User signed in:', user);
-        showDashboard(user);
-    }).catch(err => {
-        console.error('Signin callback error:', err);
-    });
+    }
+    
+    // Setup Aurora canvas
+    setupAuroraCanvas();
 });
 
 function showLoginScreen() {
@@ -286,10 +284,46 @@ function showLoginScreen() {
     document.getElementById('dashboardScreen').classList.add('hidden');
 }
 
-function showDashboard(user) {
+function showDashboard() {
     document.getElementById('loginScreen').classList.add('hidden');
     document.getElementById('dashboardScreen').classList.remove('hidden');
     initializeDashboard();
+}
+
+// Exchange authorization code for access token
+async function exchangeCodeForToken(code) {
+    try {
+        const response = await fetch('https://hybridai-auth.auth.us-west-2.amazoncognito.com/oauth2/token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                grant_type: 'authorization_code',
+                client_id: '5dm1etldt5tea0olbf4k8r67jh',
+                code: code,
+                redirect_uri: 'https://hybridaimedlegal.com/callback'
+            })
+        });
+
+        const data = await response.json();
+        if (data.access_token) {
+            localStorage.setItem('access_token', data.access_token);
+            localStorage.setItem('id_token', data.id_token);
+            currentUser = data;
+            
+            // Clean up URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+            
+            showDashboard();
+        } else {
+            console.error('No access token in response:', data);
+            showLoginScreen();
+        }
+    } catch (err) {
+        console.error('Token exchange error:', err);
+        showLoginScreen();
+    }
 }
 
 // Initialize dashboard
@@ -297,17 +331,16 @@ function initializeDashboard() {
     loadCases();
     setupFileUpload();
     setupButtons();
-    setupAuroraCanvas();
 }
 
 // Load cases
 async function loadCases() {
     try {
-        const user = await userManager.getUser();
+        const token = localStorage.getItem('access_token');
         const response = await fetch('https://vicwyv5xoi.execute-api.us-west-2.amazonaws.com/prod/cases', {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${user.access_token}`,
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             }
         });
@@ -342,13 +375,13 @@ function setupFileUpload() {
         if (!file) return;
 
         try {
-            const user = await userManager.getUser();
+            const token = localStorage.getItem('access_token');
             const payload = { fileName: file.name };
 
             const handshakeResponse = await fetch('https://vicwyv5xoi.execute-api.us-west-2.amazonaws.com/prod/upload', {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Bearer ${user.access_token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(payload)
@@ -380,11 +413,11 @@ function setupFileUpload() {
 function setupButtons() {
     document.getElementById('buildChronBtn').addEventListener('click', async () => {
         try {
-            const user = await userManager.getUser();
+            const token = localStorage.getItem('access_token');
             const response = await fetch('https://huy6splpn3.execute-api.us-west-2.amazonaws.com/prod/build', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${user.access_token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
@@ -397,11 +430,11 @@ function setupButtons() {
 
     document.getElementById('rnReviewBtn').addEventListener('click', async () => {
         try {
-            const user = await userManager.getUser();
+            const token = localStorage.getItem('access_token');
             const response = await fetch('https://rolkt59qj4.execute-api.us-west-2.amazonaws.com/prod/rn/request', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${user.access_token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
@@ -414,11 +447,11 @@ function setupButtons() {
 
     document.getElementById('exportBtn').addEventListener('click', async () => {
         try {
-            const user = await userManager.getUser();
+            const token = localStorage.getItem('access_token');
             const response = await fetch('https://g4r3dpjiu9.execute-api.us-west-2.amazonaws.com/prod/export', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${user.access_token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
