@@ -7,7 +7,7 @@
     "allowJs": true,
     "strict": false,
     "skipLibCheck": true,
-    "lib": ["ES2020"],
+    "lib": ["ES2020", "dom"],
     "types": ["node"],
     "esModuleInterop": true,
     "declaration": false
