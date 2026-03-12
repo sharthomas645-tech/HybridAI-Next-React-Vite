@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+﻿import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 // AWS Client
@@ -49,7 +49,6 @@ export const handler = async (event: {
 
   // Validate environment variables
   if (!BUCKET_NAME) {
-    console.error("BUCKET_NAME environment variable is not set");
     return {
       statusCode: 500,
       headers: {
@@ -64,7 +63,6 @@ export const handler = async (event: {
   }
 
   if (REQUIRE_KMS && !KMS_KEY_ID) {
-    console.error("REQUIRE_KMS is true but KMS_KEY_ID is not set");
     return {
       statusCode: 500,
       headers: {
@@ -89,7 +87,6 @@ export const handler = async (event: {
             fileSizeMB?: number;
           }) || {};
   } catch (e) {
-    console.error("JSON Parse Error:", e);
     return {
       statusCode: 400,
       headers: {
@@ -107,7 +104,6 @@ export const handler = async (event: {
 
   // Validate file size
   if (fileSizeMB > MAX_FILE_SIZE_MB) {
-    console.warn(`File size ${fileSizeMB}MB exceeds max of ${MAX_FILE_SIZE_MB}MB`);
     return {
       statusCode: 413,
       headers: {
@@ -123,7 +119,6 @@ export const handler = async (event: {
   // Validate file extension
   const fileExtension = rawFileName.split(".").pop()?.toLowerCase() || "";
   if (!ALLOWED_EXTENSIONS.includes(fileExtension)) {
-    console.warn(`File extension .${fileExtension} not allowed`);
     return {
       statusCode: 415,
       headers: {
@@ -146,7 +141,6 @@ export const handler = async (event: {
     ? `${UPLOAD_PATH}${caseId}/${timestamp}-${fileName}`
     : `${UPLOAD_PATH}${timestamp}-${fileName}`;
 
-  console.log(`Generating presigned URL for: s3://${BUCKET_NAME}/${key}`);
 
   // S3 Put Command with metadata
   const command = new PutObjectCommand({
@@ -167,7 +161,6 @@ export const handler = async (event: {
       expiresIn: 900,
     });
 
-    console.log(`Presigned URL generated successfully for key: ${key}`);
 
     return {
       statusCode: 200,
@@ -187,7 +180,6 @@ export const handler = async (event: {
       }),
     };
   } catch (err) {
-    console.error("S3 Error:", err);
     return {
       statusCode: 500,
       headers: {
