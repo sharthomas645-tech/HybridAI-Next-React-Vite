@@ -1,4 +1,5 @@
-import { defineFunction, NodeVersion } from "@aws-amplify/backend";
+import { defineFunction } from "@aws-amplify/backend";
+import { NodeVersion } from "@aws-amplify/backend-function";
 
 export const AttorneyUploadAPI = defineFunction({
   name: "AttorneyUploadAPI",
