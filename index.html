@@ -365,13 +365,15 @@ async function exchangeCodeForToken(code) {
                 grant_type: 'authorization_code',
                 client_id: CLIENT_ID,
                 code: code,
-                redirect_uri: REDIRECT_URI
+                redirect_uri: REDIRECT_URI,
+                audience: CLIENT_ID
             })
         });
 
         const data = await response.json();
         console.log('Token response status:', response.status);
         console.log('Token response has access_token:', !!data.access_token);
+        console.log('Token claims:', data);
 
         if (data.access_token) {
             console.log('✓ Access token received, storing...');
@@ -434,6 +436,7 @@ async function loadCases() {
 
         console.log('\n=== LOADING CASES ===');
         console.log('API Endpoint:', API_ENDPOINTS.GET_CASES);
+        console.log('Token exists:', !!token);
 
         const response = await fetch(API_ENDPOINTS.GET_CASES, {
             method: 'GET',
@@ -444,6 +447,7 @@ async function loadCases() {
         });
 
         console.log('Response status:', response.status);
+        console.log('Response ok:', response.ok);
 
         // Handle 401 - Token expired
         if (response.status === 401) {
@@ -460,7 +464,7 @@ async function loadCases() {
             console.error('Failed to load cases, status:', response.status);
             const errorText = await response.text();
             console.error('Error response:', errorText);
-            showError('Failed to load cases. Please try again.');
+            showError('Failed to load cases. Status: ' + response.status);
             return;
         }
 
@@ -483,15 +487,17 @@ async function loadCases() {
             console.log('✓ Dropdown populated with', result.cases.length, 'cases');
             showSuccess(`Loaded ${result.cases.length} case(s)`);
         } else {
-            console.log('No cases found for this attorney');
+            console.log('No cases found or unsuccessful response');
             const dropdown = document.getElementById('casesDropdown');
             dropdown.innerHTML = '<option value="">No cases found</option>';
-            showError('No cases found. Contact your administrator.');
+            showError('No cases found. Response: ' + JSON.stringify(result));
         }
 
         console.log('=== LOADING CASES COMPLETE ===\n');
     } catch (err) {
         console.error('Error loading cases:', err);
+        console.error('Error type:', err.name);
+        console.error('Error message:', err.message);
         showError('Error loading cases: ' + err.message);
     }
 }
