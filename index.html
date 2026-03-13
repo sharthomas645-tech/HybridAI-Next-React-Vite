@@ -46,14 +46,16 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
 .brand-section{text-align:center;animation:fadeInDown .8s ease both}
 @keyframes fadeInDown{from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:translateY(0)}}
 
-.hybrid-logo{display:inline-flex;align-items:baseline;margin-bottom:.5rem;
-  filter:drop-shadow(0 0 24px rgba(80,160,255,.6))}
-.logo-h{font-size:4.5rem;font-weight:900;line-height:1;letter-spacing:-2px;
-  background:linear-gradient(135deg,var(--blue-3) 0%,var(--purple-3) 50%,var(--aqua-2) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.logo-text{font-size:3rem;font-weight:700;line-height:1;
-  background:linear-gradient(135deg,var(--purple-3) 0%,var(--aqua-2) 60%,var(--blue-3) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hybrid-logo{display:inline-flex;align-items:center;margin-bottom:.5rem;
+  filter:drop-shadow(0 0 32px rgba(80,160,255,.8));gap:.2rem}
+.logo-h{font-size:4.5rem;font-weight:900;line-height:1.2;letter-spacing:-2px;
+  background:linear-gradient(135deg,#60a5fa 0%,#a855f7 50%,#22d3ee 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 20px rgba(96,165,250,.9));text-shadow:0 0 30px rgba(168,85,247,.5)}
+.logo-text{font-size:3rem;font-weight:700;line-height:1.2;
+  background:linear-gradient(135deg,#a855f7 0%,#22d3ee 60%,#60a5fa 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 20px rgba(168,85,247,.8))}
 
 .sub1{margin:.4rem 0 .2rem;font-size:clamp(1rem,2.5vw,1.5rem);font-weight:700;
   background:linear-gradient(90deg,var(--blue-3),var(--purple-3),var(--aqua-2),var(--blue-3));
@@ -94,6 +96,100 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
 .login-hint{font-size:.75rem;color:rgba(160,185,220,.5);text-align:center;margin:.25rem 0 0}
 
 /* ══════════════════════════════════════════════════════
+   SPLASH PAGE (Logo Screen with Aurora Text Flow)
+══════════════════════════════════════════════════════ */
+#splash-page{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:2rem 1rem;gap:1.5rem;position:relative;z-index:10;min-height:100vh;
+  background:var(--night-bg)
+}
+
+#aurora-canvas-splash{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+.splash-content{
+  display:flex;flex-direction:column;align-items:center;gap:1rem;
+  position:relative;z-index:11;animation:splashFadeIn 1s ease both
+}
+
+@keyframes splashFadeIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
+
+/* AURORA TEXT FLOW - Synced with platform animation */
+.aurora-text{
+  background:linear-gradient(90deg,
+    #60a5fa 0%,
+    #a855f7 25%,
+    #22d3ee 50%,
+    #a855f7 75%,
+    #60a5fa 100%);
+  background-size:300% auto;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:auroraFlow 4s linear infinite;
+  filter:drop-shadow(0 0 10px rgba(96,165,250,.5)) drop-shadow(0 0 20px rgba(168,85,247,.3));
+}
+
+@keyframes auroraFlow{
+  0%{background-position:0% center}
+  100%{background-position:300% center}
+}
+
+.splash-logo-svg{
+  filter:drop-shadow(0 0 50px rgba(80,160,255,.95)) drop-shadow(0 0 80px rgba(168,85,247,.6));
+  animation:splashLogoPulse 2.5s ease-in-out infinite;
+  margin-bottom:1rem
+}
+
+@keyframes splashLogoPulse{
+  0%,100%{filter:drop-shadow(0 0 50px rgba(80,160,255,.95)) drop-shadow(0 0 80px rgba(168,85,247,.6));transform:scale(1)}
+  50%{filter:drop-shadow(0 0 65px rgba(96,165,250,1)) drop-shadow(0 0 110px rgba(168,85,247,.8));transform:scale(1.08)}
+}
+
+.splash-title{
+  margin:0;font-size:clamp(3rem,10vw,5.5rem);font-weight:900;text-align:center;
+  letter-spacing:-2px;
+  line-height:1.1;margin-bottom:.5rem;
+  text-shadow:0 0 30px rgba(96,165,250,.5),0 0 50px rgba(168,85,247,.3);
+  font-family:"Inter",system-ui,-apple-system,Helvetica,Arial,sans-serif
+}
+
+.splash-subtitle-1{
+  margin:0;font-size:clamp(1rem,3vw,1.5rem);font-weight:700;text-align:center;
+  letter-spacing:.04em;
+  max-width:700px;line-height:1.4;
+  text-shadow:0 0 20px rgba(96,165,250,.4),0 0 35px rgba(168,85,247,.25);
+  font-family:"Inter",system-ui,-apple-system,Helvetica,Arial,sans-serif
+}
+
+.splash-subtitle-2{
+  margin:0;font-size:clamp(.95rem,2.8vw,1.4rem);font-weight:800;text-align:center;
+  letter-spacing:.08em;text-transform:uppercase;
+  margin-top:.5rem;
+  text-shadow:0 0 25px rgba(96,165,250,.5),0 0 40px rgba(168,85,247,.35);
+  font-family:"Inter",system-ui,-apple-system,Helvetica,Arial,sans-serif;
+  font-style:italic
+}
+
+.splash-loader{
+  display:flex;gap:.5rem;align-items:center;margin-top:2rem
+}
+
+.loader-dot{
+  width:12px;height:12px;border-radius:50%;
+  background:linear-gradient(135deg,#60a5fa,#a855f7,#22d3ee);
+  animation:splashLoaderBounce 1.4s infinite;
+  box-shadow:0 0 10px rgba(96,165,250,.6)
+}
+
+.loader-dot:nth-child(2){animation-delay:0.2s}
+.loader-dot:nth-child(3){animation-delay:0.4s}
+
+@keyframes splashLoaderBounce{
+  0%,80%,100%{transform:scale(1);opacity:.7}
+  40%{transform:scale(1.3);opacity:1}
+}
+
+/* ══════════════════════════════════════════════════════
    DASHBOARD
 ══════════════════════════════════════════════════════ */
 #dashboard-page{display:flex;flex-direction:column}
@@ -104,11 +200,13 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);flex-wrap:wrap;gap:.5rem}
 .nav-brand{display:flex;align-items:center;gap:.5rem}
 .logo-h-sm{font-size:1.6rem;font-weight:900;
-  background:linear-gradient(135deg,var(--blue-3),var(--purple-3),var(--aqua-2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  background:linear-gradient(135deg,#60a5fa 0%,#a855f7 50%,#22d3ee 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 16px rgba(96,165,250,.7))}
 .nav-brand-text{font-size:1.25rem;font-weight:700;
-  background:linear-gradient(135deg,var(--purple-3),var(--aqua-2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  background:linear-gradient(135deg,#a855f7 0%,#22d3ee 60%,#60a5fa 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 16px rgba(168,85,247,.6))}
 .nav-sep{color:var(--glass-border);font-size:1.1rem}
 .nav-subtitle{font-size:.78rem;color:var(--text-muted);letter-spacing:.02em;display:none}
 @media(min-width:640px){.nav-subtitle{display:inline}}
@@ -324,7 +422,28 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
 <div id="login-page" class="page">
   <div class="brand-section">
     <div class="hybrid-logo">
-      <span class="logo-h">H</span>
+      <svg width="80" height="80" viewBox="0 0 80 80" class="logo-svg" style="flex-shrink:0">
+        <defs>
+          <filter id="logoGlow">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+          <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#a855f7;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#22d3ee;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <g filter="url(#logoGlow)">
+          <path d="M 20 15 L 20 65" stroke="url(#logoGradient)" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M 60 15 L 60 65" stroke="url(#logoGradient)" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M 20 40 L 60 40" stroke="url(#logoGradient)" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M 50 20 Q 70 15 75 35 Q 75 45 65 50" stroke="url(#logoGradient)" stroke-width="4" fill="none" stroke-linecap="round"/>
+        </g>
+      </svg>
       <span class="logo-text">ybridAI</span>
     </div>
     <p class="sub1">Medical Chronology &amp; Analyzer Intelligence</p>
@@ -351,6 +470,54 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
 </div>
 
 <!-- ══════════════════════════════════════════════════════
+     LOGO SPLASH PAGE (shown during login)
+══════════════════════════════════════════════════════ -->
+<div id="splash-page" class="page hidden">
+  <canvas id="aurora-canvas-splash" aria-hidden="true"></canvas>
+  
+  <div class="splash-content">
+    <!-- MUCH LARGER LOGO -->
+    <svg width="280" height="280" viewBox="0 0 80 80" class="splash-logo-svg">
+      <defs>
+        <filter id="splashLogoGlow">
+          <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+          <feMerge>
+            <feMergeNode in="coloredBlur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+        <linearGradient id="splashLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+          <stop offset="50%" style="stop-color:#a855f7;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#22d3ee;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      
+      <g filter="url(#splashLogoGlow)">
+        <path d="M 20 15 L 20 65" stroke="url(#splashLogoGradient)" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <path d="M 60 15 L 60 65" stroke="url(#splashLogoGradient)" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <path d="M 20 40 L 60 40" stroke="url(#splashLogoGradient)" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <path d="M 50 20 Q 70 15 75 35 Q 75 45 65 50" stroke="url(#splashLogoGradient)" stroke-width="4" fill="none" stroke-linecap="round"/>
+      </g>
+    </svg>
+    
+    <h1 class="splash-title aurora-text">HybridAI</h1>
+    
+    <!-- FIRST SUBTITLE WITH AURORA FLOW -->
+    <p class="splash-subtitle-1 aurora-text">Medical Chronology &amp; Analyzer Intelligence Engine</p>
+    
+    <!-- SECOND SUBTITLE WITH AURORA FLOW -->
+    <p class="splash-subtitle-2 aurora-text">We Make It Make Sense</p>
+    
+    <div class="splash-loader">
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
      DASHBOARD PAGE
 ══════════════════════════════════════════════════════ -->
 <div id="dashboard-page" class="page hidden">
@@ -358,7 +525,29 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
   <!-- Nav -->
   <nav class="dash-nav">
     <div class="nav-brand">
-      <span class="logo-h-sm">H</span>
+      <svg width="40" height="40" viewBox="0 0 80 80" class="logo-svg logo-svg-sm" style="flex-shrink:0">
+        <defs>
+          <filter id="logoGlowSm">
+            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+          <linearGradient id="logoGradientSm" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#a855f7;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#22d3ee;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        
+        <g filter="url(#logoGlowSm)">
+          <path d="M 20 15 L 20 65" stroke="url(#logoGradientSm)" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M 60 15 L 60 65" stroke="url(#logoGradientSm)" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M 20 40 L 60 40" stroke="url(#logoGradientSm)" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M 50 20 Q 70 15 75 35 Q 75 45 65 50" stroke="url(#logoGradientSm)" stroke-width="4" fill="none" stroke-linecap="round"/>
+        </g>
+      </svg>
       <span class="nav-brand-text">ybridAI</span>
       <span class="nav-sep">|</span>
       <span class="nav-subtitle">Medical Chronology &amp; Analyzer Intelligence</span>
@@ -591,20 +780,30 @@ function doLogin() {
 
   const btn = document.getElementById("login-btn");
   btn.disabled = true;
-  btn.innerHTML = '<span class="btn-spinner"></span> Signing in…';
+  btn.textContent = "Sign In";
+  
+  // Show splash page
+  document.getElementById("login-page").classList.add("hidden");
+  document.getElementById("splash-page").classList.remove("hidden");
+  startSplashAnimation();
+  
   currentUser = email;
   document.getElementById("user-badge").textContent = email;
 
-  loadCases().finally(function() {
-    btn.disabled = false;
-    btn.textContent = "Sign In";
-    showDashboard();
-  });
+  // Simulate loading time (2-3 seconds)
+  setTimeout(function() {
+    loadCases().finally(function() {
+      document.getElementById("splash-page").classList.add("hidden");
+      document.getElementById("dashboard-page").classList.remove("hidden");
+      showDashboard();
+    });
+  }, 2500);
 }
 
 function doLogout() {
   document.getElementById("login-page").classList.remove("hidden");
   document.getElementById("dashboard-page").classList.add("hidden");
+  document.getElementById("splash-page").classList.add("hidden");
   document.getElementById("email-input").value = "";
   document.getElementById("pw-input").value = "";
   CASES    = DEMO_CASES.map(c => Object.assign({}, c));
@@ -829,7 +1028,7 @@ function saveSettings() {
   toast("✅ API config saved — region: " + API.region);
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* ═══════════���═══════════════════════════════════════════════
    DASHBOARD RENDER
 ═══════════════════════════════════════════════════════════ */
 function showDashboard() {
@@ -1043,7 +1242,71 @@ function toast(msg) {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   AURORA BOREALIS CANVAS ANIMATION
+   SPLASH PAGE AURORA ANIMATION
+═══════════════════════════════════════════════════════════ */
+function startSplashAnimation() {
+  const canvas = document.getElementById("aurora-canvas-splash");
+  const ctx = canvas.getContext("2d");
+  
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+
+  let time = 0;
+  
+  function animateSplash() {
+    time += 0.003;
+    
+    ctx.fillStyle = "rgba(2,2,12,0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const auroraLayers = [
+      { color: "rgba(30,80,200,", alpha: 0.25 },
+      { color: "rgba(120,50,230,", alpha: 0.20 },
+      { color: "rgba(20,200,220,", alpha: 0.18 },
+      { color: "rgba(96,165,250,", alpha: 0.15 },
+      { color: "rgba(180,100,255,", alpha: 0.12 },
+    ];
+
+    auroraLayers.forEach(function(layer, index) {
+      const yBase = (canvas.height * (0.15 + index * 0.18));
+      const waveFreq = 0.0015 + index * 0.0003;
+      const waveSpeed = 0.0002 - index * 0.00003;
+      const amplitude = canvas.height * (0.15 + index * 0.03);
+
+      ctx.beginPath();
+      ctx.moveTo(0, yBase);
+
+      for (let x = 0; x <= canvas.width; x += 4) {
+        const wave1 = Math.sin(x * waveFreq + time * waveSpeed) * amplitude;
+        const wave2 = Math.sin(x * waveFreq * 1.3 + time * waveSpeed * 1.2 + index) * (amplitude * 0.7);
+        const y = yBase + wave1 + wave2;
+        ctx.lineTo(x, y);
+      }
+
+      ctx.lineTo(canvas.width, canvas.height);
+      ctx.lineTo(0, canvas.height);
+      ctx.closePath();
+
+      const gradient = ctx.createLinearGradient(0, yBase - amplitude, 0, yBase + amplitude);
+      gradient.addColorStop(0, layer.color + "0)");
+      gradient.addColorStop(0.5, layer.color + layer.alpha + ")");
+      gradient.addColorStop(1, layer.color + "0)");
+
+      ctx.fillStyle = gradient;
+      ctx.fill();
+    });
+
+    requestAnimationFrame(animateSplash);
+  }
+  animateSplash();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   AURORA BOREALIS CANVAS ANIMATION (Fixed)
+   Blue, Purple, Aqua only — NO YELLOWS
 ═══════════════════════════════════════════════════════════ */
 (function() {
   const canvas = document.getElementById("aurora-canvas");
@@ -1057,32 +1320,61 @@ function toast(msg) {
   window.addEventListener("resize", resizeCanvas);
 
   let time = 0;
+  
   function animate() {
     time += 0.005;
-    ctx.fillStyle = "rgba(2,2,12,0.1)";
+    
+    ctx.fillStyle = "rgba(2,2,12,0.08)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    for (let i = 0; i < 5; i++) {
-      const hue = (i * 60 + time * 30) % 360;
-      ctx.fillStyle = `hsla(${hue}, 80%, 50%, 0.15)`;
-      
-      const y = (Math.sin(time * 0.3 + i) * 0.3 + 0.5) * canvas.height;
+    const auroraLayers = [
+      { color: "rgba(30,80,200,", alpha: 0.18 },
+      { color: "rgba(120,50,230,", alpha: 0.14 },
+      { color: "rgba(20,200,220,", alpha: 0.13 },
+      { color: "rgba(96,165,250,", alpha: 0.12 },
+      { color: "rgba(180,100,255,", alpha: 0.10 },
+    ];
+
+    auroraLayers.forEach(function(layer, index) {
+      const yBase = (canvas.height * (0.2 + index * 0.15));
+      const waveFreq = 0.002 + index * 0.0005;
+      const waveSpeed = 0.0003 - index * 0.00005;
+      const amplitude = canvas.height * (0.12 + index * 0.02);
+
       ctx.beginPath();
-      for (let x = 0; x < canvas.width; x += 50) {
-        const offsetY = Math.sin((x * 0.005 + time) + i) * 80;
-        if (x === 0) ctx.moveTo(x, y + offsetY);
-        else ctx.lineTo(x, y + offsetY);
+      ctx.moveTo(0, yBase);
+
+      for (let x = 0; x <= canvas.width; x += 5) {
+        const wave1 = Math.sin(x * waveFreq + time * waveSpeed) * amplitude;
+        const wave2 = Math.sin(x * waveFreq * 1.5 + time * waveSpeed * 1.3 + index) * (amplitude * 0.6);
+        const y = yBase + wave1 + wave2;
+        ctx.lineTo(x, y);
       }
+
       ctx.lineTo(canvas.width, canvas.height);
       ctx.lineTo(0, canvas.height);
       ctx.closePath();
+
+      const gradient = ctx.createLinearGradient(0, yBase - amplitude, 0, yBase + amplitude);
+      gradient.addColorStop(0, layer.color + "0)");
+      gradient.addColorStop(0.5, layer.color + layer.alpha + ")");
+      gradient.addColorStop(1, layer.color + "0)");
+
+      ctx.fillStyle = gradient;
       ctx.fill();
-    }
+    });
 
     requestAnimationFrame(animate);
   }
   animate();
 })();
+
+/* Enter key on login form */
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Enter" && !document.getElementById("login-page").classList.contains("hidden")) {
+    doLogin();
+  }
+});
 </script>
 
 </body>
