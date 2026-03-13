@@ -187,6 +187,35 @@
             display: none;
         }
         .hidden { display: none !important; }
+        .agent-result {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(76, 201, 240, 0.3);
+            border-radius: 12px;
+            padding: 24px;
+            display: none;
+        }
+        .agent-result h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #64c8ff;
+            margin-bottom: 16px;
+        }
+        .agent-result-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+        .agent-result-label {
+            color: #b0e0ff;
+            font-weight: 600;
+            min-width: 130px;
+        }
+        .agent-result-value {
+            color: #e0f8ff;
+            word-break: break-all;
+        }
     </style>
 </head>
 <body>
@@ -225,6 +254,7 @@
             <button id="buildChronBtn" type="button">Build Chronology</button>
             <button id="rnReviewBtn" type="button">RN Review Request</button>
             <button id="exportBtn" type="button">Export Files</button>
+            <button id="getLastAgentBtn" type="button">Get Last Agent</button>
         </div>
         
         <div class="cards">
@@ -241,6 +271,30 @@
                 <div class="metric" id="casesUploaded">0</div>
             </div>
         </div>
+
+        <div id="lastAgentResult" class="agent-result">
+            <h3>Last Agent</h3>
+            <div class="agent-result-row">
+                <span class="agent-result-label">Agent Type:</span>
+                <span class="agent-result-value" id="lastAgentType">—</span>
+            </div>
+            <div class="agent-result-row">
+                <span class="agent-result-label">Case ID:</span>
+                <span class="agent-result-value" id="lastAgentCaseId">—</span>
+            </div>
+            <div class="agent-result-row">
+                <span class="agent-result-label">Status:</span>
+                <span class="agent-result-value" id="lastAgentStatus">—</span>
+            </div>
+            <div class="agent-result-row">
+                <span class="agent-result-label">Invoked At:</span>
+                <span class="agent-result-value" id="lastAgentInvokedAt">—</span>
+            </div>
+            <div class="agent-result-row">
+                <span class="agent-result-label">Result:</span>
+                <span class="agent-result-value" id="lastAgentSummary">—</span>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -254,7 +308,8 @@ const API_ENDPOINTS = {
     UPLOAD: 'https://vicwyv5xoi.execute-api.us-west-2.amazonaws.com/prod/upload',
     BUILD_CHRONOLOGY: 'https://huy6splpn3.execute-api.us-west-2.amazonaws.com/prod/build',
     RN_REVIEW: 'https://rolkt59qj4.execute-api.us-west-2.amazonaws.com/prod/rn/request',
-    EXPORT: 'https://g4r3dpjiu9.execute-api.us-west-2.amazonaws.com/prod/export'
+    EXPORT: 'https://g4r3dpjiu9.execute-api.us-west-2.amazonaws.com/prod/export',
+    GET_LAST_AGENT: 'https://k9a2qtik02.execute-api.us-west-2.amazonaws.com/prod/agent/last'
 };
 
 // ============================================================================
@@ -806,6 +861,68 @@ function setupButtons() {
             console.error('Export error:', err);
         } finally {
             setButtonLoading('exportBtn', false);
+        }
+    });
+
+    document.getElementById('getLastAgentBtn').addEventListener('click', async () => {
+        try {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                showError('Please log in first');
+                return;
+            }
+
+            setButtonLoading('getLastAgentBtn', true);
+            console.log('\n=== FETCHING LAST AGENT ===');
+
+            const caseId = document.getElementById('casesDropdown').value;
+            const url = caseId
+                ? `${API_ENDPOINTS.GET_LAST_AGENT}?caseId=${encodeURIComponent(caseId)}`
+                : API_ENDPOINTS.GET_LAST_AGENT;
+
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.status === 401) {
+                localStorage.clear();
+                showError('Session expired. Please log in again.');
+                showLoginScreen();
+                setupLoginButton();
+                setButtonLoading('getLastAgentBtn', false);
+                return;
+            }
+
+            if (!response.ok) {
+                showError(`Failed to retrieve last agent (status ${response.status})`);
+                setButtonLoading('getLastAgentBtn', false);
+                return;
+            }
+
+            const result = await response.json();
+            console.log('Last agent result:', result);
+
+            // Expected API response: { agentType, caseId, status, invokedAt, summary }
+            // Falls back to a nested `agent` object if present
+            const agent = result.agent || result;
+            document.getElementById('lastAgentType').textContent = agent.agentType || '—';
+            document.getElementById('lastAgentCaseId').textContent = agent.caseId || caseId || '—';
+            document.getElementById('lastAgentStatus').textContent = agent.status || '—';
+            document.getElementById('lastAgentInvokedAt').textContent = agent.invokedAt || '—';
+            document.getElementById('lastAgentSummary').textContent = agent.summary || '—';
+            document.getElementById('lastAgentResult').style.display = 'block';
+
+            showSuccess('Last agent retrieved successfully!');
+            console.log('=== FETCHING LAST AGENT COMPLETE ===\n');
+        } catch (err) {
+            showError('Get last agent error: ' + err.message);
+            console.error('Get last agent error:', err);
+        } finally {
+            setButtonLoading('getLastAgentBtn', false);
         }
     });
 }
