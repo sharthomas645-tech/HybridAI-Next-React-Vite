@@ -260,6 +260,55 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
   backdrop-filter:blur(16px);box-shadow:0 8px 32px rgba(0,0,0,.5);
   animation:toastIn .3s ease;pointer-events:none}
 @keyframes toastIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Button loading spinner ─────────────────────────── */
+.btn-spinner{display:inline-block;width:13px;height:13px;vertical-align:middle;
+  border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;
+  animation:spin .65s linear infinite;margin-right:4px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── API Settings modal ─────────────────────────────── */
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.68);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;padding:1rem}
+.modal{background:rgba(8,10,28,.97);border:1px solid var(--glass-border);border-radius:16px;
+  padding:2rem;width:100%;max-width:500px;
+  box-shadow:0 0 0 1px rgba(100,160,255,.08),0 24px 64px rgba(0,0,0,.75);
+  animation:fadeInUp .25s ease}
+.modal-title{margin:0 0 1.25rem;font-size:1.1rem;font-weight:700;
+  background:linear-gradient(90deg,var(--blue-3),var(--purple-3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.modal-section{font-size:.72rem;font-weight:700;color:var(--text-muted);letter-spacing:.08em;
+  text-transform:uppercase;padding-bottom:.5rem;border-bottom:1px solid var(--glass-border);
+  margin:.25rem 0 .6rem}
+.modal-grid{display:flex;flex-direction:column;gap:.8rem}
+.modal-row{display:flex;flex-direction:column;gap:.3rem}
+.modal-label{font-size:.78rem;font-weight:600;color:var(--text-muted);letter-spacing:.04em}
+.modal-input{background:rgba(10,20,50,.8);border:1px solid var(--glass-border);border-radius:8px;
+  padding:.58rem .85rem;font-size:.9rem;color:var(--text-primary);outline:none;
+  font-family:inherit;transition:border-color .2s,box-shadow .2s;width:100%}
+.modal-input:focus{border-color:var(--blue-3);box-shadow:0 0 0 3px rgba(96,165,250,.15)}
+.modal-hint{font-size:.72rem;color:rgba(160,185,220,.45);margin:.1rem 0 0}
+.api-row{display:flex;align-items:center;justify-content:space-between;gap:.5rem;
+  padding:.4rem .65rem;background:rgba(96,165,250,.05);border:1px solid rgba(96,165,250,.12);
+  border-radius:7px}
+.api-row-name{font-size:.78rem;color:var(--text-muted);flex:1;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.api-id-code{font-family:monospace;font-size:.8rem;color:var(--blue-3);
+  background:rgba(96,165,250,.08);padding:.2rem .45rem;border-radius:4px;
+  border:1px solid rgba(96,165,250,.18);user-select:all;white-space:nowrap}
+.modal-footer{display:flex;gap:.75rem;margin-top:1.5rem;justify-content:flex-end}
+.modal-btn{padding:.55rem 1.25rem;font-size:.88rem;font-weight:600;border-radius:8px;
+  cursor:pointer;font-family:inherit;transition:all .15s}
+.modal-btn-save{background:linear-gradient(135deg,var(--blue-1),var(--purple-1));
+  border:none;color:#fff;box-shadow:0 4px 14px rgba(80,80,255,.3)}
+.modal-btn-save:hover{opacity:.9;transform:translateY(-1px)}
+.modal-btn-cancel{background:transparent;border:1px solid var(--glass-border);color:var(--text-muted)}
+.modal-btn-cancel:hover{border-color:var(--blue-3);color:var(--blue-3)}
+.settings-btn{padding:.35rem .85rem;font-size:.82rem;font-weight:500;background:transparent;
+  border:1px solid rgba(100,160,255,.22);border-radius:6px;color:var(--text-muted);
+  cursor:pointer;font-family:inherit;transition:all .2s}
+.settings-btn:hover{border-color:var(--purple-3);color:var(--purple-3);background:rgba(192,132,252,.08)}
 </style>
 </head>
 <body>
@@ -314,6 +363,7 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
     </div>
     <div class="nav-user">
       <span class="user-badge" id="user-badge"></span>
+      <button class="settings-btn" onclick="openSettings()">⚙️ API Config</button>
       <button class="logout-btn" onclick="doLogout()">Sign Out</button>
     </div>
   </nav>
@@ -327,23 +377,25 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
         <select id="case-select" class="case-selector" onchange="selectCase(this.value)"></select>
       </div>
       <div class="action-buttons">
-        <button class="action-btn action-upload" onclick="toast('📤 Uploading PDF…')">
+        <button id="btn-upload" class="action-btn action-upload" onclick="doUpload()">
           <span class="action-btn-icon">📤</span>
-          <span class="action-btn-label">Upload PDF</span>
+          <span class="action-btn-label" id="btn-upload-lbl">Upload PDF</span>
         </button>
-        <button class="action-btn action-build" onclick="toast('🗂️ Building Chronology…')">
+        <button id="btn-build" class="action-btn action-build" onclick="doBuildChronology()">
           <span class="action-btn-icon">🗂️</span>
-          <span class="action-btn-label">Build Chronology</span>
+          <span class="action-btn-label" id="btn-build-lbl">Build Chronology</span>
         </button>
-        <button class="action-btn action-rn" onclick="toast('🩺 Sending RN Review Request…')">
+        <button id="btn-rn" class="action-btn action-rn" onclick="doRNReview()">
           <span class="action-btn-icon">🩺</span>
-          <span class="action-btn-label">RN Review Request</span>
+          <span class="action-btn-label" id="btn-rn-lbl">RN Review Request</span>
         </button>
-        <button class="action-btn action-export" onclick="toast('📥 Exporting File…')">
+        <button id="btn-export" class="action-btn action-export" onclick="doExport()">
           <span class="action-btn-icon">📥</span>
-          <span class="action-btn-label">Export File</span>
+          <span class="action-btn-label" id="btn-export-lbl">Export File</span>
         </button>
       </div>
+      <!-- Hidden file input for PDF upload -->
+      <input type="file" id="pdf-file-input" accept=".pdf,application/pdf" style="display:none" onchange="handlePDFUpload(this)">
     </div>
 
     <!-- Metrics bar -->
@@ -377,27 +429,110 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
   </div><!-- /dash-body -->
 </div><!-- /dashboard-page -->
 
+<!-- ── API Settings Modal ────────────────────────────── -->
+<div id="settings-modal" class="modal-overlay hidden" onclick="closeSettings(event)">
+  <div class="modal">
+    <h3 class="modal-title">⚙️ API Configuration</h3>
+    <div class="modal-grid">
+
+      <p class="modal-section">AWS Deployment</p>
+      <div class="modal-row">
+        <label class="modal-label" for="cfg-region">AWS Region</label>
+        <input id="cfg-region" class="modal-input" placeholder="us-east-1"/>
+        <p class="modal-hint">e.g. us-east-1 · us-west-2 · eu-west-1</p>
+      </div>
+      <div class="modal-row">
+        <label class="modal-label" for="cfg-stage">Stage <span style="font-weight:400;text-transform:none">(leave blank for HTTP API $default)</span></label>
+        <input id="cfg-stage" class="modal-input" placeholder="prod / dev / (empty = $default)"/>
+      </div>
+
+      <p class="modal-section">Live API IDs</p>
+      <div class="api-row">
+        <span class="api-row-name">AttorneyCasesHandlerAPI</span>
+        <span class="api-id-code">k9a2qtik02</span>
+      </div>
+      <div class="api-row">
+        <span class="api-row-name">AttorneyUploadAPI</span>
+        <span class="api-id-code">vicwyv5xoi</span>
+      </div>
+      <div class="api-row">
+        <span class="api-row-name">BuildChronologyAPI</span>
+        <span class="api-id-code">huy6splpn3</span>
+      </div>
+      <div class="api-row">
+        <span class="api-row-name">ExportCaseChronology-API</span>
+        <span class="api-id-code">g4r3dpjiu9</span>
+      </div>
+      <div class="api-row">
+        <span class="api-row-name">RNVerificationRequest-API</span>
+        <span class="api-id-code">rolkt59qj4</span>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn modal-btn-cancel" onclick="closeSettings()">Cancel</button>
+      <button class="modal-btn modal-btn-save" onclick="saveSettings()">Save &amp; Apply</button>
+    </div>
+  </div>
+</div>
+
 <!-- Toast container -->
 <div id="toast-container"></div>
 
 <script>
 /* ═══════════════════════════════════════════════════════════
-   DATA
+   API CONFIG
+   AWS API Gateway HTTP APIs.
+   Edit API.region (and optionally API.stage) to match your
+   AWS deployment. API IDs are hardcoded from the console.
 ═══════════════════════════════════════════════════════════ */
-const CASES = [
+const API = {
+  region: "us-east-1",  // ← change to your AWS region
+  stage:  "",           // ← leave blank for HTTP API $default stage
+  ids: {
+    cases:      "k9a2qtik02",  // AttorneyCasesHandlerAPI
+    upload:     "vicwyv5xoi",  // AttorneyUploadAPI
+    chronology: "huy6splpn3",  // BuildChronologyAPI
+    export:     "g4r3dpjiu9",  // ExportCaseChronology-API
+    rnReview:   "rolkt59qj4",  // RNVerificationRequest-API
+  },
+};
+
+/* Restore saved region/stage from localStorage */
+(function(){
+  try {
+    const saved = localStorage.getItem("hai_api_cfg");
+    if (saved) { const p = JSON.parse(saved); if(p.region) API.region=p.region; API.stage=p.stage||""; }
+  } catch(e) {}
+})();
+
+/** Build a full API Gateway URL from an API id and resource path */
+function apiUrl(id, path) {
+  const stagePrefix = API.stage ? "/" + API.stage : "";
+  return "https://" + id + ".execute-api." + API.region + ".amazonaws.com" + stagePrefix + path;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DEMO FALLBACK DATA (used when APIs are unreachable)
+═══════════════════════════════════════════════════════════ */
+const DEMO_CASES = [
   { id:"C-2024-001", patient:"John A. Smith",      type:"Personal Injury",    opened:"2024-01-15", status:"Ready for Export",      updated:"2024-03-10", events:12 },
   { id:"C-2024-002", patient:"Maria L. Garcia",    type:"Medical Malpractice",opened:"2024-02-03", status:"RN Review in Progress",  updated:"2024-03-08", events:8  },
   { id:"C-2024-003", patient:"Robert J. Thompson", type:"Birth Injury",       opened:"2023-11-20", status:"Processing",             updated:"2024-03-12", events:21 },
   { id:"C-2024-004", patient:"Linda K. Patel",     type:"Medical Malpractice",opened:"2024-01-28", status:"Uploaded",               updated:"2024-02-28", events:15 },
 ];
 
-const TIMELINE = [
+const DEMO_TIMELINE = [
   { date:"2024-03-12", label:"Medical records reviewed"          },
   { date:"2024-03-08", label:"Expert consultation scheduled"     },
   { date:"2024-02-25", label:"Radiology reports uploaded"        },
   { date:"2024-02-14", label:"Initial case assessment completed" },
   { date:"2024-01-30", label:"Case file created"                 },
 ];
+
+/* Mutable copies updated by API calls */
+let CASES    = DEMO_CASES.map(c => Object.assign({}, c));
+let TIMELINE = DEMO_TIMELINE.map(e => Object.assign({}, e));
 
 const STATUS_CFG = {
   "Uploaded":              { color:"#60a5fa", glow:"rgba(96,165,250,.45)",  icon:"📄" },
@@ -414,38 +549,290 @@ const TYPE_COLORS = {
 
 const CASE_TYPES = ["Personal Injury","Medical Malpractice","Birth Injury"];
 
-let currentUser   = "";
-let selectedType  = "All";
-let selectedId    = CASES[0].id;
+let currentUser  = "";
+let selectedType = "All";
+let selectedId   = CASES[0].id;
+
+/* ═══════════════════════════════════════════════════════════
+   DATA NORMALISATION
+   Accepts flexible field names from different API shapes.
+═══════════════════════════════════════════════════════════ */
+function normalizeCase(raw) {
+  return {
+    id:      raw.caseId      || raw.id       || raw.case_id    || "UNKNOWN",
+    patient: raw.patientName || raw.patient  || raw.name       || "Unknown Patient",
+    type:    raw.caseType    || raw.type     || raw.case_type  || "Personal Injury",
+    opened:  raw.dateOpened  || raw.opened   || raw.createdAt  || "",
+    status:  raw.status      || "Uploaded",
+    updated: raw.lastUpdated || raw.updated  || raw.updatedAt  || "",
+    events:  raw.events      || raw.eventCount || 0,
+  };
+}
+
+function normalizeEvent(raw) {
+  return {
+    date:  raw.date        || raw.eventDate || raw.timestamp  || "",
+    label: raw.description || raw.label     || raw.event      || raw.title || "",
+  };
+}
 
 /* ═══════════════════════════════════════════════════════════
    AUTH
 ═══════════════════════════════════════════════════════════ */
-function doLogin(){
+function doLogin() {
   const email = document.getElementById("email-input").value.trim();
   const pw    = document.getElementById("pw-input").value;
   const err   = document.getElementById("login-error");
-  if(!email){ err.textContent="Please enter your email."; err.classList.remove("hidden"); return; }
-  if(!pw)   { err.textContent="Please enter your password."; err.classList.remove("hidden"); return; }
+  if (!email) { err.textContent = "Please enter your email.";    err.classList.remove("hidden"); return; }
+  if (!pw)    { err.textContent = "Please enter your password."; err.classList.remove("hidden"); return; }
   err.classList.add("hidden");
+
+  const btn = document.getElementById("login-btn");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="btn-spinner"></span> Signing in\u2026';
   currentUser = email;
   document.getElementById("user-badge").textContent = email;
-  showDashboard();
+
+  loadCases().finally(function() {
+    btn.disabled = false;
+    btn.textContent = "Sign In";
+    showDashboard();
+  });
 }
 
-function doLogout(){
+function doLogout() {
   document.getElementById("login-page").classList.remove("hidden");
   document.getElementById("dashboard-page").classList.add("hidden");
-  document.getElementById("email-input").value="";
-  document.getElementById("pw-input").value="";
+  document.getElementById("email-input").value = "";
+  document.getElementById("pw-input").value = "";
+  CASES    = DEMO_CASES.map(c => Object.assign({}, c));
+  TIMELINE = DEMO_TIMELINE.map(e => Object.assign({}, e));
+  selectedType = "All";
+}
+
+/* ═══════════════════════════════════════════════════════════
+   API — AttorneyCasesHandlerAPI
+   GET /cases?attorney={email}
+═══════════════════════════════════════════════════════════ */
+async function loadCases() {
+  try {
+    const url = apiUrl(API.ids.cases, "/cases?attorney=" + encodeURIComponent(currentUser));
+    const res = await fetch(url, { headers: { "Content-Type": "application/json" } });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    const arr  = Array.isArray(data) ? data : (data.cases || data.items || data.data || []);
+    if (arr.length > 0) {
+      CASES = arr.map(normalizeCase);
+      toast("\u2705 Loaded " + CASES.length + " case(s) from API");
+    } else {
+      CASES = DEMO_CASES.map(c => Object.assign({}, c));
+    }
+  } catch (e) {
+    CASES = DEMO_CASES.map(c => Object.assign({}, c));
+    console.warn("AttorneyCasesHandlerAPI unavailable, using demo data:", e.message);
+  }
+  if (CASES.length) selectedId = CASES[0].id;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   API — AttorneyCasesHandlerAPI (timeline)
+   GET /cases/{caseId}/timeline
+═══════════════════════════════════════════════════════════ */
+async function loadTimeline(caseId) {
+  try {
+    const url = apiUrl(API.ids.cases, "/cases/" + encodeURIComponent(caseId) + "/timeline");
+    const res = await fetch(url, { headers: { "Content-Type": "application/json" } });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    const arr  = Array.isArray(data) ? data : (data.events || data.timeline || data.items || []);
+    if (arr.length > 0) { TIMELINE = arr.map(normalizeEvent); return; }
+  } catch (e) { /* fall through */ }
+  TIMELINE = DEMO_TIMELINE.map(e => Object.assign({}, e));
+}
+
+/* ═══════════════════════════════════════════════════════════
+   API — AttorneyUploadAPI
+   POST /upload  (multipart/form-data: file + caseId + attorney)
+═══════════════════════════════════════════════════════════ */
+function doUpload() {
+  document.getElementById("pdf-file-input").click();
+}
+
+async function handlePDFUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const btn = document.getElementById("btn-upload");
+  const lbl = document.getElementById("btn-upload-lbl");
+  setBtnLoading(btn, lbl, "Uploading\u2026");
+  try {
+    const caseObj = CASES.find(c => c.id === selectedId) || CASES[0];
+    const form = new FormData();
+    form.append("file",        file);
+    form.append("caseId",      caseObj.id);
+    form.append("attorney",    currentUser);
+    form.append("patientName", caseObj.patient);
+    const res  = await fetch(apiUrl(API.ids.upload, "/upload"), { method: "POST", body: form });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json().catch(() => ({}));
+    toast("\u2705 " + file.name + " uploaded" + (data.message ? " \u2014 " + data.message : ""));
+    await loadCases();
+    rebuildDashboard();
+  } catch (e) {
+    toast("\u274C Upload failed: " + e.message);
+  } finally {
+    setBtnReady(btn, lbl, "Upload PDF");
+    input.value = "";
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   API — BuildChronologyAPI
+   POST /build  { caseId, attorney, patientName }
+═══════════════════════════════════════════════════════════ */
+async function doBuildChronology() {
+  const btn = document.getElementById("btn-build");
+  const lbl = document.getElementById("btn-build-lbl");
+  setBtnLoading(btn, lbl, "Building\u2026");
+  try {
+    const caseObj = CASES.find(c => c.id === selectedId) || CASES[0];
+    const res = await fetch(apiUrl(API.ids.chronology, "/build"), {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ caseId: caseObj.id, attorney: currentUser, patientName: caseObj.patient }),
+    });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json().catch(() => ({}));
+    toast("\uD83D\uDDC2\uFE0F Chronology build started" + (data.jobId ? " \u2014 Job #" + data.jobId : ""));
+    await loadTimeline(caseObj.id);
+    renderTimeline();
+  } catch (e) {
+    toast("\u274C Build failed: " + e.message);
+  } finally {
+    setBtnReady(btn, lbl, "Build Chronology");
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   API — RNVerificationRequest-API
+   POST /rn-review  { caseId, attorney, patientName }
+═══════════════════════════════════════════════════════════ */
+async function doRNReview() {
+  const btn = document.getElementById("btn-rn");
+  const lbl = document.getElementById("btn-rn-lbl");
+  setBtnLoading(btn, lbl, "Sending\u2026");
+  try {
+    const caseObj = CASES.find(c => c.id === selectedId) || CASES[0];
+    const res = await fetch(apiUrl(API.ids.rnReview, "/rn-review"), {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ caseId: caseObj.id, attorney: currentUser, patientName: caseObj.patient }),
+    });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json().catch(() => ({}));
+    toast("\uD83E\uDE7A RN Review request sent" + (data.reviewId ? " \u2014 #" + data.reviewId : ""));
+    const c = CASES.find(x => x.id === caseObj.id);
+    if (c) c.status = "RN Review in Progress";
+    rebuildDashboard();
+  } catch (e) {
+    toast("\u274C RN Review failed: " + e.message);
+  } finally {
+    setBtnReady(btn, lbl, "RN Review Request");
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   API — ExportCaseChronology-API
+   GET /export?caseId={id}&attorney={email}
+   Handles both binary PDF responses and JSON { url } responses.
+═══════════════════════════════════════════════════════════ */
+async function doExport() {
+  const btn = document.getElementById("btn-export");
+  const lbl = document.getElementById("btn-export-lbl");
+  setBtnLoading(btn, lbl, "Exporting\u2026");
+  try {
+    const caseObj = CASES.find(c => c.id === selectedId) || CASES[0];
+    const url = apiUrl(API.ids.export,
+      "/export?caseId=" + encodeURIComponent(caseObj.id) +
+      "&attorney="      + encodeURIComponent(currentUser));
+    const res = await fetch(url, { headers: { "Accept": "application/json,application/pdf,*/*" } });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const ct = res.headers.get("Content-Type") || "";
+    if (ct.includes("pdf") || ct.includes("octet-stream")) {
+      /* Binary PDF — trigger browser download */
+      const blob = await res.blob();
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = caseObj.id + "_chronology.pdf";
+      a.click();
+      URL.revokeObjectURL(a.href);
+      toast("\uD83D\uDCE5 Downloaded " + caseObj.id + "_chronology.pdf");
+    } else {
+      /* JSON — may contain a pre-signed download URL */
+      const data = await res.json().catch(() => ({}));
+      const dlUrl = data.url || data.downloadUrl || data.fileUrl || data.presignedUrl;
+      if (dlUrl) {
+        const a = document.createElement("a");
+        a.href = dlUrl; a.download = caseObj.id + "_chronology.pdf"; a.target = "_blank";
+        a.click();
+        toast("\uD83D\uDCE5 Export ready \u2014 " + caseObj.id);
+      } else {
+        toast("\uD83D\uDCE5 Export complete" + (data.message ? " \u2014 " + data.message : ""));
+      }
+    }
+  } catch (e) {
+    toast("\u274C Export failed: " + e.message);
+  } finally {
+    setBtnReady(btn, lbl, "Export File");
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BUTTON HELPERS
+═══════════════════════════════════════════════════════════ */
+function setBtnLoading(btn, lbl, text) {
+  btn.disabled = true;
+  lbl.innerHTML = '<span class="btn-spinner"></span>' + text;
+}
+function setBtnReady(btn, lbl, text) {
+  btn.disabled = false;
+  lbl.textContent = text;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SETTINGS MODAL
+═══════════════════════════════════════════════════════════ */
+function openSettings() {
+  document.getElementById("cfg-region").value = API.region;
+  document.getElementById("cfg-stage").value  = API.stage;
+  document.getElementById("settings-modal").classList.remove("hidden");
+}
+
+function closeSettings(e) {
+  if (!e || e.target === document.getElementById("settings-modal")) {
+    document.getElementById("settings-modal").classList.add("hidden");
+  }
+}
+
+function saveSettings() {
+  const r = document.getElementById("cfg-region").value.trim();
+  const s = document.getElementById("cfg-stage").value.trim();
+  API.region = r || "us-east-1";
+  API.stage  = s;
+  try { localStorage.setItem("hai_api_cfg", JSON.stringify({ region: API.region, stage: API.stage })); } catch(e) {}
+  document.getElementById("settings-modal").classList.add("hidden");
+  toast("\u2705 API config saved \u2014 region: " + API.region);
 }
 
 /* ═══════════════════════════════════════════════════════════
    DASHBOARD RENDER
 ═══════════════════════════════════════════════════════════ */
-function showDashboard(){
+function showDashboard() {
   document.getElementById("login-page").classList.add("hidden");
   document.getElementById("dashboard-page").classList.remove("hidden");
+  rebuildDashboard();
+}
+
+function rebuildDashboard() {
   buildCaseSelector();
   buildTypeFilters();
   renderMetrics();
@@ -453,113 +840,104 @@ function showDashboard(){
   renderTimeline();
 }
 
-function buildCaseSelector(){
+function buildCaseSelector() {
   const sel = document.getElementById("case-select");
   sel.innerHTML = CASES.map(c =>
-    `<option value="${c.id}">${c.id} — ${c.patient}</option>`
+    "<option value=\"" + c.id + "\">" + c.id + " \u2014 " + c.patient + "</option>"
   ).join("");
   sel.value = selectedId;
 }
 
-function selectCase(id){
+function selectCase(id) {
   selectedId = id;
   renderCasesList();
-  renderTimeline();
+  loadTimeline(id).then(function() { renderTimeline(); });
 }
 
-function buildTypeFilters(){
+function buildTypeFilters() {
   const wrap = document.getElementById("type-filters");
-  const all  = ["All",...CASE_TYPES];
-  wrap.innerHTML = all.map(t =>
-    `<button class="filter-btn${selectedType===t?' active':''}"
-      onclick="setType('${t}')"
-      ${t!=="All"?`style="border-color:${selectedType===t?TYPE_COLORS[t]:''}; color:${selectedType===t?TYPE_COLORS[t]:''}"`:''}>
-      ${t}
-    </button>`
-  ).join("");
+  const all  = ["All"].concat(CASE_TYPES);
+  wrap.innerHTML = all.map(function(t) {
+    var active = selectedType === t;
+    var style  = (t !== "All" && active) ? " style=\"border-color:" + TYPE_COLORS[t] + ";color:" + TYPE_COLORS[t] + "\"" : "";
+    return "<button class=\"filter-btn" + (active ? " active" : "") + "\"" + style + " onclick=\"setType('" + t + "')\">" + t + "</button>";
+  }).join("");
 }
 
-function setType(t){
+function setType(t) {
   selectedType = t;
   buildTypeFilters();
   renderCasesList();
 }
 
-function renderMetrics(){
+function renderMetrics() {
   const counts = {
     "Total Cases":           CASES.length,
-    "Uploaded":              CASES.filter(c=>c.status==="Uploaded").length,
-    "Processing":            CASES.filter(c=>c.status==="Processing").length,
-    "RN Review in Progress": CASES.filter(c=>c.status==="RN Review in Progress").length,
-    "Ready for Export":      CASES.filter(c=>c.status==="Ready for Export").length,
+    "Uploaded":              CASES.filter(function(c){return c.status==="Uploaded";}).length,
+    "Processing":            CASES.filter(function(c){return c.status==="Processing";}).length,
+    "RN Review in Progress": CASES.filter(function(c){return c.status==="RN Review in Progress";}).length,
+    "Ready for Export":      CASES.filter(function(c){return c.status==="Ready for Export";}).length,
   };
-  const colors  = ["#60a5fa","#60a5fa","#a78bfa","#f59e0b","#22d3ee"];
-  const glows   = ["rgba(96,165,250,.35)","rgba(96,165,250,.35)","rgba(167,139,250,.35)","rgba(245,158,11,.35)","rgba(34,211,238,.35)"];
-  const entries = Object.entries(counts);
-  document.getElementById("metrics-bar").innerHTML = entries.map(([label,val],i)=>
-    `<div class="metric-card" style="--metric-glow:${glows[i]}"
-       onmouseover="this.style.boxShadow='0 0 0 1px rgba(100,160,255,.25),0 0 20px ${glows[i]}'"
-       onmouseout="this.style.boxShadow=''">
-      <span class="metric-value" style="color:${colors[i]}">${val}</span>
-      <span class="metric-label">${label}</span>
-    </div>`
-  ).join("");
-}
-
-function renderCasesList(){
-  const filtered = selectedType==="All" ? CASES : CASES.filter(c=>c.type===selectedType);
-  document.getElementById("cases-list").innerHTML = filtered.map(c=>{
-    const sc = STATUS_CFG[c.status];
-    return `<div class="case-card${selectedId===c.id?' selected':''}" onclick="selectCase('${c.id}')">
-      <div class="case-card-top">
-        <span class="case-id">${c.id}</span>
-        <span class="case-status-badge"
-          style="background:${sc.color}1a;color:${sc.color};border:1px solid ${sc.color}44;box-shadow:0 0 8px ${sc.glow}">
-          ${sc.icon} ${c.status}
-        </span>
-      </div>
-      <div class="case-patient">${c.patient}</div>
-      <div class="case-meta">
-        <span class="case-type-tag" style="color:${TYPE_COLORS[c.type]}">${c.type}</span>
-        <span class="case-events">${c.events} events</span>
-      </div>
-      <div class="case-dates">
-        <span>Opened: ${c.opened}</span>
-        <span>Updated: ${c.updated}</span>
-      </div>
-    </div>`;
+  const colors = ["#60a5fa","#60a5fa","#a78bfa","#f59e0b","#22d3ee"];
+  const glows  = ["rgba(96,165,250,.35)","rgba(96,165,250,.35)","rgba(167,139,250,.35)","rgba(245,158,11,.35)","rgba(34,211,238,.35)"];
+  document.getElementById("metrics-bar").innerHTML = Object.entries(counts).map(function([label,val],i) {
+    return "<div class=\"metric-card\" style=\"--metric-glow:" + glows[i] + "\"" +
+      " onmouseover=\"this.style.boxShadow='0 0 0 1px rgba(100,160,255,.25),0 0 20px " + glows[i] + "'\"" +
+      " onmouseout=\"this.style.boxShadow=''\">" +
+      "<span class=\"metric-value\" style=\"color:" + colors[i] + "\">" + val + "</span>" +
+      "<span class=\"metric-label\">" + label + "</span></div>";
   }).join("");
 }
 
-function renderTimeline(){
-  const ac = CASES.find(c=>c.id===selectedId)||CASES[0];
-  const sc = STATUS_CFG[ac.status];
-  document.getElementById("tl-title").textContent = `Chronology Timeline — ${ac.id}`;
+function renderCasesList() {
+  const filtered = selectedType === "All" ? CASES : CASES.filter(function(c){return c.type===selectedType;});
+  document.getElementById("cases-list").innerHTML = filtered.map(function(c) {
+    const sc = STATUS_CFG[c.status] || STATUS_CFG["Uploaded"];
+    return "<div class=\"case-card" + (selectedId===c.id?" selected":"") + "\" onclick=\"selectCase('" + c.id + "')\">" +
+      "<div class=\"case-card-top\">" +
+        "<span class=\"case-id\">" + c.id + "</span>" +
+        "<span class=\"case-status-badge\" style=\"background:" + sc.color + "1a;color:" + sc.color + ";border:1px solid " + sc.color + "44;box-shadow:0 0 8px " + sc.glow + "\">" +
+          sc.icon + " " + c.status +
+        "</span>" +
+      "</div>" +
+      "<div class=\"case-patient\">" + c.patient + "</div>" +
+      "<div class=\"case-meta\">" +
+        "<span class=\"case-type-tag\" style=\"color:" + (TYPE_COLORS[c.type]||"#60a5fa") + "\">" + c.type + "</span>" +
+        "<span class=\"case-events\">" + c.events + " events</span>" +
+      "</div>" +
+      "<div class=\"case-dates\"><span>Opened: " + c.opened + "</span><span>Updated: " + c.updated + "</span></div>" +
+    "</div>";
+  }).join("");
+}
+
+function renderTimeline() {
+  const ac = CASES.find(function(c){return c.id===selectedId;}) || CASES[0];
+  const sc = STATUS_CFG[ac.status] || STATUS_CFG["Uploaded"];
+  document.getElementById("tl-title").textContent   = "Chronology Timeline \u2014 " + ac.id;
   document.getElementById("tl-patient").textContent = ac.patient;
   const badge = document.getElementById("tl-status-badge");
-  badge.textContent = `${sc.icon} ${ac.status}`;
-  badge.style.cssText = `background:${sc.color}1a;color:${sc.color};border:1px solid ${sc.color}44;box-shadow:0 0 12px ${sc.glow}`;
-  document.getElementById("timeline").innerHTML = TIMELINE.map((ev,i)=>
-    `<div class="tl-event">
-       <div class="tl-dot"></div>
-       ${i<TIMELINE.length-1?'<div class="tl-line"></div>':''}
-       <div class="tl-content">
-         <span class="tl-date">${ev.date}</span>
-         <span class="tl-label">${ev.label}</span>
-       </div>
-     </div>`
-  ).join("");
+  badge.textContent  = sc.icon + " " + ac.status;
+  badge.style.cssText = "background:" + sc.color + "1a;color:" + sc.color + ";border:1px solid " + sc.color + "44;box-shadow:0 0 12px " + sc.glow;
+  document.getElementById("timeline").innerHTML = TIMELINE.map(function(ev, i) {
+    return "<div class=\"tl-event\">" +
+      "<div class=\"tl-dot\"></div>" +
+      (i < TIMELINE.length - 1 ? "<div class=\"tl-line\"></div>" : "") +
+      "<div class=\"tl-content\">" +
+        "<span class=\"tl-date\">" + ev.date + "</span>" +
+        "<span class=\"tl-label\">" + ev.label + "</span>" +
+      "</div></div>";
+  }).join("");
 }
 
 /* ═══════════════════════════════════════════════════════════
    TOAST
 ═══════════════════════════════════════════════════════════ */
-let toastTimer;
-function toast(msg){
+var toastTimer;
+function toast(msg) {
   const tc = document.getElementById("toast-container");
-  tc.innerHTML = `<div class="toast">${msg}</div>`;
+  tc.innerHTML = "<div class=\"toast\">" + msg + "</div>";
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>{ tc.innerHTML=""; }, 2800);
+  toastTimer = setTimeout(function(){ tc.innerHTML = ""; }, 3000);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -568,41 +946,36 @@ function toast(msg){
 (function(){
   const canvas = document.getElementById("aurora-canvas");
   const ctx    = canvas.getContext("2d");
-  let W, H, t=0;
+  var W, H, t = 0;
 
-  function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+  function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
   window.addEventListener("resize", resize);
   resize();
 
-  function wave(x, freq, phase, amp){
-    return Math.sin(x * freq + phase) * amp;
-  }
+  function wave(x, freq, phase, amp){ return Math.sin(x * freq + phase) * amp; }
 
   function drawAurora(){
-    ctx.clearRect(0,0,W,H);
-    const layers = [
-      { color:[30,80,200],  alpha:.18, freq:.0018, speed:.00028, amp:.13 },
-      { color:[120,50,230], alpha:.14, freq:.0022, speed:.00022, amp:.11 },
-      { color:[20,200,220], alpha:.13, freq:.0015, speed:.00035, amp:.10 },
-      { color:[180,50,255], alpha:.10, freq:.0025, speed:.00018, amp:.09 },
+    ctx.clearRect(0, 0, W, H);
+    var layers = [
+      { color:[30,80,200],   alpha:.18, freq:.0018, speed:.00028, amp:.13 },
+      { color:[120,50,230],  alpha:.14, freq:.0022, speed:.00022, amp:.11 },
+      { color:[20,200,220],  alpha:.13, freq:.0015, speed:.00035, amp:.10 },
+      { color:[180,50,255],  alpha:.10, freq:.0025, speed:.00018, amp:.09 },
     ];
-    layers.forEach((l,li)=>{
-      const gradient = ctx.createLinearGradient(0,0,W,0);
-      gradient.addColorStop(0,   `rgba(${l.color},0)`);
-      gradient.addColorStop(0.3, `rgba(${l.color},${l.alpha})`);
-      gradient.addColorStop(0.7, `rgba(${l.color},${l.alpha*1.3})`);
-      gradient.addColorStop(1,   `rgba(${l.color},0)`);
-
+    layers.forEach(function(l, li){
+      var gradient = ctx.createLinearGradient(0, 0, W, 0);
+      gradient.addColorStop(0,   "rgba(" + l.color + ",0)");
+      gradient.addColorStop(0.3, "rgba(" + l.color + "," + l.alpha + ")");
+      gradient.addColorStop(0.7, "rgba(" + l.color + "," + (l.alpha*1.3) + ")");
+      gradient.addColorStop(1,   "rgba(" + l.color + ",0)");
       ctx.beginPath();
-      const yBase = H*(0.3 + li*0.12);
+      var yBase = H * (0.3 + li * 0.12);
       ctx.moveTo(0, yBase);
-      for(let x=0;x<=W;x+=4){
-        const y = yBase
-          + wave(x, l.freq,            t*l.speed,       H*l.amp)
-          + wave(x, l.freq*2.3+0.001,  t*l.speed*1.7+1, H*l.amp*0.5);
+      for (var x = 0; x <= W; x += 4) {
+        var y = yBase + wave(x, l.freq, t*l.speed, H*l.amp) + wave(x, l.freq*2.3+0.001, t*l.speed*1.7+1, H*l.amp*0.5);
         ctx.lineTo(x, y);
       }
-      ctx.lineTo(W,H); ctx.lineTo(0,H); ctx.closePath();
+      ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
       ctx.fillStyle = gradient;
       ctx.fill();
     });
@@ -612,9 +985,9 @@ function toast(msg){
   drawAurora();
 })();
 
-/* handle Enter key on login form */
-document.addEventListener("keydown", function(e){
-  if(e.key==="Enter" && !document.getElementById("login-page").classList.contains("hidden")){
+/* Enter key on login form */
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Enter" && !document.getElementById("login-page").classList.contains("hidden")) {
     doLogin();
   }
 });
