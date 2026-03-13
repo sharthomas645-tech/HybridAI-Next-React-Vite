@@ -39,7 +39,7 @@ const Login: FC<LoginProps> = ({ onLogin }) => {
           <span className="logo-text">ybridAI</span>
         </div>
         <h1 className="subtitle-1">Medical Chronology &amp; Analyzer Intelligence</h1>
-        <h2 className="subtitle-2">We Make It make Sense</h2>
+        <h2 className="subtitle-2">We Make It Make Sense</h2>
       </div>
 
       {/* Login Card */}
