@@ -43,19 +43,25 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
 .brand-section{text-align:center;animation:fadeInDown .8s ease both}
 @keyframes fadeInDown{from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:translateY(0)}}
 
-.hybrid-logo{display:inline-flex;align-items:center;gap:.4rem;margin-bottom:.8rem;
-  filter:drop-shadow(0 0 32px rgba(80,160,255,.8))}
+.hybrid-logo{display:inline-flex;align-items:center;gap:.6rem;margin-bottom:.8rem}
 
-.logo-svg{
-  filter:drop-shadow(0 0 20px rgba(96,165,250,.9)) drop-shadow(0 0 12px rgba(168,85,247,.7));
+/* Stylized H Logo with Aurora Colors */
+.logo-h-svg{
+  width:80px;height:80px;flex-shrink:0;
+  filter:drop-shadow(0 0 25px rgba(96,165,250,.8)) drop-shadow(0 0 12px rgba(168,85,247,.6));
+  animation:logoGlow 4s ease-in-out infinite
+}
+
+@keyframes logoGlow{
+  0%,100%{filter:drop-shadow(0 0 25px rgba(96,165,250,.8)) drop-shadow(0 0 12px rgba(168,85,247,.6))}
+  50%{filter:drop-shadow(0 0 35px rgba(34,211,238,.9)) drop-shadow(0 0 18px rgba(168,85,247,.8))}
 }
 
 .logo-text-hybrid{
-  font-size:3.5rem;font-weight:800;letter-spacing:-1.5px;
-  background:linear-gradient(135deg,#3b82f6 0%,#a855f7 50%,#06b6d4 100%);
+  font-size:3rem;font-weight:700;line-height:1.2;letter-spacing:-1px;
+  background:linear-gradient(90deg,#ffffff 0%,#ffffff 70%,#22d3ee 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 0 12px rgba(59,130,246,.6));
-  line-height:1;
+  filter:drop-shadow(0 0 12px rgba(34,211,238,.6))
 }
 
 .sub1{margin:.4rem 0 .2rem;font-size:clamp(1rem,2.5vw,1.5rem);font-weight:700;
@@ -131,6 +137,7 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
 }
 
 .splash-logo-svg{
+  width:280px;height:280px;
   filter:drop-shadow(0 0 50px rgba(80,160,255,.95)) drop-shadow(0 0 80px rgba(168,85,247,.6));
   animation:splashLogoPulse 2.5s ease-in-out infinite;
   margin-bottom:1rem
@@ -181,163 +188,144 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
 }
 
 /* ══════════════════════════════════════════════════════
-   DASHBOARD - GLASSMORPHISM STYLE
+   DASHBOARD - PROFESSIONAL LAYOUT
 ══════════════════════════════════════════════════════ */
 #dashboard-page{display:flex;flex-direction:column;position:relative;min-height:100vh}
 
-.dash-nav{display:flex;align-items:center;justify-content:space-between;
-  padding:1rem 2rem;background:rgba(200,215,255,0.85);border-bottom:1px solid rgba(150,180,255,0.4);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);flex-wrap:wrap;gap:1rem;
-  box-shadow:0 4px 20px rgba(30,80,200,.15)}
+.dash-header{background:rgba(200,215,255,0.85);border-bottom:2px solid rgba(96,165,250,.3);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:1.5rem 2rem;
+  box-shadow:0 4px 20px rgba(30,80,200,.15);display:flex;align-items:center;
+  justify-content:space-between;gap:2rem;flex-wrap:wrap}
 
-.nav-brand{display:flex;align-items:center;gap:.7rem}
+.header-left{display:flex;align-items:center;gap:1.5rem}
 
-.logo-h-sm{font-size:1.8rem;font-weight:900;
-  background:linear-gradient(135deg,#3b82f6 0%,#a855f7 50%,#06b6d4 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 0 12px rgba(59,130,246,.5))}
+.logo-h-nav-svg{
+  width:50px;height:50px;flex-shrink:0;
+  filter:drop-shadow(0 0 15px rgba(59,130,246,.6));
+}
 
 .nav-brand-text{font-size:1.3rem;font-weight:700;
-  background:linear-gradient(135deg,#a855f7 0%,#06b6d4 100%);
+  background:linear-gradient(135deg,#ffffff 0%,#22d3ee 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 0 10px rgba(168,85,247,.4))}
+  filter:drop-shadow(0 0 8px rgba(34,211,238,.5))}
 
 .nav-sep{color:rgba(150,180,255,.4);font-size:1.1rem}
 .nav-subtitle{font-size:.78rem;color:rgba(80,100,150,.7);letter-spacing:.02em;display:none}
 @media(min-width:640px){.nav-subtitle{display:inline}}
 
-.nav-user{display:flex;align-items:center;gap:.75rem}
-.user-badge{font-size:.8rem;color:rgba(80,100,150,.7);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.settings-btn{padding:.35rem .85rem;font-size:.82rem;font-weight:500;background:transparent;
-  border:1px solid rgba(59,130,246,.3);border-radius:6px;color:rgba(80,100,150,.7);cursor:pointer;
+.header-right{display:flex;align-items:center;gap:1rem}
+.user-badge{font-size:.85rem;color:rgba(80,100,150,.8);font-weight:600}
+.logout-btn{padding:.4rem .9rem;font-size:.82rem;font-weight:600;background:transparent;
+  border:1px solid rgba(59,130,246,.4);border-radius:8px;color:#3b82f6;cursor:pointer;
   font-family:inherit;transition:all .2s}
-.settings-btn:hover{border-color:#3b82f6;color:#3b82f6;background:rgba(59,130,246,.05)}
-
-.logout-btn{padding:.35rem .85rem;font-size:.82rem;font-weight:500;background:transparent;
-  border:1px solid rgba(59,130,246,.4);border-radius:6px;color:#3b82f6;cursor:pointer;
-  transition:all .2s;font-family:inherit}
 .logout-btn:hover{background:rgba(59,130,246,.1);border-color:#3b82f6}
 
-.dash-body{flex:1;display:flex;flex-direction:column;padding:2rem;gap:1.5rem;
-  align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 30%, rgba(59,130,246,.08) 0%, transparent 60%),
+.dash-body{flex:1;display:flex;flex-direction:column;padding:2.5rem;gap:2rem;
+  background:radial-gradient(ellipse at 50% 30%, rgba(59,130,246,.08) 0%, transparent 60%),
              radial-gradient(ellipse at 50% 70%, rgba(168,85,247,.06) 0%, transparent 60%)}
 
-/* MAIN DASHBOARD CARD - Glassmorphism */
-.dashboard-card{
-  background:var(--glass-bg);border:2px solid var(--glass-border);
-  border-radius:24px;padding:2.5rem;width:100%;max-width:850px;
-  backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);
-  box-shadow:0 20px 60px rgba(30,80,200,.2),inset 0 0 40px rgba(150,180,255,.2);
-  animation:cardFadeIn .6s ease}
+/* Case selector and actions row */
+.dashboard-controls{display:flex;flex-wrap:wrap;gap:1.5rem;align-items:flex-end;margin-bottom:1.5rem}
 
-@keyframes cardFadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.case-selector-group{flex:1;min-width:250px}
+.case-label{font-size:.75rem;font-weight:700;color:rgba(80,100,150,.8);
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem;display:block}
+.case-selector{
+  appearance:none;-webkit-appearance:none;width:100%;
+  background:rgba(200,215,255,0.85) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%233b82f6' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 1rem center;
+  background-size:auto,12px;border:2px solid rgba(96,165,250,.4);border-radius:12px;
+  padding:.75rem 2.5rem .75rem 1rem;font-size:1rem;color:rgba(30,60,140,.95);
+  cursor:pointer;outline:none;font-family:inherit;font-weight:600;
+  transition:all .2s;box-shadow:0 0 20px rgba(59,130,246,.15)}
+.case-selector:focus,.case-selector:hover{
+  border-color:#60a5fa;box-shadow:0 0 0 3px rgba(96,165,250,.2),0 0 30px rgba(59,130,246,.4)}
+.case-selector option{background:#ffffff;color:rgba(30,60,140,.95)}
 
-.card-title{margin:0 0 2rem;font-size:1.25rem;font-weight:700;
-  color:rgba(30,60,140,.95);text-align:center}
+.action-buttons-row{display:flex;gap:1rem;flex-wrap:wrap}
 
-/* Action buttons row */
-.action-buttons{display:flex;gap:1rem;margin-bottom:2rem;flex-wrap:wrap;justify-content:center}
-
-.action-btn{display:inline-flex;align-items:center;gap:.5rem;
-  padding:.7rem 1.2rem;font-size:.88rem;font-weight:700;border:none;
-  border-radius:10px;cursor:pointer;font-family:inherit;
-  letter-spacing:.02em;text-transform:uppercase;
-  transition:all .2s;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.action-btn{display:inline-flex;align-items:center;gap:.6rem;
+  padding:.85rem 1.4rem;font-size:.92rem;font-weight:700;border:none;
+  border-radius:12px;cursor:pointer;font-family:inherit;
+  letter-spacing:.03em;text-transform:uppercase;
+  transition:all .3s;text-shadow:0 1px 3px rgba(0,0,0,.15);
+  box-shadow:0 6px 20px rgba(0,0,0,.15)}
 
 .action-upload{background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);
-  color:#ffffff;box-shadow:0 4px 15px rgba(168,85,247,.4)}
-.action-upload:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(168,85,247,.6)}
+  color:#ffffff;box-shadow:0 6px 20px rgba(168,85,247,.4)}
+.action-upload:hover{transform:translateY(-3px);box-shadow:0 10px 35px rgba(168,85,247,.6)}
 
 .action-build{background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);
-  color:#ffffff;box-shadow:0 4px 15px rgba(168,85,247,.4)}
-.action-build:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(168,85,247,.6)}
+  color:#ffffff;box-shadow:0 6px 20px rgba(168,85,247,.4)}
+.action-build:hover{transform:translateY(-3px);box-shadow:0 10px 35px rgba(168,85,247,.6)}
 
 .action-rn{background:linear-gradient(135deg,#d4a574 0%,#e6b566 100%);
-  color:#ffffff;box-shadow:0 4px 15px rgba(212,165,116,.4)}
-.action-rn:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(212,165,116,.6)}
+  color:#ffffff;box-shadow:0 6px 20px rgba(212,165,116,.4)}
+.action-rn:hover{transform:translateY(-3px);box-shadow:0 10px 35px rgba(212,165,116,.6)}
 
 .action-export{background:linear-gradient(135deg,#3b82f6 0%,#2563eb 100%);
-  color:#ffffff;box-shadow:0 4px 15px rgba(59,130,246,.4)}
-.action-export:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(59,130,246,.6)}
+  color:#ffffff;box-shadow:0 6px 20px rgba(59,130,246,.4)}
+.action-export:hover{transform:translateY(-3px);box-shadow:0 10px 35px rgba(59,130,246,.6)}
 
-/* Metrics row */
-.metrics-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;
-  margin-bottom:2rem;padding-bottom:2rem;border-bottom:1px solid rgba(150,180,255,.3)}
+/* Main content grid */
+.dashboard-content{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem}
 
-.metric-item{text-align:center}
-.metric-label{font-size:.75rem;color:rgba(80,100,150,.7);
-  text-transform:uppercase;letter-spacing:.04em;margin-bottom:.5rem;font-weight:600}
-.metric-value{font-size:2.2rem;font-weight:900;
-  color:rgba(30,60,140,.9);line-height:1}
-.metric-subtitle{font-size:.8rem;color:rgba(80,100,150,.6);margin-top:.2rem}
+/* Case info cards */
+.info-card{background:var(--glass-bg);border:2px solid var(--glass-border);
+  border-radius:18px;padding:2rem;backdrop-filter:blur(20px);
+  box-shadow:0 12px 40px rgba(30,80,200,.18),inset 0 0 30px rgba(150,180,255,.15);
+  transition:all .3s}
 
-/* Timeline section */
-.timeline-section-title{font-size:.95rem;font-weight:700;
-  color:rgba(30,60,140,.85);margin-bottom:1.2rem;text-align:center}
+.info-card:hover{transform:translateY(-4px);
+  box-shadow:0 18px 60px rgba(30,80,200,.3),inset 0 0 40px rgba(150,180,255,.25)}
 
-.timeline-items{display:flex;flex-direction:column;gap:.8rem}
+.card-title{margin:0 0 1.5rem;font-size:1.1rem;font-weight:700;
+  color:rgba(30,60,140,.95)}
 
-.timeline-item{display:flex;align-items:center;gap:1rem;
-  padding:.9rem 1.2rem;background:rgba(255,255,255,.5);
-  border-radius:10px;border-left:3px solid #3b82f6}
+.card-value{font-size:3rem;font-weight:900;line-height:1;
+  background:linear-gradient(135deg,#3b82f6 0%,#a855f7 50%,#06b6d4 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:.5rem}
 
-.timeline-dot{width:14px;height:14px;border-radius:50%;
-  background:linear-gradient(135deg,#3b82f6,#7c3aed);flex-shrink:0;
-  box-shadow:0 0 8px rgba(59,130,246,.6)}
+.card-subtitle{font-size:.85rem;color:rgba(80,100,150,.7);font-weight:600;
+  text-transform:uppercase;letter-spacing:.03em}
 
-.timeline-label{font-size:.9rem;font-weight:600;
-  color:rgba(30,60,140,.9)}
+/* Case detail section */
+.case-detail-section{
+  background:var(--glass-bg);border:2px solid var(--glass-border);
+  border-radius:18px;padding:2.5rem;backdrop-filter:blur(20px);
+  box-shadow:0 12px 40px rgba(30,80,200,.18),inset 0 0 30px rgba(150,180,255,.15);
+  grid-column:1/-1}
 
-.timeline-progress{flex:1;height:6px;background:rgba(150,180,255,.25);
-  border-radius:3px;margin-left:.5rem;overflow:hidden}
+.case-detail-title{margin:0 0 2rem;font-size:1.3rem;font-weight:700;
+  color:rgba(30,60,140,.95);display:flex;align-items:center;gap:1rem}
 
-.timeline-progress-bar{height:100%;background:linear-gradient(90deg,#3b82f6,#7c3aed);
-  border-radius:3px;width:75%;box-shadow:0 0 8px rgba(59,130,246,.5)}
+.case-name{font-size:1.2rem;font-weight:700;color:rgba(30,60,140,.95)}
+.case-type{font-size:.9rem;color:rgba(80,100,150,.7);font-weight:500;
+  background:rgba(59,130,246,.1);padding:.35rem .75rem;border-radius:20px;
+  border:1px solid rgba(96,165,250,.3)}
 
-/* Modal and settings */
-.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.68);
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-  display:flex;align-items:center;justify-content:center;padding:1rem}
+/* Timeline */
+.timeline{display:flex;flex-direction:column;gap:1.2rem;margin-top:1.5rem}
 
-.modal{background:rgba(200,215,255,0.95);border:1px solid rgba(150,180,255,.4);border-radius:16px;
-  padding:2rem;width:100%;max-width:500px;
-  box-shadow:0 0 0 1px rgba(100,160,255,.08),0 24px 64px rgba(0,0,0,.2)}
+.timeline-item{display:flex;gap:1.2rem;padding:1.2rem;
+  background:rgba(255,255,255,.4);border-radius:12px;
+  border-left:4px solid #3b82f6;transition:all .2s}
 
-.modal-title{margin:0 0 1.25rem;font-size:1.1rem;font-weight:700;
-  background:linear-gradient(90deg,#3b82f6,#a855f7);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.timeline-item:hover{background:rgba(255,255,255,.6);
+  box-shadow:0 4px 16px rgba(59,130,246,.2)}
 
-.modal-section{font-size:.72rem;font-weight:700;color:rgba(80,100,150,.7);letter-spacing:.08em;
-  text-transform:uppercase;padding-bottom:.5rem;border-bottom:1px solid rgba(150,180,255,.2);
-  margin:.25rem 0 .6rem}
+.timeline-dot{width:16px;height:16px;border-radius:50%;
+  background:linear-gradient(135deg,#3b82f6,#a855f7);flex-shrink:0;
+  margin-top:2px;box-shadow:0 0 12px rgba(59,130,246,.6)}
 
-.modal-grid{display:flex;flex-direction:column;gap:.8rem}
-.modal-row{display:flex;flex-direction:column;gap:.3rem}
-.modal-label{font-size:.78rem;font-weight:600;color:rgba(80,100,150,.7);letter-spacing:.04em}
-.modal-input{background:rgba(255,255,255,.7);border:1px solid rgba(100,140,200,.4);border-radius:8px;
-  padding:.58rem .85rem;font-size:.9rem;color:rgba(30,60,140,.9);outline:none;
-  font-family:inherit;transition:border-color .2s,box-shadow .2s;width:100%}
-.modal-input:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.15)}
-.modal-hint{font-size:.72rem;color:rgba(80,100,150,.5);margin:.1rem 0 0}
+.timeline-content{flex:1}
+.timeline-label{font-size:.95rem;font-weight:600;color:rgba(30,60,140,.9);margin-bottom:.3rem}
+.timeline-date{font-size:.8rem;color:rgba(80,100,150,.6)}
 
-.api-row{display:flex;align-items:center;justify-content:space-between;gap:.5rem;
-  padding:.4rem .65rem;background:rgba(59,130,246,.08);border:1px solid rgba(100,140,200,.2);
-  border-radius:7px}
-.api-row-name{font-size:.78rem;color:rgba(80,100,150,.7);flex:1;min-width:0;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.api-id-code{font-family:monospace;font-size:.8rem;color:#3b82f6;
-  background:rgba(59,130,246,.1);padding:.2rem .45rem;border-radius:4px;
-  border:1px solid rgba(59,130,246,.2);user-select:all;white-space:nowrap}
-
-.modal-footer{display:flex;gap:.75rem;margin-top:1.5rem;justify-content:flex-end}
-.modal-btn{padding:.55rem 1.25rem;font-size:.88rem;font-weight:600;border-radius:8px;
-  cursor:pointer;font-family:inherit;transition:all .15s}
-.modal-btn-save{background:linear-gradient(135deg,#7c3aed,#a855f7);
-  border:none;color:#fff;box-shadow:0 4px 14px rgba(168,85,247,.3)}
-.modal-btn-save:hover{opacity:.9;transform:translateY(-1px)}
-.modal-btn-cancel{background:transparent;border:1px solid rgba(150,180,255,.4);
-  color:rgba(80,100,150,.7)}
-.modal-btn-cancel:hover{border-color:#3b82f6;color:#3b82f6}
+.timeline-progress-bar{height:8px;background:rgba(150,180,255,.25);
+  border-radius:4px;margin-top:.8rem;overflow:hidden}
+.timeline-progress-fill{height:100%;background:linear-gradient(90deg,#3b82f6,#a855f7);
+  border-radius:4px;box-shadow:0 0 10px rgba(59,130,246,.6)}
 
 /* Hidden elements */
 #pdf-file-input{display:none}
@@ -345,44 +333,46 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
 /* Toast */
 .toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;
   background:rgba(200,215,255,0.95);border:1px solid rgba(150,180,255,.4);
-  border-radius:12px;padding:.9rem 1.3rem;font-size:.85rem;
+  border-radius:12px;padding:1rem 1.5rem;font-size:.9rem;
   color:rgba(30,60,140,.9);backdrop-filter:blur(16px);
-  box-shadow:0 8px 32px rgba(30,80,200,.2);animation:toastIn .3s ease;pointer-events:none}
+  box-shadow:0 8px 32px rgba(30,80,200,.2);animation:toastIn .3s ease;pointer-events:none;
+  max-width:300px}
 @keyframes toastIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 <body>
 
-<!-- Aurora canvas (background only) -->
+<!-- Aurora canvas -->
 <canvas id="aurora-canvas" aria-hidden="true"></canvas>
 
 <!-- LOGIN PAGE -->
 <div id="login-page" class="page">
   <div class="brand-section">
     <div class="hybrid-logo">
-      <svg width="90" height="90" viewBox="0 0 100 100" class="logo-svg" style="flex-shrink:0;overflow:visible">
+      <svg class="logo-h-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="logoGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+          <linearGradient id="hGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1"/>
+            <stop offset="33%" style="stop-color:#a855f7;stop-opacity:1"/>
+            <stop offset="66%" style="stop-color:#22d3ee;stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1"/>
+          </linearGradient>
+          <filter id="hGlow">
+            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
             <feMerge>
               <feMergeNode in="coloredBlur"/>
               <feMergeNode in="SourceGraphic"/>
             </feMerge>
           </filter>
-          <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
-            <stop offset="50%" style="stop-color:#a855f7;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
-          </linearGradient>
         </defs>
-        <g filter="url(#logoGlow)" stroke="url(#logoGradient)" stroke-width="10" stroke-linecap="round" fill="none" stroke-linejoin="round">
-          <line x1="20" y1="15" x2="20" y2="85" stroke-width="10"/>
-          <line x1="80" y1="15" x2="80" y2="85" stroke-width="10"/>
-          <line x1="20" y1="50" x2="80" y2="50" stroke-width="10"/>
-        </g>
-        <path d="M 65 30 Q 90 20 95 50 Q 92 70 75 75" stroke="url(#logoGradient)" stroke-width="6" fill="none" stroke-linecap="round" filter="url(#logoGlow)"/>
+        <!-- Stylized flowing H -->
+        <path d="M 25 20 Q 30 15 35 20 L 35 50 Q 40 55 45 50 L 45 20 Q 50 15 55 20 L 55 80 Q 50 85 45 80 L 45 60 L 35 60 L 35 80 Q 30 85 25 80 Z" 
+              fill="url(#hGradient)" filter="url(#hGlow)" stroke="url(#hGradient)" stroke-width="1" opacity="0.95"/>
+        <!-- Swoosh accent -->
+        <path d="M 50 30 Q 65 25 70 40 Q 68 50 55 55" 
+              fill="none" stroke="url(#hGradient)" stroke-width="3" stroke-linecap="round" filter="url(#hGlow)"/>
       </svg>
-      <span class="logo-text-hybrid">HybridAI</span>
+      <span class="logo-text-hybrid">ybridAI</span>
     </div>
     <p class="sub1">Medical Chronology &amp; Analyzer Intelligence</p>
     <p class="sub2">We Make It Make Sense</p>
@@ -411,27 +401,26 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
 <div id="splash-page" class="page hidden">
   <canvas id="aurora-canvas-splash" aria-hidden="true"></canvas>
   <div class="splash-content">
-    <svg width="280" height="280" viewBox="0 0 100 100" class="splash-logo-svg">
+    <svg class="splash-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <filter id="splashLogoGlow">
-          <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+        <linearGradient id="hGradientSplash" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1"/>
+          <stop offset="33%" style="stop-color:#a855f7;stop-opacity:1"/>
+          <stop offset="66%" style="stop-color:#22d3ee;stop-opacity:1"/>
+          <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1"/>
+        </linearGradient>
+        <filter id="hGlowSplash">
+          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
           <feMerge>
             <feMergeNode in="coloredBlur"/>
             <feMergeNode in="SourceGraphic"/>
           </feMerge>
         </filter>
-        <linearGradient id="splashLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
-          <stop offset="50%" style="stop-color:#a855f7;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
-        </linearGradient>
       </defs>
-      <g filter="url(#splashLogoGlow)" stroke="url(#splashLogoGradient)" stroke-width="10" stroke-linecap="round" fill="none" stroke-linejoin="round">
-        <line x1="20" y1="15" x2="20" y2="85" stroke-width="10"/>
-        <line x1="80" y1="15" x2="80" y2="85" stroke-width="10"/>
-        <line x1="20" y1="50" x2="80" y2="50" stroke-width="10"/>
-      </g>
-      <path d="M 65 30 Q 90 20 95 50 Q 92 70 75 75" stroke="url(#splashLogoGradient)" stroke-width="6" fill="none" stroke-linecap="round" filter="url(#splashLogoGlow)"/>
+      <path d="M 25 20 Q 30 15 35 20 L 35 50 Q 40 55 45 50 L 45 20 Q 50 15 55 20 L 55 80 Q 50 85 45 80 L 45 60 L 35 60 L 35 80 Q 30 85 25 80 Z" 
+            fill="url(#hGradientSplash)" filter="url(#hGlowSplash)" stroke="url(#hGradientSplash)" stroke-width="1" opacity="0.95"/>
+      <path d="M 50 30 Q 65 25 70 40 Q 68 50 55 55" 
+            fill="none" stroke="url(#hGradientSplash)" stroke-width="3" stroke-linecap="round" filter="url(#hGlowSplash)"/>
     </svg>
     <h1 class="splash-title aurora-text">HybridAI</h1>
     <p class="splash-subtitle-1 aurora-text">Medical Chronology &amp; Analyzer Intelligence Engine</p>
@@ -446,83 +435,117 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
 
 <!-- DASHBOARD PAGE -->
 <div id="dashboard-page" class="page hidden">
-  <nav class="dash-nav">
-    <div class="nav-brand">
-      <svg width="40" height="40" viewBox="0 0 100 100" style="flex-shrink:0;overflow:visible">
+  <div class="dash-header">
+    <div class="header-left">
+      <svg class="logo-h-nav-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="navLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
-            <stop offset="50%" style="stop-color:#a855f7;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
+          <linearGradient id="hGradientNav" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1"/>
+            <stop offset="33%" style="stop-color:#a855f7;stop-opacity:1"/>
+            <stop offset="66%" style="stop-color:#22d3ee;stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1"/>
           </linearGradient>
+          <filter id="hGlowNav">
+            <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
         </defs>
-        <g stroke="url(#navLogoGradient)" stroke-width="10" stroke-linecap="round" fill="none" stroke-linejoin="round">
-          <line x1="20" y1="15" x2="20" y2="85" stroke-width="10"/>
-          <line x1="80" y1="15" x2="80" y2="85" stroke-width="10"/>
-          <line x1="20" y1="50" x2="80" y2="50" stroke-width="10"/>
-        </g>
+        <path d="M 25 20 Q 30 15 35 20 L 35 50 Q 40 55 45 50 L 45 20 Q 50 15 55 20 L 55 80 Q 50 85 45 80 L 45 60 L 35 60 L 35 80 Q 30 85 25 80 Z" 
+              fill="url(#hGradientNav)" filter="url(#hGlowNav)" stroke="url(#hGradientNav)" stroke-width="1" opacity="0.95"/>
+        <path d="M 50 30 Q 65 25 70 40 Q 68 50 55 55" 
+              fill="none" stroke="url(#hGradientNav)" stroke-width="3" stroke-linecap="round" filter="url(#hGlowNav)"/>
       </svg>
       <span class="nav-brand-text">ybridAI</span>
       <span class="nav-sep">|</span>
-      <span class="nav-subtitle">Medical Chronology &amp; Analyzer</span>
+      <span class="nav-subtitle">Medical Chronology Builder</span>
     </div>
-    <div class="nav-user">
+    <div class="header-right">
       <span class="user-badge" id="user-badge"></span>
-      <button class="settings-btn" onclick="openSettings()" aria-label="Open API configuration settings">⚙️ API Config</button>
-      <button class="logout-btn" onclick="doLogout()" aria-label="Sign out of HybridAI">Sign Out</button>
+      <button class="logout-btn" onclick="doLogout()">Sign Out</button>
     </div>
-  </nav>
+  </div>
 
   <div class="dash-body">
-    <div class="dashboard-card">
-      <h2 class="card-title">Medical Chronology Builder</h2>
-      
-      <div class="action-buttons">
-        <button class="action-btn action-upload" onclick="doUpload()" aria-label="Upload PDF document">📤 Upload PDF</button>
-        <button class="action-btn action-build" onclick="doBuildChronology()" aria-label="Build case chronology">🗂️ Build Chronology</button>
-        <button class="action-btn action-rn" onclick="doRNReview()" aria-label="Send RN Review Request">🩺 RN Review Request</button>
-        <button class="action-btn action-export" onclick="doExport()" aria-label="Export case chronology file">📥 Export</button>
+    <!-- Case selector and action buttons -->
+    <div class="dashboard-controls">
+      <div class="case-selector-group">
+        <label class="case-label">Select Case</label>
+        <select id="case-select" class="case-selector" onchange="selectCase(this.value)"></select>
+      </div>
+      <div class="action-buttons-row">
+        <button id="btn-upload" class="action-btn action-upload" onclick="doUpload()">📤 Upload PDF</button>
+        <button id="btn-build" class="action-btn action-build" onclick="doBuildChronology()">🗂️ Build Chronology</button>
+        <button id="btn-rn" class="action-btn action-rn" onclick="doRNReview()">🩺 RN Review</button>
+        <button id="btn-export" class="action-btn action-export" onclick="doExport()">📥 Export</button>
+      </div>
+    </div>
+
+    <!-- Main content grid -->
+    <div class="dashboard-content">
+      <!-- Total Cases Card -->
+      <div class="info-card">
+        <div class="card-title">Total Cases</div>
+        <div class="card-value" id="total-cases">12</div>
+        <div class="card-subtitle">Active Cases</div>
       </div>
 
-      <div class="metrics-row">
-        <div class="metric-item">
-          <div class="metric-label">Case Status</div>
-          <div class="metric-value" id="metric-cases">12</div>
-          <div class="metric-subtitle">Active</div>
-        </div>
-        <div class="metric-item">
-          <div class="metric-label">High-Risk Alerts</div>
-          <div class="metric-value" id="metric-alerts" style="color:#dc2626">3</div>
-          <div class="metric-subtitle"></div>
-        </div>
-        <div class="metric-item">
-          <div class="metric-label">Upcoming</div>
-          <div class="metric-value">—</div>
-          <div class="metric-subtitle"></div>
-        </div>
+      <!-- Pending Tasks Card -->
+      <div class="info-card">
+        <div class="card-title">Pending Tasks</div>
+        <div class="card-value" id="pending-tasks">5</div>
+        <div class="card-subtitle">In Progress</div>
       </div>
 
-      <div class="timeline-section-title">Chronology Timeline</div>
-      <div class="timeline-items">
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-label">PDF uploaded</div>
-          <div class="timeline-progress"><div class="timeline-progress-bar" style="width:100%"></div></div>
+      <!-- High-Risk Alerts Card -->
+      <div class="info-card">
+        <div class="card-title">High-Risk Alerts</div>
+        <div class="card-value" id="risk-alerts" style="background:linear-gradient(135deg,#dc2626 0%,#f87171 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">3</div>
+        <div class="card-subtitle">Requiring Review</div>
+      </div>
+
+      <!-- Case Detail Section -->
+      <div class="case-detail-section">
+        <div class="case-detail-title">
+          <span id="detail-case-name" class="case-name">Select a case</span>
+          <span id="detail-case-type" class="case-type">—</span>
         </div>
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-label">Chronology built</div>
-          <div class="timeline-progress"><div class="timeline-progress-bar" style="width:85%"></div></div>
+
+        <div style="margin-bottom:1.5rem">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem">
+            <div>
+              <div style="font-size:.8rem;color:rgba(80,100,150,.7);font-weight:600;text-transform:uppercase;letter-spacing:.03em;margin-bottom:.5rem">Patient Name</div>
+              <div id="detail-patient" style="font-size:1.1rem;font-weight:700;color:rgba(30,60,140,.95)">—</div>
+            </div>
+            <div>
+              <div style="font-size:.8rem;color:rgba(80,100,150,.7);font-weight:600;text-transform:uppercase;letter-spacing:.03em;margin-bottom:.5rem">Case Status</div>
+              <div id="detail-status" style="font-size:1rem;font-weight:700;color:#3b82f6">—</div>
+            </div>
+            <div>
+              <div style="font-size:.8rem;color:rgba(80,100,150,.7);font-weight:600;text-transform:uppercase;letter-spacing:.03em;margin-bottom:.5rem">Date Opened</div>
+              <div id="detail-opened" style="font-size:1rem;font-weight:600;color:rgba(80,100,150,.8)">—</div>
+            </div>
+            <div>
+              <div style="font-size:.8rem;color:rgba(80,100,150,.7);font-weight:600;text-transform:uppercase;letter-spacing:.03em;margin-bottom:.5rem">Events Count</div>
+              <div id="detail-events" style="font-size:1.1rem;font-weight:700;color:#3b82f6">—</div>
+            </div>
+          </div>
         </div>
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-label">RN Review Requested</div>
-          <div class="timeline-progress"><div class="timeline-progress-bar" style="width:60%"></div></div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-label">Chronology exported</div>
-          <div class="timeline-progress"><div class="timeline-progress-bar" style="width:40%"></div></div>
+
+        <div>
+          <div style="font-size:.95rem;font-weight:700;color:rgba(30,60,140,.95);margin-bottom:1rem">Case Progression Timeline</div>
+          <div class="timeline" id="timeline-container">
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-label">Case created</div>
+                <div class="timeline-date">2024-01-15</div>
+                <div class="timeline-progress-bar"><div class="timeline-progress-fill" style="width:100%"></div></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -531,80 +554,35 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
   <input type="file" id="pdf-file-input" accept=".pdf,application/pdf" onchange="handlePDFUpload(this)">
 </div>
 
-<!-- API Settings Modal -->
-<div id="settings-modal" class="modal-overlay hidden" onclick="closeSettings(event)">
-  <div class="modal">
-    <h3 class="modal-title">⚙️ API Configuration</h3>
-    <div class="modal-grid">
-      <p class="modal-section">AWS Deployment</p>
-      <div class="modal-row">
-        <label class="modal-label" for="cfg-region">AWS Region</label>
-        <input id="cfg-region" class="modal-input" placeholder="us-east-1"/>
-        <p class="modal-hint">e.g. us-east-1 · us-west-2 · eu-west-1</p>
-      </div>
-      <div class="modal-row">
-        <label class="modal-label" for="cfg-stage">Stage</label>
-        <input id="cfg-stage" class="modal-input" placeholder="prod / dev / (empty = $default)"/>
-      </div>
-
-      <p class="modal-section">Live API IDs</p>
-      <div class="api-row">
-        <span class="api-row-name">AttorneyCasesHandlerAPI</span>
-        <span class="api-id-code">k9a2qtik02</span>
-      </div>
-      <div class="api-row">
-        <span class="api-row-name">AttorneyUploadAPI</span>
-        <span class="api-id-code">vicwyv5xoi</span>
-      </div>
-      <div class="api-row">
-        <span class="api-row-name">BuildChronologyAPI</span>
-        <span class="api-id-code">huy6splpn3</span>
-      </div>
-      <div class="api-row">
-        <span class="api-row-name">ExportCaseChronology-API</span>
-        <span class="api-id-code">g4r3dpjiu9</span>
-      </div>
-      <div class="api-row">
-        <span class="api-row-name">RNVerificationRequest-API</span>
-        <span class="api-id-code">rolkt59qj4</span>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="modal-btn modal-btn-cancel" onclick="closeSettings()">Cancel</button>
-      <button class="modal-btn modal-btn-save" onclick="saveSettings()">Save &amp; Apply</button>
-    </div>
-  </div>
-</div>
-
 <!-- Toast container -->
 <div id="toast-container" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <script>
-const API = {
-  region: "us-east-1",
-  stage: "",
-  ids: {
-    cases: "k9a2qtik02",
-    upload: "vicwyv5xoi",
-    chronology: "huy6splpn3",
-    export: "g4r3dpjiu9",
-    rnReview: "rolkt59qj4",
-  },
-};
+const DEMO_CASES = [
+  { id:"C-2024-001", patient:"John A. Smith", type:"Personal Injury", opened:"2024-01-15", status:"Ready for Export", updated:"2024-03-10", events:12 },
+  { id:"C-2024-002", patient:"Maria L. Garcia", type:"Medical Malpractice", opened:"2024-02-03", status:"RN Review in Progress", updated:"2024-03-08", events:8 },
+  { id:"C-2024-003", patient:"Robert J. Thompson", type:"Birth Injury", opened:"2023-11-20", status:"Processing", updated:"2024-03-12", events:21 },
+  { id:"C-2024-004", patient:"Linda K. Patel", type:"Medical Malpractice", opened:"2024-01-28", status:"Uploaded", updated:"2024-02-28", events:15 },
+];
 
-(function(){
-  try {
-    const saved = localStorage.getItem("hai_api_cfg");
-    if (saved) { const p = JSON.parse(saved); if(p.region) API.region=p.region; API.stage=p.stage||""; }
-  } catch(e) {}
-})();
+const DEMO_TIMELINE = [
+  { date:"2024-03-12", label:"Medical records reviewed" },
+  { date:"2024-03-08", label:"Expert consultation scheduled" },
+  { date:"2024-02-25", label:"Radiology reports uploaded" },
+  { date:"2024-02-14", label:"Initial case assessment completed" },
+  { date:"2024-01-30", label:"Case file created" },
+];
 
+let cases = DEMO_CASES.map(c => Object.assign({}, c));
+let timeline = DEMO_TIMELINE.map(e => Object.assign({}, e));
+let selectedCaseId = cases[0].id;
 let currentUser = "";
 
 function doLogin() {
   const email = document.getElementById("email-input").value.trim();
   const pw = document.getElementById("pw-input").value;
   const err = document.getElementById("login-error");
+  
   if (!email) { err.textContent = "Please enter your email."; err.classList.remove("hidden"); return; }
   if (!pw) { err.textContent = "Please enter your password."; err.classList.remove("hidden"); return; }
   err.classList.add("hidden");
@@ -619,6 +597,8 @@ function doLogin() {
   setTimeout(function() {
     document.getElementById("splash-page").classList.add("hidden");
     document.getElementById("dashboard-page").classList.remove("hidden");
+    buildCaseSelector();
+    displayCaseDetails();
   }, 2500);
 }
 
@@ -630,40 +610,63 @@ function doLogout() {
   document.getElementById("pw-input").value = "";
 }
 
+function buildCaseSelector() {
+  const sel = document.getElementById("case-select");
+  sel.innerHTML = "";
+  cases.forEach(function(c) {
+    const opt = document.createElement("option");
+    opt.value = c.id;
+    opt.textContent = c.id + " — " + c.patient;
+    sel.appendChild(opt);
+  });
+  sel.value = selectedCaseId;
+}
+
+function selectCase(id) {
+  selectedCaseId = id;
+  displayCaseDetails();
+}
+
+function displayCaseDetails() {
+  const selectedCase = cases.find(c => c.id === selectedCaseId) || cases[0];
+  
+  document.getElementById("detail-case-name").textContent = selectedCase.id;
+  document.getElementById("detail-case-type").textContent = selectedCase.type;
+  document.getElementById("detail-patient").textContent = selectedCase.patient;
+  document.getElementById("detail-status").textContent = selectedCase.status;
+  document.getElementById("detail-opened").textContent = selectedCase.opened;
+  document.getElementById("detail-events").textContent = selectedCase.events;
+
+  const tlContainer = document.getElementById("timeline-container");
+  tlContainer.innerHTML = "";
+  timeline.forEach(function(item, idx) {
+    const pct = ((timeline.length - idx) / timeline.length) * 100;
+    const div = document.createElement("div");
+    div.className = "timeline-item";
+    div.innerHTML = `
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-label">${item.label}</div>
+        <div class="timeline-date">${item.date}</div>
+        <div class="timeline-progress-bar"><div class="timeline-progress-fill" style="width:${pct}%"></div></div>
+      </div>
+    `;
+    tlContainer.appendChild(div);
+  });
+}
+
 function doUpload() { document.getElementById("pdf-file-input").click(); }
 
-function handlePDFUpload(input) { 
+function handlePDFUpload(input) {
   if (input.files[0]) {
-    toast("✅ " + input.files[0].name + " uploaded");
+    toast("✅ " + input.files[0].name + " uploaded successfully");
     input.value = "";
   }
 }
 
-function doBuildChronology() { toast("🗂️ Building chronology..."); }
-function doRNReview() { toast("🧑‍⚕️ RN Review request sent"); }
-function doExport() { toast("📥 Exporting chronology..."); }
-
-function openSettings() {
-  document.getElementById("cfg-region").value = API.region;
-  document.getElementById("cfg-stage").value = API.stage;
-  document.getElementById("settings-modal").classList.remove("hidden");
-}
-
-function closeSettings(e) {
-  if (!e || e.target === document.getElementById("settings-modal")) {
-    document.getElementById("settings-modal").classList.add("hidden");
-  }
-}
-
-function saveSettings() {
-  const r = document.getElementById("cfg-region").value.trim();
-  const s = document.getElementById("cfg-stage").value.trim();
-  API.region = r || "us-east-1";
-  API.stage = s;
-  try { localStorage.setItem("hai_api_cfg", JSON.stringify({ region: API.region, stage: API.stage })); } catch(e) {}
-  document.getElementById("settings-modal").classList.add("hidden");
-  toast("✅ API config saved — region: " + API.region);
-}
+function doBuildChronology() { toast("🗂️ Building chronology for case..."); }
+function doRNReview() { toast("🩺 RN Review request sent"); }
+function doExport() { toast("📥 Exporting case chronology..."); }
 
 function toast(msg) {
   const container = document.getElementById("toast-container");
