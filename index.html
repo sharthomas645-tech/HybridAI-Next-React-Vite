@@ -305,60 +305,43 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
 <div id="login-page" class="page">
   <div class="brand-section">
     <div class="hybrid-logo">
-      <svg class="logo-h-svg" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+      <!-- HYBRIDAI H LOGO - LOGIN -->
+      <svg class="logo-h-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="leftRibbon" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#f472b6;stop-opacity:1"/>
-            <stop offset="50%" style="stop-color:#ec4899;stop-opacity:1"/>
-            <stop offset="100%" style="stop-color:#be185d;stop-opacity:1"/>
+          <linearGradient id="hLeftGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#f97cc8;stop-opacity:1"/>
+            <stop offset="50%" style="stop-color:#e84a9a;stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:#d946a6;stop-opacity:1"/>
           </linearGradient>
-          <linearGradient id="rightRibbon" x1="100%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:#67e8f9;stop-opacity:1"/>
-            <stop offset="50%" style="stop-color:#22d3ee;stop-opacity:1"/>
-            <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1"/>
+          <linearGradient id="hRightGrad" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1"/>
+            <stop offset="50%" style="stop-color:#14b8a6;stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:#0891b2;stop-opacity:1"/>
           </linearGradient>
-          <filter id="ribbonGlow">
-            <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+          <filter id="hGlow">
+            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
             <feMerge>
               <feMergeNode in="coloredBlur"/>
               <feMergeNode in="SourceGraphic"/>
             </feMerge>
           </filter>
-          <filter id="shadow">
-            <feDropShadow dx="0" dy="3" stdDeviation="2" flood-opacity="0.3"/>
-          </filter>
         </defs>
         
-        <path d="M 45 45 Q 48 50 48 70 Q 48 90 42 105 Q 50 100 52 75 Q 52 55 50 48 Z" 
-              fill="#000000" opacity="0.15" filter="url(#shadow)"/>
-        <path d="M 115 45 Q 112 50 112 70 Q 112 90 118 105 Q 110 100 108 75 Q 108 55 110 48 Z" 
-              fill="#000000" opacity="0.15" filter="url(#shadow)"/>
+        <!-- Left ribbon (pink/magenta) -->
+        <path d="M 25 20 Q 28 30 30 50 Q 32 70 30 90 Q 28 105 25 115 Q 35 110 38 90 Q 40 70 38 50 Q 36 30 35 20 Z" 
+              fill="url(#hLeftGrad)" filter="url(#hGlow)" opacity="0.95"/>
+        <path d="M 30 25 Q 32 35 33 55 Q 34 75 33 90 Q 32 100 30 110 Q 34 105 36 85 Q 37 65 36 45 Q 35 30 33 25 Z" 
+              fill="#fca5de" opacity="0.5"/>
         
-        <path d="M 42 45 Q 40 52 40 70 Q 40 88 45 105 C 48 108 52 105 52 100 Q 48 85 48 70 Q 48 55 50 48 Q 48 44 42 45 Z" 
-              fill="url(#leftRibbon)" filter="url(#ribbonGlow)" opacity="0.95"/>
-        <path d="M 43 48 Q 42 54 42 68 Q 42 82 46 98 C 47 100 49 99 49 96 Q 46 84 46 70 Q 46 57 48 50 Q 46 47 43 48 Z" 
-              fill="#fca5de" opacity="0.4"/>
+        <!-- Center connecting bar -->
+        <path d="M 35 55 Q 45 50 60 50 Q 75 50 85 55 L 85 70 Q 75 75 60 75 Q 45 75 35 70 Z" 
+              fill="url(#hRightGrad)" filter="url(#hGlow)" opacity="0.9"/>
         
-        <path d="M 118 45 Q 120 52 120 70 Q 120 88 115 105 C 112 108 108 105 108 100 Q 112 85 112 70 Q 112 55 110 48 Q 112 44 118 45 Z" 
-              fill="url(#rightRibbon)" filter="url(#ribbonGlow)" opacity="0.95"/>
-        <path d="M 117 48 Q 118 54 118 68 Q 118 82 114 98 C 113 100 111 99 111 96 Q 114 84 114 70 Q 114 57 112 50 Q 114 47 117 48 Z" 
-              fill="#a5f3fc" opacity="0.4"/>
-        
-        <defs>
-          <linearGradient id="centerBar" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" style="stop-color:#f472b6"/>
-            <stop offset="40%" style="stop-color:#ec4899"/>
-            <stop offset="60%" style="stop-color:#06b6d4"/>
-            <stop offset="100%" style="stop-color:#22d3ee"/>
-          </linearGradient>
-        </defs>
-        <path d="M 45 68 Q 52 65 80 65 Q 108 65 115 68 L 115 82 Q 108 85 80 85 Q 52 85 45 82 Z" 
-              fill="url(#centerBar)" filter="url(#ribbonGlow)"/>
-        <path d="M 45 70 Q 52 68 80 68 Q 108 68 115 70 L 115 74 Q 108 76 80 76 Q 52 76 45 74 Z" 
-              fill="#ffffff" opacity="0.3"/>
-        
-        <path d="M 60 40 Q 80 32 105 45 Q 98 38 80 35 Q 70 33 60 40" 
-              fill="#ec4899" opacity="0.5" filter="url(#ribbonGlow)"/>
+        <!-- Right ribbon (cyan) -->
+        <path d="M 95 20 Q 92 30 90 50 Q 88 70 90 90 Q 92 105 95 115 Q 85 110 82 90 Q 80 70 82 50 Q 84 30 85 20 Z" 
+              fill="url(#hRightGrad)" filter="url(#hGlow)" opacity="0.95"/>
+        <path d="M 90 25 Q 88 35 87 55 Q 86 75 87 90 Q 88 100 90 110 Q 86 105 84 85 Q 83 65 84 45 Q 85 30 87 25 Z" 
+              fill="#a5f3fc" opacity="0.5"/>
       </svg>
       
       <div class="logo-text-section">
@@ -381,45 +364,40 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
 <div id="splash-page" class="page hidden">
   <canvas id="aurora-canvas-splash" aria-hidden="true"></canvas>
   <div class="splash-content">
-    <svg class="splash-logo-svg" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <!-- HYBRIDAI H LOGO - SPLASH -->
+    <svg class="splash-logo-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="bgGradSplash" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#2563eb;stop-opacity:1"/>
-          <stop offset="50%" style="stop-color:#7c3aed;stop-opacity:1"/>
-          <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1"/>
+        <linearGradient id="hLeftGradSplash" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#f97cc8;stop-opacity:1"/>
+          <stop offset="50%" style="stop-color:#e84a9a;stop-opacity:1"/>
+          <stop offset="100%" style="stop-color:#d946a6;stop-opacity:1"/>
         </linearGradient>
-        <linearGradient id="leftRibSplash" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#f472b6;stop-opacity:1"/>
-          <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1"/>
+        <linearGradient id="hRightGradSplash" x1="100%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1"/>
+          <stop offset="50%" style="stop-color:#14b8a6;stop-opacity:1"/>
+          <stop offset="100%" style="stop-color:#0891b2;stop-opacity:1"/>
         </linearGradient>
-        <linearGradient id="rightRibSplash" x1="100%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style="stop-color:#67e8f9;stop-opacity:1"/>
-          <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1"/>
-        </linearGradient>
-        <filter id="logoGlowBigSplash">
-          <feGaussianBlur stdDeviation="3"/>
+        <filter id="hGlowSplash">
+          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+          <feMerge>
+            <feMergeNode in="coloredBlur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
         </filter>
       </defs>
       
-      <rect width="400" height="200" fill="url(#bgGradSplash)"/>
+      <path d="M 25 20 Q 28 30 30 50 Q 32 70 30 90 Q 28 105 25 115 Q 35 110 38 90 Q 40 70 38 50 Q 36 30 35 20 Z" 
+            fill="url(#hLeftGradSplash)" filter="url(#hGlowSplash)" opacity="0.95"/>
+      <path d="M 30 25 Q 32 35 33 55 Q 34 75 33 90 Q 32 100 30 110 Q 34 105 36 85 Q 37 65 36 45 Q 35 30 33 25 Z" 
+            fill="#fca5de" opacity="0.5"/>
       
-      <path d="M 60 50 Q 55 60 55 100 Q 55 140 70 160 Q 75 158 78 145 Q 72 120 72 100 Q 72 70 75 55 Z" 
-            fill="url(#leftRibSplash)" filter="url(#logoGlowBigSplash)" opacity="0.9"/>
-      <path d="M 65 55 Q 62 65 62 100 Q 62 135 72 152 Q 75 150 77 138 Q 70 115 70 100 Q 70 75 73 60 Z" 
-            fill="#fca5de" opacity="0.3"/>
+      <path d="M 35 55 Q 45 50 60 50 Q 75 50 85 55 L 85 70 Q 75 75 60 75 Q 45 75 35 70 Z" 
+            fill="url(#hRightGradSplash)" filter="url(#hGlowSplash)" opacity="0.9"/>
       
-      <path d="M 70 95 Q 80 90 120 90 Q 160 90 170 95 L 170 115 Q 160 120 120 120 Q 80 120 70 115 Z" 
-            fill="url(#rightRibSplash)" filter="url(#logoGlowBigSplash)" opacity="0.85"/>
-      <path d="M 75 98 Q 85 95 120 95 Q 155 95 165 98 L 165 110 Q 155 113 120 113 Q 85 113 75 110 Z" 
-            fill="#ffffff" opacity="0.25"/>
-      
-      <path d="M 340 50 Q 345 60 345 100 Q 345 140 330 160 Q 325 158 322 145 Q 328 120 328 100 Q 328 70 325 55 Z" 
-            fill="url(#rightRibSplash)" filter="url(#logoGlowBigSplash)" opacity="0.9"/>
-      <path d="M 335 55 Q 338 65 338 100 Q 338 135 328 152 Q 325 150 323 138 Q 330 115 330 100 Q 330 75 327 60 Z" 
-            fill="#a5f3fc" opacity="0.3"/>
-      
-      <text x="200" y="130" font-size="72" font-weight="900" font-family="Inter, Arial, sans-serif" text-anchor="middle" fill="#ffffff" letter-spacing="-2">HybridAI</text>
-      <text x="200" y="130" font-size="72" font-weight="900" font-family="Inter, Arial, sans-serif" text-anchor="middle" fill="none" stroke="#22d3ee" stroke-width="1" opacity="0.5" letter-spacing="-2" filter="url(#logoGlowBigSplash)">HybridAI</text>
+      <path d="M 95 20 Q 92 30 90 50 Q 88 70 90 90 Q 92 105 95 115 Q 85 110 82 90 Q 80 70 82 50 Q 84 30 85 20 Z" 
+            fill="url(#hRightGradSplash)" filter="url(#hGlowSplash)" opacity="0.95"/>
+      <path d="M 90 25 Q 88 35 87 55 Q 86 75 87 90 Q 88 100 90 110 Q 86 105 84 85 Q 83 65 84 45 Q 85 30 87 25 Z" 
+            fill="#a5f3fc" opacity="0.5"/>
     </svg>
 
     <h1 class="splash-title aurora-text" style="margin-bottom:1rem">Medical Chronology &amp; Analyzer Intelligence</h1>
@@ -431,60 +409,40 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
 <div id="dashboard-page" class="page hidden">
   <div class="dash-header">
     <div class="header-left">
-      <svg class="logo-h-nav-svg" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+      <!-- HYBRIDAI H LOGO - NAV -->
+      <svg class="logo-h-nav-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="leftRibbonNav" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#f472b6;stop-opacity:1"/>
-            <stop offset="50%" style="stop-color:#ec4899;stop-opacity:1"/>
-            <stop offset="100%" style="stop-color:#be185d;stop-opacity:1"/>
+          <linearGradient id="hLeftGradNav" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#f97cc8;stop-opacity:1"/>
+            <stop offset="50%" style="stop-color:#e84a9a;stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:#d946a6;stop-opacity:1"/>
           </linearGradient>
-          <linearGradient id="rightRibbonNav" x1="100%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:#67e8f9;stop-opacity:1"/>
-            <stop offset="50%" style="stop-color:#22d3ee;stop-opacity:1"/>
-            <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1"/>
+          <linearGradient id="hRightGradNav" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1"/>
+            <stop offset="50%" style="stop-color:#14b8a6;stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:#0891b2;stop-opacity:1"/>
           </linearGradient>
-          <filter id="ribbonGlowNav">
-            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+          <filter id="hGlowNav">
+            <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
             <feMerge>
               <feMergeNode in="coloredBlur"/>
               <feMergeNode in="SourceGraphic"/>
             </feMerge>
           </filter>
-          <filter id="shadowNav">
-            <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-opacity="0.25"/>
-          </filter>
         </defs>
         
-        <path d="M 45 45 Q 48 50 48 70 Q 48 90 42 105 Q 50 100 52 75 Q 52 55 50 48 Z" 
-              fill="#000000" opacity="0.12" filter="url(#shadowNav)"/>
-        <path d="M 115 45 Q 112 50 112 70 Q 112 90 118 105 Q 110 100 108 75 Q 108 55 110 48 Z" 
-              fill="#000000" opacity="0.12" filter="url(#shadowNav)"/>
+        <path d="M 25 20 Q 28 30 30 50 Q 32 70 30 90 Q 28 105 25 115 Q 35 110 38 90 Q 40 70 38 50 Q 36 30 35 20 Z" 
+              fill="url(#hLeftGradNav)" filter="url(#hGlowNav)" opacity="0.95"/>
+        <path d="M 30 25 Q 32 35 33 55 Q 34 75 33 90 Q 32 100 30 110 Q 34 105 36 85 Q 37 65 36 45 Q 35 30 33 25 Z" 
+              fill="#fca5de" opacity="0.5"/>
         
-        <path d="M 42 45 Q 40 52 40 70 Q 40 88 45 105 C 48 108 52 105 52 100 Q 48 85 48 70 Q 48 55 50 48 Q 48 44 42 45 Z" 
-              fill="url(#leftRibbonNav)" filter="url(#ribbonGlowNav)" opacity="0.95"/>
-        <path d="M 43 48 Q 42 54 42 68 Q 42 82 46 98 C 47 100 49 99 49 96 Q 46 84 46 70 Q 46 57 48 50 Q 46 47 43 48 Z" 
-              fill="#fca5de" opacity="0.35"/>
+        <path d="M 35 55 Q 45 50 60 50 Q 75 50 85 55 L 85 70 Q 75 75 60 75 Q 45 75 35 70 Z" 
+              fill="url(#hRightGradNav)" filter="url(#hGlowNav)" opacity="0.9"/>
         
-        <path d="M 118 45 Q 120 52 120 70 Q 120 88 115 105 C 112 108 108 105 108 100 Q 112 85 112 70 Q 112 55 110 48 Q 112 44 118 45 Z" 
-              fill="url(#rightRibbonNav)" filter="url(#ribbonGlowNav)" opacity="0.95"/>
-        <path d="M 117 48 Q 118 54 118 68 Q 118 82 114 98 C 113 100 111 99 111 96 Q 114 84 114 70 Q 114 57 112 50 Q 114 47 117 48 Z" 
-              fill="#a5f3fc" opacity="0.35"/>
-        
-        <defs>
-          <linearGradient id="centerBarNav" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" style="stop-color:#f472b6"/>
-            <stop offset="40%" style="stop-color:#ec4899"/>
-            <stop offset="60%" style="stop-color:#06b6d4"/>
-            <stop offset="100%" style="stop-color:#22d3ee"/>
-          </linearGradient>
-        </defs>
-        <path d="M 45 68 Q 52 65 80 65 Q 108 65 115 68 L 115 82 Q 108 85 80 85 Q 52 85 45 82 Z" 
-              fill="url(#centerBarNav)" filter="url(#ribbonGlowNav)"/>
-        <path d="M 45 70 Q 52 68 80 68 Q 108 68 115 70 L 115 74 Q 108 76 80 76 Q 52 76 45 74 Z" 
-              fill="#ffffff" opacity="0.3"/>
-        
-        <path d="M 60 40 Q 80 32 105 45 Q 98 38 80 35 Q 70 33 60 40" 
-              fill="#ec4899" opacity="0.45" filter="url(#ribbonGlowNav)"/>
+        <path d="M 95 20 Q 92 30 90 50 Q 88 70 90 90 Q 92 105 95 115 Q 85 110 82 90 Q 80 70 82 50 Q 84 30 85 20 Z" 
+              fill="url(#hRightGradNav)" filter="url(#hGlowNav)" opacity="0.95"/>
+        <path d="M 90 25 Q 88 35 87 55 Q 86 75 87 90 Q 88 100 90 110 Q 86 105 84 85 Q 83 65 84 45 Q 85 30 87 25 Z" 
+              fill="#a5f3fc" opacity="0.5"/>
       </svg>
       <span class="nav-brand-text">HybridAI</span>
       <span class="nav-subtitle">Legal Medical Intelligence</span>
@@ -590,12 +548,12 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
 // ════════════════════════════════════════════════════════
 // AWS COGNITO CONFIGURATION
 // ════════════════════════════════════════════════════════
-// REPLACE THESE WITH YOUR ACTUAL COGNITO VALUES
 const COGNITO_CONFIG = {
-  UserPoolId: 'us-east-1_XXXXXXXXX', // Your Cognito User Pool ID
-  ClientId: 'XXXXXXXXXXXXXXXXXXXXXXXXXX', // Your Cognito Client ID
-  RedirectUri: 'https://www.hybridaimedlegal.com/', // Your redirect URL
-  Region: 'us-east-1'
+  UserPoolId: 'us-west-2_O3TpxRglB',
+  ClientId: '5dm1etldt5tea0olbf4k8r67jh',
+  RedirectUri: 'https://hybridaimedlegal.com',
+  Region: 'us-west-2',
+  Domain: 'us-west-2o3tpxrglb'
 };
 
 const cognitoIdentityServiceProvider = new AmazonCognitoIdentity.CognitoIdentityServiceProvider({
@@ -638,8 +596,7 @@ function initiateLogin() {
   loginBtn.disabled = true;
   loginBtn.textContent = "Redirecting to Cognito...";
   
-  // Redirect to Cognito hosted UI
-  const cognitoLoginUrl = `https://${COGNITO_CONFIG.UserPoolId.split('_')[1]}.auth.${COGNITO_CONFIG.Region}.amazoncognito.com/oauth2/authorize?client_id=${COGNITO_CONFIG.ClientId}&response_type=code&redirect_uri=${encodeURIComponent(COGNITO_CONFIG.RedirectUri)}&identity_provider=Cognito`;
+  const cognitoLoginUrl = `https://${COGNITO_CONFIG.Domain}.auth.${COGNITO_CONFIG.Region}.amazoncognito.com/oauth2/authorize?client_id=${COGNITO_CONFIG.ClientId}&response_type=code&redirect_uri=${encodeURIComponent(COGNITO_CONFIG.RedirectUri)}&identity_provider=Cognito`;
   
   window.location.href = cognitoLoginUrl;
 }
@@ -670,7 +627,7 @@ function handleCognitoCallback() {
 }
 
 function exchangeCodeForToken(authCode) {
-  const tokenEndpoint = `https://${COGNITO_CONFIG.UserPoolId.split('_')[1]}.auth.${COGNITO_CONFIG.Region}.amazoncognito.com/oauth2/token`;
+  const tokenEndpoint = `https://${COGNITO_CONFIG.Domain}.auth.${COGNITO_CONFIG.Region}.amazoncognito.com/oauth2/token`;
   
   fetch(tokenEndpoint, {
     method: 'POST',
@@ -690,8 +647,7 @@ function exchangeCodeForToken(authCode) {
       localStorage.setItem('access_token', data.access_token);
       localStorage.setItem('id_token', data.id_token);
       
-      // Get user info and show dashboard
-      fetch(`https://${COGNITO_CONFIG.UserPoolId.split('_')[1]}.auth.${COGNITO_CONFIG.Region}.amazoncognito.com/oauth2/userInfo`, {
+      fetch(`https://${COGNITO_CONFIG.Domain}.auth.${COGNITO_CONFIG.Region}.amazoncognito.com/oauth2/userInfo`, {
         headers: { 'Authorization': `Bearer ${data.access_token}` }
       })
       .then(res => res.json())
@@ -724,11 +680,9 @@ function showSplashAndDashboard(email) {
 }
 
 function doLogout() {
-  // Clear tokens
   localStorage.removeItem('access_token');
   localStorage.removeItem('id_token');
   
-  // Sign out from Cognito
   const currentUser = userPool.getCurrentUser();
   if (currentUser) {
     currentUser.signOut();
@@ -738,7 +692,6 @@ function doLogout() {
   document.getElementById("dashboard-page").classList.add("hidden");
   document.getElementById("splash-page").classList.add("hidden");
   
-  // Reset login button
   const loginBtn = document.getElementById("cognito-login-btn");
   loginBtn.disabled = false;
   loginBtn.textContent = "🔐 Sign In With Cognito";
@@ -830,39 +783,38 @@ function startSplashAnimation() {
 
   let time = 0;
   function animateSplash() {
-    time += 0.001;
-    ctx.fillStyle = "rgba(2,2,12,0.08)";
+    time += 0.0008;
+    ctx.fillStyle = "rgba(2,2,12,0.05)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const centerX = canvas.width * 0.5;
     const centerY = canvas.height * 0.5;
-    const maxRadius = Math.sqrt(centerX * centerX + centerY * centerY) * 1.6;
+    const maxRadius = Math.sqrt(centerX * centerX + centerY * centerY) * 1.5;
 
-    const mainCurtains = [
-      { color: "rgba(59,130,246,", alpha: 0.55, radiusScale: 0.25, rotationSpeed: 0.0007, spiralTightness: 0.0018 },
-      { color: "rgba(126,180,255,", alpha: 0.52, radiusScale: 0.45, rotationSpeed: 0.0005, spiralTightness: 0.002 },
-      { color: "rgba(180,100,255,", alpha: 0.58, radiusScale: 0.65, rotationSpeed: 0.00075, spiralTightness: 0.0022 },
-      { color: "rgba(50,220,220,", alpha: 0.54, radiusScale: 0.8, rotationSpeed: 0.0008, spiralTightness: 0.0016 },
-      { color: "rgba(220,100,255,", alpha: 0.60, radiusScale: 0.95, rotationSpeed: 0.00065, spiralTightness: 0.0024 },
+    const swirls = [
+      { color: "rgba(37,99,235,", alpha: 0.6, phase: 0, speed: 0.00025 },
+      { color: "rgba(99,102,241,", alpha: 0.5, phase: Math.PI/3, speed: 0.0002 },
+      { color: "rgba(168,85,247,", alpha: 0.65, phase: 2*Math.PI/3, speed: 0.00035 },
+      { color: "rgba(236,72,153,", alpha: 0.55, phase: Math.PI, speed: 0.00015 },
+      { color: "rgba(34,211,238,", alpha: 0.6, phase: 4*Math.PI/3, speed: 0.0003 },
     ];
 
-    mainCurtains.forEach(function(curtain, idx) {
+    swirls.forEach(function(swirl, idx) {
       const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, maxRadius);
-      gradient.addColorStop(0, curtain.color + "0)");
-      gradient.addColorStop(0.2, curtain.color + (curtain.alpha * 0.3) + ")");
-      gradient.addColorStop(0.5, curtain.color + curtain.alpha + ")");
-      gradient.addColorStop(0.8, curtain.color + (curtain.alpha * 0.4) + ")");
-      gradient.addColorStop(1, curtain.color + "0)");
+      gradient.addColorStop(0, swirl.color + "0)");
+      gradient.addColorStop(0.2, swirl.color + (swirl.alpha * 0.3) + ")");
+      gradient.addColorStop(0.5, swirl.color + swirl.alpha + ")");
+      gradient.addColorStop(0.8, swirl.color + (swirl.alpha * 0.4) + ")");
+      gradient.addColorStop(1, swirl.color + "0)");
 
       ctx.fillStyle = gradient;
       ctx.beginPath();
 
-      for (let angle = 0; angle < Math.PI * 10; angle += 0.06) {
-        const rotatedAngle = angle + time * curtain.rotationSpeed;
-        const spiralRadius = angle * curtain.spiralTightness * maxRadius * curtain.radiusScale;
-        const wave1 = Math.sin(angle * 0.4 + time * 0.0002) * 40;
-        const wave2 = Math.sin(angle * 0.8 + time * 0.00015 + idx) * 25;
-        const radius = Math.min(spiralRadius + wave1 + wave2, maxRadius * curtain.radiusScale);
+      for (let angle = 0; angle < Math.PI * 6; angle += 0.12) {
+        const rotatedAngle = angle + time * swirl.speed + swirl.phase;
+        const waveAmount = Math.sin(angle * 0.5 + time * 0.0005) * maxRadius * 0.15;
+        const radius = (angle / (Math.PI * 6)) * maxRadius * 0.9 + waveAmount;
+        
         const x = centerX + Math.cos(rotatedAngle) * radius;
         const y = centerY + Math.sin(rotatedAngle) * radius;
         
@@ -893,39 +845,37 @@ function startSplashAnimation() {
 
   let time = 0;
   function animate() {
-    time += 0.0003;
-    ctx.fillStyle = "rgba(2,2,12,0.08)";
+    time += 0.0002;
+    ctx.fillStyle = "rgba(2,2,12,0.04)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const centerX = canvas.width * 0.5;
     const centerY = canvas.height * 0.5;
-    const maxRadius = Math.sqrt(centerX * centerX + centerY * centerY) * 1.8;
+    const maxRadius = Math.sqrt(centerX * centerX + centerY * centerY) * 1.6;
 
     const swirls = [
-      { color: "rgba(59,130,246,", alpha: 0.35, radiusScale: 0.2, rotationSpeed: 0.0002, spiralTightness: 0.001 },
-      { color: "rgba(99,160,255,", alpha: 0.32, radiusScale: 0.4, rotationSpeed: 0.00015, spiralTightness: 0.0012 },
-      { color: "rgba(168,85,247,", alpha: 0.38, radiusScale: 0.6, rotationSpeed: 0.00025, spiralTightness: 0.0014 },
-      { color: "rgba(34,211,238,", alpha: 0.33, radiusScale: 0.75, rotationSpeed: 0.0003, spiralTightness: 0.001 },
-      { color: "rgba(196,100,255,", alpha: 0.36, radiusScale: 0.9, rotationSpeed: 0.0002, spiralTightness: 0.0012 },
+      { color: "rgba(37,99,235,", alpha: 0.5, phase: 0, speed: 0.0001 },
+      { color: "rgba(99,102,241,", alpha: 0.42, phase: Math.PI/3, speed: 0.00012 },
+      { color: "rgba(168,85,247,", alpha: 0.55, phase: 2*Math.PI/3, speed: 0.00015 },
+      { color: "rgba(236,72,153,", alpha: 0.45, phase: Math.PI, speed: 0.00008 },
+      { color: "rgba(34,211,238,", alpha: 0.5, phase: 4*Math.PI/3, speed: 0.00018 },
     ];
 
     swirls.forEach(function(swirl, idx) {
       const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, maxRadius);
       gradient.addColorStop(0, swirl.color + "0)");
-      gradient.addColorStop(0.25, swirl.color + (swirl.alpha * 0.3) + ")");
+      gradient.addColorStop(0.25, swirl.color + (swirl.alpha * 0.25) + ")");
       gradient.addColorStop(0.5, swirl.color + swirl.alpha + ")");
-      gradient.addColorStop(0.75, swirl.color + (swirl.alpha * 0.4) + ")");
+      gradient.addColorStop(0.75, swirl.color + (swirl.alpha * 0.35) + ")");
       gradient.addColorStop(1, swirl.color + "0)");
 
       ctx.fillStyle = gradient;
       ctx.beginPath();
 
-      for (let angle = 0; angle < Math.PI * 8; angle += 0.1) {
-        const rotatedAngle = angle + time * swirl.rotationSpeed;
-        const spiralRadius = angle * swirl.spiralTightness * maxRadius * swirl.radiusScale;
-        
-        const waveAmount = Math.sin(angle * 0.3 + time * 0.00005) * 20;
-        const radius = Math.min(spiralRadius + waveAmount, maxRadius * swirl.radiusScale);
+      for (let angle = 0; angle < Math.PI * 8; angle += 0.15) {
+        const rotatedAngle = angle + time * swirl.speed + swirl.phase;
+        const waveAmount = Math.sin(angle * 0.4 + time * 0.0002) * maxRadius * 0.12;
+        const radius = (angle / (Math.PI * 8)) * maxRadius * 0.85 + waveAmount;
         
         const x = centerX + Math.cos(rotatedAngle) * radius;
         const y = centerY + Math.sin(rotatedAngle) * radius;
@@ -944,7 +894,6 @@ function startSplashAnimation() {
   animate();
 })();
 
-// Handle Cognito callback on page load
 window.addEventListener('load', handleCognitoCallback);
 </script>
 
