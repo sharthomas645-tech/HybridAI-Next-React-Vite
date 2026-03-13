@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import type { Schema } from "../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
 
-const client = generateClient<Schema>();
+const client = generateClient();
 
 function App() {
-  const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
+  const [todos, setTodos] = useState([]);
 
   useEffect(() => {
     client.models.Todo.observeQuery().subscribe({

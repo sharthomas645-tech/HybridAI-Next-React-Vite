@@ -9,7 +9,6 @@ import {
     fixupConfigRules,
 } from "@eslint/compat";
 
-import tsParser from "@typescript-eslint/parser";
 import reactRefresh from "eslint-plugin-react-refresh";
 import js from "@eslint/js";
 
@@ -28,13 +27,10 @@ export default defineConfig([{
         globals: {
             ...globals.browser,
         },
-
-        parser: tsParser,
     },
 
     extends: fixupConfigRules(compat.extends(
         "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
         "plugin:react-hooks/recommended",
     )),
 

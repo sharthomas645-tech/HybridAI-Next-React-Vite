@@ -1,4 +1,4 @@
-import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
+import { a, defineData } from "@aws-amplify/backend";
 
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
@@ -13,8 +13,6 @@ const schema = a.schema({
     })
     .authorization((allow) => [allow.publicApiKey()]),
 });
-
-export type Schema = ClientSchema<typeof schema>;
 
 export const data = defineData({
   schema,
@@ -40,9 +38,8 @@ cases: https://docs.amplify.aws/gen2/build-a-backend/data/connect-to-API/
 /*
 "use client"
 import { generateClient } from "aws-amplify/data";
-import type { Schema } from "@/amplify/data/resource";
 
-const client = generateClient<Schema>() // use this Data client for CRUDL requests
+const client = generateClient() // use this Data client for CRUDL requests
 */
 
 /*== STEP 3 ===============================================================
