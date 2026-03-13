@@ -35,8 +35,11 @@ const handleGetCases = async (event) => {
     try {
         console.log('=== GET CASES START ===');
         
-        // Extract JWT claims from authorizer
-        const claims = event.requestContext?.authorizer?.jwt?.claims;
+        // Extract JWT claims from authorizer - check both possible paths
+        let claims = event.requestContext?.authorizer?.jwt?.claims;
+        if (!claims) {
+            claims = event.requestContext?.authorizer?.claims;
+        }
         console.log('Claims:', JSON.stringify(claims));
         
         if (!claims) {
@@ -51,13 +54,15 @@ const handleGetCases = async (event) => {
             };
         }
         
-        const userId = claims.sub || claims.username;
+        const userId = claims.sub || claims.username || claims['custom:attorneyId'];
         const email = claims.email;
+        const firmId = claims['custom:firmId'];
+        const attorneyId = claims['custom:attorneyId'];
         
-        console.log('Extracted:', { userId, email });
+        console.log('Extracted:', { userId, email, firmId, attorneyId });
         
         if (!userId) {
-            console.error('Missing userId/sub in claims');
+            console.error('Missing user identifier in claims');
             return {
                 statusCode: 401,
                 headers: corsHeaders,
@@ -99,6 +104,8 @@ const handleGetCases = async (event) => {
                 success: true,
                 userId: userId,
                 email: email,
+                firmId: firmId,
+                attorneyId: attorneyId,
                 cases: cases,
                 count: cases.length,
                 timestamp: new Date().toISOString()

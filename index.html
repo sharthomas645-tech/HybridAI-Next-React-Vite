@@ -474,9 +474,9 @@ async function loadCases() {
             
             result.cases.forEach(caseItem => {
                 const option = document.createElement('option');
-                option.value = caseItem.CaseId;
-                const firmName = caseItem.FirmName || caseItem.firmId || 'Unknown Firm';
-                option.textContent = `Case: ${caseItem.CaseId} | Firm: ${firmName}`;
+                option.value = caseItem.caseId;
+                const firmName = caseItem.firmId || 'Unknown Firm';
+                option.textContent = `Case: ${caseItem.caseId} | Firm: ${firmName}`;
                 dropdown.appendChild(option);
             });
             
@@ -682,6 +682,12 @@ function setupButtons() {
                 return;
             }
 
+            if (!response.ok) {
+                showError(`Build chronology failed with status ${response.status}`);
+                setButtonLoading('buildChronBtn', false);
+                return;
+            }
+
             const result = await response.json();
             
             if (result.success) {
@@ -729,6 +735,12 @@ function setupButtons() {
                 showError('Session expired. Please log in again.');
                 showLoginScreen();
                 setupLoginButton();
+                setButtonLoading('rnReviewBtn', false);
+                return;
+            }
+
+            if (!response.ok) {
+                showError(`RN review request failed with status ${response.status}`);
                 setButtonLoading('rnReviewBtn', false);
                 return;
             }
