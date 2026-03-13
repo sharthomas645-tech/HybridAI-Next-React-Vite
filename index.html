@@ -146,6 +146,11 @@
         button:hover {
             transform: translateY(-2px);
         }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
         .cards {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -162,6 +167,24 @@
             font-weight: 700;
             color: #e0f8ff;
             margin-top: 10px;
+        }
+        .error-message {
+            background: rgba(255, 100, 100, 0.2);
+            color: #ff6b6b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ff6b6b;
+            display: none;
+        }
+        .success-message {
+            background: rgba(100, 200, 100, 0.2);
+            color: #64c864;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #64c864;
+            display: none;
         }
         .hidden { display: none !important; }
     </style>
@@ -186,6 +209,9 @@
         
         <div class="logoText">HybridAI</div>
         <div class="subtitle">Medical Chronology Builder & Analyzer</div>
+        
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
         
         <div class="cases-section">
             <label for="casesDropdown">Select Case:</label>
@@ -220,7 +246,20 @@
 
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1201.0.min.js"></script>
 <script>
-// CORRECT Cognito Configuration
+// ============================================================================
+// API ENDPOINT CONFIGURATION
+// ============================================================================
+const API_ENDPOINTS = {
+    GET_CASES: 'https://k9a2qtik02.execute-api.us-west-2.amazonaws.com/prod/cases',
+    UPLOAD: 'https://vicwyv5xoi.execute-api.us-west-2.amazonaws.com/prod/upload',
+    BUILD_CHRONOLOGY: 'https://huy6splpn3.execute-api.us-west-2.amazonaws.com/prod/build',
+    RN_REVIEW: 'https://rolkt59qj4.execute-api.us-west-2.amazonaws.com/prod/rn/request',
+    EXPORT: 'https://g4r3dpjiu9.execute-api.us-west-2.amazonaws.com/prod/export'
+};
+
+// ============================================================================
+// COGNITO CONFIGURATION
+// ============================================================================
 const COGNITO_DOMAIN = 'https://us-west-2o3tpxrglb.auth.us-west-2.amazoncognito.com';
 const CLIENT_ID = '5dm1etldt5tea0olbf4k8r67jh';
 const REDIRECT_URI = 'https://hybridaimedlegal.com';
@@ -228,13 +267,49 @@ const SCOPES = 'email openid';
 
 let currentUser = null;
 
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+function showError(message) {
+    const errorDiv = document.getElementById('errorMessage');
+    errorDiv.textContent = message;
+    errorDiv.style.display = 'block';
+    setTimeout(() => {
+        errorDiv.style.display = 'none';
+    }, 5000);
+    console.error('ERROR:', message);
+}
+
+function showSuccess(message) {
+    const successDiv = document.getElementById('successMessage');
+    successDiv.textContent = message;
+    successDiv.style.display = 'block';
+    setTimeout(() => {
+        successDiv.style.display = 'none';
+    }, 5000);
+    console.log('SUCCESS:', message);
+}
+
+function setButtonLoading(buttonId, isLoading) {
+    const btn = document.getElementById(buttonId);
+    if (btn) {
+        btn.disabled = isLoading;
+        btn.style.opacity = isLoading ? '0.6' : '1';
+    }
+}
+
+// ============================================================================
+// INITIALIZATION
+// ============================================================================
+
 console.log('HybridAI app initializing...');
 console.log('Cognito Domain:', COGNITO_DOMAIN);
+console.log('API Endpoints:', API_ENDPOINTS);
 
 window.addEventListener('load', function() {
     console.log('Page loaded, setting up event listeners');
     
-    // Check for auth code FIRST before checking token
     const urlParams = new URLSearchParams(window.location.search);
     const authCode = urlParams.get('code');
     
@@ -244,13 +319,11 @@ window.addEventListener('load', function() {
         console.log('Auth code found in URL, exchanging for token...');
         exchangeCodeForToken(authCode);
     } else {
-        // No auth code, show login screen
         console.log('No auth code, showing login screen');
         showLoginScreen();
         setupLoginButton();
     }
     
-    // Setup Aurora canvas
     setupAuroraCanvas();
 });
 
@@ -262,7 +335,6 @@ function setupLoginButton() {
             e.stopPropagation();
             console.log('Sign in button clicked - redirecting to Cognito');
             
-            // Redirect to Cognito login
             const authUrl = `${COGNITO_DOMAIN}/oauth2/authorize?client_id=${CLIENT_ID}&response_type=code&scope=${encodeURIComponent(SCOPES)}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
             console.log('Redirecting to:', authUrl);
             window.location.href = authUrl;
@@ -307,18 +379,19 @@ async function exchangeCodeForToken(code) {
             localStorage.setItem('id_token', data.id_token);
             currentUser = data;
             
-            // Clean up URL
             window.history.replaceState({}, document.title, window.location.pathname);
             
             console.log('✓ Showing dashboard');
             showDashboard();
         } else {
             console.error('No access token in response:', data);
+            showError('Failed to get access token from Cognito');
             showLoginScreen();
             setupLoginButton();
         }
     } catch (err) {
         console.error('Token exchange error:', err);
+        showError('Token exchange failed: ' + err.message);
         showLoginScreen();
         setupLoginButton();
     }
@@ -347,6 +420,10 @@ function setupLogoutButton() {
     }
 }
 
+// ============================================================================
+// CASES LOADING
+// ============================================================================
+
 async function loadCases() {
     try {
         const token = localStorage.getItem('access_token');
@@ -355,7 +432,10 @@ async function loadCases() {
             return;
         }
 
-        const response = await fetch('https://vicwyv5xoi.execute-api.us-west-2.amazonaws.com/prod/cases', {
+        console.log('\n=== LOADING CASES ===');
+        console.log('API Endpoint:', API_ENDPOINTS.GET_CASES);
+
+        const response = await fetch(API_ENDPOINTS.GET_CASES, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -363,29 +443,62 @@ async function loadCases() {
             }
         });
 
+        console.log('Response status:', response.status);
+
+        // Handle 401 - Token expired
         if (response.status === 401) {
-            console.error('Token expired or invalid, logging out');
+            console.error('Token expired or invalid (401)');
             localStorage.clear();
+            showError('Your session has expired. Please log in again.');
             showLoginScreen();
             setupLoginButton();
             return;
         }
 
+        // Handle other errors
+        if (!response.ok) {
+            console.error('Failed to load cases, status:', response.status);
+            const errorText = await response.text();
+            console.error('Error response:', errorText);
+            showError('Failed to load cases. Please try again.');
+            return;
+        }
+
         const result = await response.json();
+        console.log('✓ Cases loaded successfully');
+        console.log('Cases count:', result.cases ? result.cases.length : 0);
+
         if (result.success && result.cases && result.cases.length > 0) {
             const dropdown = document.getElementById('casesDropdown');
             dropdown.innerHTML = '<option value="">-- Select a Case --</option>';
+            
             result.cases.forEach(caseItem => {
                 const option = document.createElement('option');
-                option.value = caseItem.caseId;
-                option.textContent = `Case: ${caseItem.caseId} | Firm: ${caseItem.firmId}`;
+                option.value = caseItem.CaseId;
+                const firmName = caseItem.FirmName || caseItem.firmId || 'Unknown Firm';
+                option.textContent = `Case: ${caseItem.CaseId} | Firm: ${firmName}`;
                 dropdown.appendChild(option);
             });
+            
+            console.log('✓ Dropdown populated with', result.cases.length, 'cases');
+            showSuccess(`Loaded ${result.cases.length} case(s)`);
+        } else {
+            console.log('No cases found for this attorney');
+            const dropdown = document.getElementById('casesDropdown');
+            dropdown.innerHTML = '<option value="">No cases found</option>';
+            showError('No cases found. Contact your administrator.');
         }
+
+        console.log('=== LOADING CASES COMPLETE ===\n');
     } catch (err) {
         console.error('Error loading cases:', err);
+        showError('Error loading cases: ' + err.message);
     }
 }
+
+// ============================================================================
+// FILE UPLOAD
+// ============================================================================
 
 function setupFileUpload() {
     const fileInput = document.getElementById('fileInput');
@@ -393,6 +506,13 @@ function setupFileUpload() {
 
     uploadBtn.addEventListener('click', () => {
         console.log('Upload button clicked');
+        
+        const caseId = document.getElementById('casesDropdown').value;
+        if (!caseId) {
+            showError('Please select a case first');
+            return;
+        }
+        
         fileInput.click();
     });
 
@@ -408,11 +528,13 @@ function setupFileUpload() {
         console.log('File size:', file.size, 'bytes');
         console.log('File type:', file.type);
 
+        setButtonLoading('uploadBtn', true);
+
         try {
             const token = localStorage.getItem('access_token');
             if (!token) {
                 console.error('No access token found in localStorage');
-                alert('Authentication error: No access token. Please log in again.');
+                showError('Authentication error: No access token. Please log in again.');
                 localStorage.clear();
                 showLoginScreen();
                 setupLoginButton();
@@ -420,15 +542,23 @@ function setupFileUpload() {
             }
             console.log('✓ Access token found');
 
-            const payload = { fileName: file.name };
+            const caseId = document.getElementById('casesDropdown').value;
+            if (!caseId) {
+                showError('Please select a case first');
+                setButtonLoading('uploadBtn', false);
+                return;
+            }
+
+            const payload = { 
+                fileName: file.name,
+                caseId: caseId
+            };
             console.log('Payload:', payload);
 
-            // STEP 1: Get presigned URL from API
-            console.log('\n--- STEP 1: Requesting presigned URL from API ---');
-            console.log('API Endpoint:', 'https://vicwyv5xoi.execute-api.us-west-2.amazonaws.com/prod/upload');
-            console.log('Method:', 'PUT');
+            console.log('\n--- STEP 1: Requesting presigned URL ---');
+            console.log('API Endpoint:', API_ENDPOINTS.UPLOAD);
 
-            const handshakeResponse = await fetch('https://vicwyv5xoi.execute-api.us-west-2.amazonaws.com/prod/upload', {
+            const handshakeResponse = await fetch(API_ENDPOINTS.UPLOAD, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -437,28 +567,24 @@ function setupFileUpload() {
                 body: JSON.stringify(payload)
             });
 
-            console.log('API Response Status:', handshakeResponse.status, handshakeResponse.statusText);
+            console.log('API Response Status:', handshakeResponse.status);
 
-            // Handle 401 Unauthorized
             if (handshakeResponse.status === 401) {
                 console.error('Token is invalid or expired (401)');
                 localStorage.clear();
-                alert('Your session has expired. Please log in again.');
+                showError('Your session has expired. Please log in again.');
                 showLoginScreen();
                 setupLoginButton();
+                setButtonLoading('uploadBtn', false);
                 return;
             }
-
-            console.log('API Response Headers:', {
-                'content-type': handshakeResponse.headers.get('content-type'),
-                'access-control-allow-origin': handshakeResponse.headers.get('access-control-allow-origin')
-            });
 
             if (!handshakeResponse.ok && handshakeResponse.status !== 201) {
                 console.error('API Response not OK. Status:', handshakeResponse.status);
                 const errorText = await handshakeResponse.text();
                 console.error('API Error Response:', errorText);
-                alert(`Upload failed: API returned status ${handshakeResponse.status}`);
+                showError(`Upload failed: API returned status ${handshakeResponse.status}`);
+                setButtonLoading('uploadBtn', false);
                 return;
             }
 
@@ -469,23 +595,22 @@ function setupFileUpload() {
                 console.log('API Response Body:', result);
             } catch (parseErr) {
                 console.error('Failed to parse API response as JSON:', parseErr);
-                alert('Upload failed: Could not parse API response');
+                showError('Upload failed: Could not parse API response');
+                setButtonLoading('uploadBtn', false);
                 return;
             }
 
-            // STEP 2: Extract upload URL
             console.log('\n--- STEP 2: Extracting upload URL ---');
             const uploadUrl = result.uploadUrl || result.url;
             
             if (!uploadUrl) {
                 console.error('No uploadUrl or url in response:', result);
-                alert('Upload failed: No upload URL returned from server');
+                showError('Upload failed: No upload URL returned from server');
+                setButtonLoading('uploadBtn', false);
                 return;
             }
             console.log('✓ Upload URL received');
-            console.log('URL starts with:', uploadUrl.substring(0, 80));
 
-            // STEP 3: Upload file to S3
             console.log('\n--- STEP 3: Uploading file to S3 ---');
 
             const s3Response = await fetch(uploadUrl, {
@@ -494,53 +619,82 @@ function setupFileUpload() {
                 headers: { 'Content-Type': file.type || 'application/pdf' }
             });
 
-            console.log('S3 Response Status:', s3Response.status, s3Response.statusText);
-            console.log('S3 Response OK:', s3Response.ok);
-            console.log('S3 Response Headers:', {
-                'etag': s3Response.headers.get('etag'),
-                'x-amz-request-id': s3Response.headers.get('x-amz-request-id')
-            });
+            console.log('S3 Response Status:', s3Response.status);
 
             if (s3Response.ok || s3Response.status === 200 || s3Response.status === 201) {
                 console.log('✓ File uploaded to S3 successfully!');
                 console.log('=== FILE UPLOAD COMPLETE ===\n');
-                alert('File uploaded successfully!');
+                showSuccess('File uploaded successfully!');
                 loadCases();
             } else {
                 console.error('S3 Upload failed with status:', s3Response.status);
-                const s3ErrorText = await s3Response.text();
-                console.error('S3 Error Response:', s3ErrorText);
-                alert(`S3 Upload failed with status ${s3Response.status}`);
+                showError(`S3 Upload failed with status ${s3Response.status}`);
             }
         } catch (err) {
             console.error('=== UPLOAD ERROR ===');
             console.error('Error message:', err.message);
             console.error('Error type:', err.name);
-            console.error('=== END ERROR ===\n');
-            alert(`Upload failed: ${err.message}`);
+            showError('Upload failed: ' + err.message);
+        } finally {
+            setButtonLoading('uploadBtn', false);
+            fileInput.value = '';
         }
     });
 }
+
+// ============================================================================
+// BUTTON HANDLERS
+// ============================================================================
 
 function setupButtons() {
     document.getElementById('buildChronBtn').addEventListener('click', async () => {
         try {
             const token = localStorage.getItem('access_token');
             if (!token) {
-                alert('Please log in first');
+                showError('Please log in first');
                 return;
             }
-            const response = await fetch('https://huy6splpn3.execute-api.us-west-2.amazonaws.com/prod/build', {
+
+            const caseId = document.getElementById('casesDropdown').value;
+            if (!caseId) {
+                showError('Please select a case first');
+                return;
+            }
+
+            setButtonLoading('buildChronBtn', true);
+            console.log('Building chronology for case:', caseId);
+
+            const response = await fetch(API_ENDPOINTS.BUILD_CHRONOLOGY, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify({ caseId })
             });
+
+            if (response.status === 401) {
+                localStorage.clear();
+                showError('Session expired. Please log in again.');
+                showLoginScreen();
+                setupLoginButton();
+                setButtonLoading('buildChronBtn', false);
+                return;
+            }
+
             const result = await response.json();
-            alert(result.success ? 'Chronology built!' : 'Error building chronology');
+            
+            if (result.success) {
+                showSuccess('Chronology built successfully!');
+                console.log('Chronology built:', result);
+            } else {
+                showError('Error building chronology: ' + (result.error || 'Unknown error'));
+            }
         } catch (err) {
-            alert('Error: ' + err.message);
+            showError('Build chronology error: ' + err.message);
+            console.error('Build error:', err);
+        } finally {
+            setButtonLoading('buildChronBtn', false);
         }
     });
 
@@ -548,20 +702,50 @@ function setupButtons() {
         try {
             const token = localStorage.getItem('access_token');
             if (!token) {
-                alert('Please log in first');
+                showError('Please log in first');
                 return;
             }
-            const response = await fetch('https://rolkt59qj4.execute-api.us-west-2.amazonaws.com/prod/rn/request', {
+
+            const caseId = document.getElementById('casesDropdown').value;
+            if (!caseId) {
+                showError('Please select a case first');
+                return;
+            }
+
+            setButtonLoading('rnReviewBtn', true);
+            console.log('Requesting RN review for case:', caseId);
+
+            const response = await fetch(API_ENDPOINTS.RN_REVIEW, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify({ caseId })
             });
+
+            if (response.status === 401) {
+                localStorage.clear();
+                showError('Session expired. Please log in again.');
+                showLoginScreen();
+                setupLoginButton();
+                setButtonLoading('rnReviewBtn', false);
+                return;
+            }
+
             const result = await response.json();
-            alert(result.success ? 'RN Review requested!' : 'Error');
+            
+            if (result.success) {
+                showSuccess('RN Review requested successfully!');
+                console.log('RN Review requested:', result);
+            } else {
+                showError('Error requesting RN review: ' + (result.error || 'Unknown error'));
+            }
         } catch (err) {
-            alert('Error: ' + err.message);
+            showError('RN review error: ' + err.message);
+            console.error('RN review error:', err);
+        } finally {
+            setButtonLoading('rnReviewBtn', false);
         }
     });
 
@@ -569,29 +753,66 @@ function setupButtons() {
         try {
             const token = localStorage.getItem('access_token');
             if (!token) {
-                alert('Please log in first');
+                showError('Please log in first');
                 return;
             }
-            const response = await fetch('https://g4r3dpjiu9.execute-api.us-west-2.amazonaws.com/prod/export', {
+
+            const caseId = document.getElementById('casesDropdown').value;
+            if (!caseId) {
+                showError('Please select a case first');
+                return;
+            }
+
+            setButtonLoading('exportBtn', true);
+            console.log('Exporting case:', caseId);
+
+            const response = await fetch(API_ENDPOINTS.EXPORT, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify({ caseId })
             });
+
+            if (response.status === 401) {
+                localStorage.clear();
+                showError('Session expired. Please log in again.');
+                showLoginScreen();
+                setupLoginButton();
+                setButtonLoading('exportBtn', false);
+                return;
+            }
+
+            if (!response.ok) {
+                showError(`Export failed with status ${response.status}`);
+                setButtonLoading('exportBtn', false);
+                return;
+            }
+
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'exported_files.zip';
+            a.download = `chronology-${caseId}-${new Date().toISOString().split('T')[0]}.zip`;
             document.body.appendChild(a);
             a.click();
             a.remove();
+            
+            showSuccess('Export downloaded successfully!');
+            console.log('Export completed');
         } catch (err) {
-            alert('Error: ' + err.message);
+            showError('Export error: ' + err.message);
+            console.error('Export error:', err);
+        } finally {
+            setButtonLoading('exportBtn', false);
         }
     });
 }
+
+// ============================================================================
+// AURORA CANVAS ANIMATION
+// ============================================================================
 
 function setupAuroraCanvas() {
     const canvas = document.getElementById('auroraCanvas');
