@@ -9,7 +9,7 @@
 <style>
 /* ============================================================
    HybridAI — Medical Chronology & Analyzer Intelligence
-   Aurora Borealis Theme  |  Standalone single-file version
+   Aurora Borealis Theme with Glassmorphism
    ============================================================ */
 *,*::before,*::after{box-sizing:border-box}
 :root{
@@ -17,10 +17,10 @@
   --purple-1:#7c3aed;--purple-2:#a855f7;--purple-3:#c084fc;
   --aqua-1:#06b6d4;--aqua-2:#22d3ee;--aqua-3:#67e8f9;
   --night-bg:#02020c;
-  --glass-bg:rgba(10,12,30,0.72);
-  --glass-border:rgba(100,160,255,0.18);
-  --text-primary:rgba(220,235,255,0.95);
-  --text-muted:rgba(160,185,220,0.7);
+  --glass-bg:rgba(200,215,255,0.92);
+  --glass-border:rgba(150,180,255,0.4);
+  --text-primary:rgba(30,50,120,0.95);
+  --text-muted:rgba(80,100,150,0.7);
 }
 html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-bg);
   font-family:"Inter",system-ui,-apple-system,Helvetica,Arial,sans-serif;
@@ -28,17 +28,14 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
 
 /* ── Aurora background canvas ─────────────────────────── */
 #aurora-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
-
-/* ── Gradient text ────────────────────────────────────── */
-.grad{background:linear-gradient(90deg,var(--blue-3),var(--purple-3),var(--aqua-2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+#aurora-canvas-splash{position:fixed;inset:0;z-index:0;pointer-events:none}
 
 /* ── Pages ────────────────────────────────────────────── */
 .page{position:relative;z-index:10;min-height:100vh}
 .hidden{display:none!important}
 
 /* ══════════════════════════════════════════════════════
-   LOGIN
+   LOGIN PAGE
 ══════════════════════════════════════════════════════ */
 #login-page{display:flex;flex-direction:column;align-items:center;
   justify-content:center;padding:2rem 1rem;gap:2.5rem}
@@ -46,65 +43,72 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
 .brand-section{text-align:center;animation:fadeInDown .8s ease both}
 @keyframes fadeInDown{from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:translateY(0)}}
 
-.hybrid-logo{display:inline-flex;align-items:center;margin-bottom:.5rem;
-  filter:drop-shadow(0 0 32px rgba(80,160,255,.8));gap:.2rem}
-.logo-h{font-size:4.5rem;font-weight:900;line-height:1.2;letter-spacing:-2px;
-  background:linear-gradient(135deg,#60a5fa 0%,#a855f7 50%,#22d3ee 100%);
+.hybrid-logo{display:inline-flex;align-items:center;gap:.4rem;margin-bottom:.8rem;
+  filter:drop-shadow(0 0 32px rgba(80,160,255,.8))}
+
+.logo-svg{
+  filter:drop-shadow(0 0 20px rgba(96,165,250,.9)) drop-shadow(0 0 12px rgba(168,85,247,.7));
+}
+
+.logo-text-hybrid{
+  font-size:3.5rem;font-weight:800;letter-spacing:-1.5px;
+  background:linear-gradient(135deg,#3b82f6 0%,#a855f7 50%,#06b6d4 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 0 20px rgba(96,165,250,.9));text-shadow:0 0 30px rgba(168,85,247,.5)}
-.logo-text{font-size:3rem;font-weight:700;line-height:1.2;
-  background:linear-gradient(135deg,#a855f7 0%,#22d3ee 60%,#60a5fa 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 0 20px rgba(168,85,247,.8))}
+  filter:drop-shadow(0 0 12px rgba(59,130,246,.6));
+  line-height:1;
+}
 
 .sub1{margin:.4rem 0 .2rem;font-size:clamp(1rem,2.5vw,1.5rem);font-weight:700;
-  background:linear-gradient(90deg,var(--blue-3),var(--purple-3),var(--aqua-2),var(--blue-3));
+  background:linear-gradient(90deg,#60a5fa,#a855f7,#22d3ee,#60a5fa);
   background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
   background-clip:text;animation:shimmer 4s linear infinite}
+
 .sub2{margin:0;font-size:clamp(.85rem,1.8vw,1.1rem);font-weight:700;
-  background:linear-gradient(90deg,var(--aqua-2),var(--purple-3),var(--blue-3),var(--aqua-2));
+  background:linear-gradient(90deg,#22d3ee,#a855f7,#3b82f6,#22d3ee);
   background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
   background-clip:text;animation:shimmer 5s linear infinite reverse;letter-spacing:.04em}
+
 @keyframes shimmer{from{background-position:0% center}to{background-position:200% center}}
 
-.login-card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:16px;
+.login-card{background:rgba(200,215,255,0.92);border:1px solid rgba(150,180,255,0.5);border-radius:20px;
   padding:2.5rem 2rem;width:100%;max-width:400px;backdrop-filter:blur(18px);
   -webkit-backdrop-filter:blur(18px);
-  box-shadow:0 0 0 1px rgba(100,160,255,.08),0 20px 60px rgba(0,0,0,.6),0 0 80px rgba(80,100,255,.12);
+  box-shadow:0 8px 32px rgba(30,80,200,.25),0 0 60px rgba(100,160,255,.15);
   animation:fadeInUp .8s ease .1s both}
+
 @keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 
-.login-title{margin:0 0 1.5rem;font-size:1.3rem;font-weight:600;color:var(--text-primary);text-align:center}
+.login-title{margin:0 0 1.5rem;font-size:1.3rem;font-weight:600;
+  color:rgba(30,60,140,.95);text-align:center}
+
 .login-form{display:flex;flex-direction:column;gap:1rem}
 .form-group{display:flex;flex-direction:column;gap:.35rem}
-.form-label{font-size:.82rem;font-weight:500;color:var(--text-muted);letter-spacing:.04em}
-.form-input{background:rgba(10,20,50,.7);border:1px solid var(--glass-border);border-radius:8px;
-  padding:.65rem .9rem;font-size:.95rem;color:var(--text-primary);outline:none;
+.form-label{font-size:.82rem;font-weight:500;color:rgba(80,100,150,.8);letter-spacing:.04em}
+.form-input{background:rgba(255,255,255,.7);border:1px solid rgba(100,140,200,.4);border-radius:8px;
+  padding:.65rem .9rem;font-size:.95rem;color:rgba(30,60,140,.9);outline:none;
   transition:border-color .2s,box-shadow .2s;font-family:inherit;width:100%}
-.form-input::placeholder{color:rgba(160,185,220,.35)}
-.form-input:focus{border-color:var(--blue-3);box-shadow:0 0 0 3px rgba(96,165,250,.15)}
-.error-msg{margin:0;font-size:.82rem;color:#f87171;padding:.5rem .75rem;
-  background:rgba(248,113,113,.08);border-radius:6px;border:1px solid rgba(248,113,113,.2)}
+.form-input::placeholder{color:rgba(100,140,200,.4)}
+.form-input:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+.error-msg{margin:0;font-size:.82rem;color:#dc2626;padding:.5rem .75rem;
+  background:rgba(220,38,38,.08);border-radius:6px;border:1px solid rgba(220,38,38,.2)}
 .login-btn{margin-top:.5rem;padding:.75rem;font-size:1rem;font-weight:600;border:none;
   border-radius:8px;cursor:pointer;width:100%;
-  background:linear-gradient(135deg,var(--blue-1) 0%,var(--purple-1) 60%,var(--aqua-1) 100%);
+  background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);
   color:#fff;transition:opacity .2s,transform .1s,box-shadow .2s;
-  box-shadow:0 4px 20px rgba(80,80,255,.3);font-family:inherit}
-.login-btn:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 6px 28px rgba(80,80,255,.45)}
-.login-btn:active{transform:translateY(0);box-shadow:0 0 18px rgba(80,80,255,.65)}
-.login-footer{margin:1.2rem 0 0;text-align:center;font-size:.78rem;color:var(--text-muted)}
-.login-hint{font-size:.75rem;color:rgba(160,185,220,.5);text-align:center;margin:.25rem 0 0}
+  box-shadow:0 4px 20px rgba(168,85,247,.4);font-family:inherit}
+.login-btn:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 6px 28px rgba(168,85,247,.6)}
+.login-btn:active{transform:translateY(0)}
+.login-footer{margin:1.2rem 0 0;text-align:center;font-size:.78rem;color:rgba(80,100,150,.6)}
+.login-hint{font-size:.75rem;color:rgba(80,100,150,.5);text-align:center;margin:.25rem 0 0}
 
 /* ══════════════════════════════════════════════════════
-   SPLASH PAGE (Logo Screen with Aurora Text Flow)
+   SPLASH PAGE
 ══════════════════════════════════════════════════════ */
 #splash-page{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding:2rem 1rem;gap:1.5rem;position:relative;z-index:10;min-height:100vh;
   background:var(--night-bg)
 }
-
-#aurora-canvas-splash{position:fixed;inset:0;z-index:0;pointer-events:none}
 
 .splash-content{
   display:flex;flex-direction:column;align-items:center;gap:1rem;
@@ -113,18 +117,10 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
 
 @keyframes splashFadeIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
 
-/* AURORA TEXT FLOW - Synced with platform animation */
 .aurora-text{
-  background:linear-gradient(90deg,
-    #60a5fa 0%,
-    #a855f7 25%,
-    #22d3ee 50%,
-    #a855f7 75%,
-    #60a5fa 100%);
+  background:linear-gradient(90deg,#60a5fa 0%,#a855f7 25%,#22d3ee 50%,#a855f7 75%,#60a5fa 100%);
   background-size:300% auto;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   animation:auroraFlow 4s linear infinite;
   filter:drop-shadow(0 0 10px rgba(96,165,250,.5)) drop-shadow(0 0 20px rgba(168,85,247,.3));
 }
@@ -147,32 +143,27 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
 
 .splash-title{
   margin:0;font-size:clamp(3rem,10vw,5.5rem);font-weight:900;text-align:center;
-  letter-spacing:-2px;
-  line-height:1.1;margin-bottom:.5rem;
+  letter-spacing:-2px;line-height:1.1;margin-bottom:.5rem;
   text-shadow:0 0 30px rgba(96,165,250,.5),0 0 50px rgba(168,85,247,.3);
   font-family:"Inter",system-ui,-apple-system,Helvetica,Arial,sans-serif
 }
 
 .splash-subtitle-1{
   margin:0;font-size:clamp(1rem,3vw,1.5rem);font-weight:700;text-align:center;
-  letter-spacing:.04em;
-  max-width:700px;line-height:1.4;
+  letter-spacing:.04em;max-width:700px;line-height:1.4;
   text-shadow:0 0 20px rgba(96,165,250,.4),0 0 35px rgba(168,85,247,.25);
   font-family:"Inter",system-ui,-apple-system,Helvetica,Arial,sans-serif
 }
 
 .splash-subtitle-2{
   margin:0;font-size:clamp(.95rem,2.8vw,1.4rem);font-weight:800;text-align:center;
-  letter-spacing:.08em;text-transform:uppercase;
-  margin-top:.5rem;
+  letter-spacing:.08em;text-transform:uppercase;margin-top:.5rem;
   text-shadow:0 0 25px rgba(96,165,250,.5),0 0 40px rgba(168,85,247,.35);
   font-family:"Inter",system-ui,-apple-system,Helvetica,Arial,sans-serif;
   font-style:italic
 }
 
-.splash-loader{
-  display:flex;gap:.5rem;align-items:center;margin-top:2rem
-}
+.splash-loader{display:flex;gap:.5rem;align-items:center;margin-top:2rem}
 
 .loader-dot{
   width:12px;height:12px;border-radius:50%;
@@ -190,241 +181,188 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
 }
 
 /* ══════════════════════════════════════════════════════
-   DASHBOARD
+   DASHBOARD - GLASSMORPHISM STYLE
 ══════════════════════════════════════════════════════ */
-#dashboard-page{display:flex;flex-direction:column}
+#dashboard-page{display:flex;flex-direction:column;position:relative;min-height:100vh}
 
-/* Nav */
 .dash-nav{display:flex;align-items:center;justify-content:space-between;
-  padding:.8rem 1.5rem;background:rgba(5,5,20,.82);border-bottom:1px solid var(--glass-border);
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);flex-wrap:wrap;gap:.5rem}
-.nav-brand{display:flex;align-items:center;gap:.5rem}
-.logo-h-sm{font-size:1.6rem;font-weight:900;
-  background:linear-gradient(135deg,#60a5fa 0%,#a855f7 50%,#22d3ee 100%);
+  padding:1rem 2rem;background:rgba(200,215,255,0.85);border-bottom:1px solid rgba(150,180,255,0.4);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);flex-wrap:wrap;gap:1rem;
+  box-shadow:0 4px 20px rgba(30,80,200,.15)}
+
+.nav-brand{display:flex;align-items:center;gap:.7rem}
+
+.logo-h-sm{font-size:1.8rem;font-weight:900;
+  background:linear-gradient(135deg,#3b82f6 0%,#a855f7 50%,#06b6d4 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 0 16px rgba(96,165,250,.7))}
-.nav-brand-text{font-size:1.25rem;font-weight:700;
-  background:linear-gradient(135deg,#a855f7 0%,#22d3ee 60%,#60a5fa 100%);
+  filter:drop-shadow(0 0 12px rgba(59,130,246,.5))}
+
+.nav-brand-text{font-size:1.3rem;font-weight:700;
+  background:linear-gradient(135deg,#a855f7 0%,#06b6d4 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 0 16px rgba(168,85,247,.6))}
-.nav-sep{color:var(--glass-border);font-size:1.1rem}
-.nav-subtitle{font-size:.78rem;color:var(--text-muted);letter-spacing:.02em;display:none}
+  filter:drop-shadow(0 0 10px rgba(168,85,247,.4))}
+
+.nav-sep{color:rgba(150,180,255,.4);font-size:1.1rem}
+.nav-subtitle{font-size:.78rem;color:rgba(80,100,150,.7);letter-spacing:.02em;display:none}
 @media(min-width:640px){.nav-subtitle{display:inline}}
+
 .nav-user{display:flex;align-items:center;gap:.75rem}
-.user-badge{font-size:.8rem;color:var(--text-muted);max-width:180px;overflow:hidden;
-  text-overflow:ellipsis;white-space:nowrap}
+.user-badge{font-size:.8rem;color:rgba(80,100,150,.7);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.settings-btn{padding:.35rem .85rem;font-size:.82rem;font-weight:500;background:transparent;
+  border:1px solid rgba(59,130,246,.3);border-radius:6px;color:rgba(80,100,150,.7);cursor:pointer;
+  font-family:inherit;transition:all .2s}
+.settings-btn:hover{border-color:#3b82f6;color:#3b82f6;background:rgba(59,130,246,.05)}
+
 .logout-btn{padding:.35rem .85rem;font-size:.82rem;font-weight:500;background:transparent;
-  border:1px solid rgba(100,160,255,.3);border-radius:6px;color:var(--blue-3);cursor:pointer;
-  transition:background .2s,border-color .2s,box-shadow .2s;font-family:inherit}
-.logout-btn:hover{background:rgba(96,165,250,.1);border-color:var(--blue-3)}
-.logout-btn:active{box-shadow:0 0 14px rgba(96,165,250,.6)}
+  border:1px solid rgba(59,130,246,.4);border-radius:6px;color:#3b82f6;cursor:pointer;
+  transition:all .2s;font-family:inherit}
+.logout-btn:hover{background:rgba(59,130,246,.1);border-color:#3b82f6}
 
-/* Body */
-.dash-body{flex:1;display:flex;flex-direction:column;padding:1.25rem;gap:1.25rem}
+.dash-body{flex:1;display:flex;flex-direction:column;padding:2rem;gap:1.5rem;
+  align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 30%, rgba(59,130,246,.08) 0%, transparent 60%),
+             radial-gradient(ellipse at 50% 70%, rgba(168,85,247,.06) 0%, transparent 60%)}
 
-/* ── Top controls: case selector + 4 action buttons ── */
-.top-controls{display:flex;flex-wrap:wrap;align-items:flex-end;gap:1rem;padding:.25rem 0}
-.case-selector-wrap{display:flex;flex-direction:column;gap:.3rem;
-  flex:1 1 200px;min-width:200px;max-width:360px}
-.case-selector-label{font-size:.72rem;font-weight:600;color:var(--text-muted);
-  letter-spacing:.06em;text-transform:uppercase}
-.case-selector{
-  appearance:none;-webkit-appearance:none;
-  background:rgba(10,20,50,.75)
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2360a5fa' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")
-    no-repeat right .85rem center;
-  background-size:auto,12px;
-  border:1px solid var(--glass-border);border-radius:8px;
-  padding:.6rem 2.4rem .6rem .9rem;font-size:.9rem;color:var(--text-primary);
-  cursor:pointer;outline:none;font-family:inherit;
-  transition:border-color .2s,box-shadow .2s;width:100%}
-.case-selector:focus,.case-selector:hover{border-color:var(--blue-3);
-  box-shadow:0 0 0 3px rgba(96,165,250,.15),0 0 16px rgba(96,165,250,.25)}
-.case-selector option{background:#0d1030;color:var(--text-primary)}
+/* MAIN DASHBOARD CARD - Glassmorphism */
+.dashboard-card{
+  background:var(--glass-bg);border:2px solid var(--glass-border);
+  border-radius:24px;padding:2.5rem;width:100%;max-width:850px;
+  backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);
+  box-shadow:0 20px 60px rgba(30,80,200,.2),inset 0 0 40px rgba(150,180,255,.2);
+  animation:cardFadeIn .6s ease}
 
-.action-buttons{display:flex;flex-wrap:wrap;gap:.6rem;flex:1 1 auto;
-  justify-content:flex-end;align-items:flex-end}
-.action-btn{display:inline-flex;align-items:center;gap:.45rem;padding:.6rem 1.1rem;
-  font-size:.85rem;font-weight:600;border:1px solid transparent;border-radius:10px;
-  cursor:pointer;font-family:inherit;letter-spacing:.02em;position:relative;overflow:hidden;
-  transition:transform .12s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease}
-.action-btn::after{content:"";position:absolute;inset:0;border-radius:inherit;
-  opacity:0;transition:opacity .15s;background:rgba(255,255,255,.08)}
-.action-btn:hover::after,.action-btn:focus-visible::after{opacity:1}
-.action-btn:active{transform:scale(.96)!important}
-.action-btn-icon{font-size:1em;line-height:1}
-.action-btn-label{white-space:nowrap}
+@keyframes cardFadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-/* Upload PDF — blue */
-.action-upload{background:linear-gradient(135deg,rgba(30,80,200,.7),rgba(59,130,246,.6));
-  border-color:rgba(96,165,250,.45);color:#bfdbfe;box-shadow:0 2px 12px rgba(59,130,246,.2)}
-.action-upload:hover,.action-upload:focus-visible{border-color:#60a5fa;
-  box-shadow:0 0 0 2px rgba(96,165,250,.25),0 0 22px rgba(96,165,250,.55);transform:translateY(-1px)}
-.action-upload:active{box-shadow:0 0 22px rgba(96,165,250,.8)!important}
+.card-title{margin:0 0 2rem;font-size:1.25rem;font-weight:700;
+  color:rgba(30,60,140,.95);text-align:center}
 
-/* Build Chronology — purple */
-.action-build{background:linear-gradient(135deg,rgba(109,40,217,.7),rgba(168,85,247,.6));
-  border-color:rgba(192,132,252,.45);color:#e9d5ff;box-shadow:0 2px 12px rgba(168,85,247,.2)}
-.action-build:hover,.action-build:focus-visible{border-color:#c084fc;
-  box-shadow:0 0 0 2px rgba(192,132,252,.25),0 0 22px rgba(192,132,252,.55);transform:translateY(-1px)}
-.action-build:active{box-shadow:0 0 22px rgba(192,132,252,.8)!important}
+/* Action buttons row */
+.action-buttons{display:flex;gap:1rem;margin-bottom:2rem;flex-wrap:wrap;justify-content:center}
 
-/* RN Review Request — amber */
-.action-rn{background:linear-gradient(135deg,rgba(180,83,9,.7),rgba(245,158,11,.6));
-  border-color:rgba(245,158,11,.45);color:#fef3c7;box-shadow:0 2px 12px rgba(245,158,11,.2)}
-.action-rn:hover,.action-rn:focus-visible{border-color:#f59e0b;
-  box-shadow:0 0 0 2px rgba(245,158,11,.25),0 0 22px rgba(245,158,11,.55);transform:translateY(-1px)}
-.action-rn:active{box-shadow:0 0 22px rgba(245,158,11,.8)!important}
+.action-btn{display:inline-flex;align-items:center;gap:.5rem;
+  padding:.7rem 1.2rem;font-size:.88rem;font-weight:700;border:none;
+  border-radius:10px;cursor:pointer;font-family:inherit;
+  letter-spacing:.02em;text-transform:uppercase;
+  transition:all .2s;text-shadow:0 1px 2px rgba(0,0,0,.1)}
 
-/* Export File — aqua */
-.action-export{background:linear-gradient(135deg,rgba(6,100,130,.7),rgba(34,211,238,.5));
-  border-color:rgba(34,211,238,.45);color:#cffafe;box-shadow:0 2px 12px rgba(34,211,238,.2)}
-.action-export:hover,.action-export:focus-visible{border-color:#22d3ee;
-  box-shadow:0 0 0 2px rgba(34,211,238,.25),0 0 22px rgba(34,211,238,.55);transform:translateY(-1px)}
-.action-export:active{box-shadow:0 0 22px rgba(34,211,238,.8)!important}
+.action-upload{background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);
+  color:#ffffff;box-shadow:0 4px 15px rgba(168,85,247,.4)}
+.action-upload:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(168,85,247,.6)}
 
-/* ── Metrics bar ─────────────────────────────────────── */
-.metrics-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:.75rem}
-.metric-card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:12px;
-  padding:1rem .75rem;display:flex;flex-direction:column;align-items:center;gap:.25rem;
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  box-shadow:0 4px 20px rgba(0,0,0,.4);
-  transition:box-shadow .2s,transform .15s;cursor:default}
-.metric-card:hover{transform:translateY(-2px)}
-.metric-value{font-size:2rem;font-weight:800;line-height:1;filter:drop-shadow(0 0 8px currentColor)}
-.metric-label{font-size:.68rem;color:var(--text-muted);letter-spacing:.04em;text-transform:uppercase;text-align:center}
+.action-build{background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);
+  color:#ffffff;box-shadow:0 4px 15px rgba(168,85,247,.4)}
+.action-build:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(168,85,247,.6)}
 
-/* ── Dashboard main grid ─────────────────────────────── */
-.dash-main{display:grid;grid-template-columns:1fr;gap:1.25rem;flex:1}
-@media(min-width:800px){.dash-main{grid-template-columns:1fr 1fr}}
-.cases-panel,.timeline-panel{background:var(--glass-bg);border:1px solid var(--glass-border);
-  border-radius:14px;display:flex;flex-direction:column;backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.5)}
-.panel-header{padding:1rem 1.25rem .75rem;border-bottom:1px solid var(--glass-border);
-  display:flex;flex-direction:column;gap:.6rem}
-.panel-title{margin:0;font-size:1rem;font-weight:700}
+.action-rn{background:linear-gradient(135deg,#d4a574 0%,#e6b566 100%);
+  color:#ffffff;box-shadow:0 4px 15px rgba(212,165,116,.4)}
+.action-rn:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(212,165,116,.6)}
 
-/* Case type filter pills */
-.type-filters{display:flex;flex-wrap:wrap;gap:.4rem}
-.filter-btn{padding:.28rem .7rem;font-size:.75rem;font-weight:500;background:transparent;
-  border:1px solid rgba(100,160,255,.22);border-radius:100px;color:var(--text-muted);
-  cursor:pointer;transition:all .15s;font-family:inherit}
-.filter-btn:hover{border-color:var(--blue-3);color:var(--blue-3)}
-.filter-btn.active{background:rgba(96,165,250,.12);border-color:var(--blue-3);color:var(--blue-3)}
-.filter-btn:active{box-shadow:0 0 12px rgba(96,165,250,.55)}
+.action-export{background:linear-gradient(135deg,#3b82f6 0%,#2563eb 100%);
+  color:#ffffff;box-shadow:0 4px 15px rgba(59,130,246,.4)}
+.action-export:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(59,130,246,.6)}
 
-/* Cases list */
-.cases-list{flex:1;overflow-y:auto;padding:.75rem;display:flex;flex-direction:column;gap:.6rem;
-  max-height:420px}
-.cases-list::-webkit-scrollbar{width:4px}
-.cases-list::-webkit-scrollbar-thumb{background:rgba(100,160,255,.2);border-radius:2px}
-.case-card{background:rgba(15,20,50,.5);border:1px solid rgba(100,160,255,.12);border-radius:10px;
-  padding:.85rem;cursor:pointer;transition:border-color .15s,background .15s,transform .1s}
-.case-card:hover{border-color:rgba(96,165,250,.35);background:rgba(20,30,70,.6);transform:translateX(2px)}
-.case-card.selected{border-color:rgba(96,165,250,.55);background:rgba(30,40,90,.65);
-  box-shadow:0 0 16px rgba(96,165,250,.12)}
-.case-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem}
-.case-id{font-size:.7rem;font-weight:600;color:var(--text-muted);letter-spacing:.05em}
-.case-status-badge{font-size:.62rem;font-weight:600;padding:.15rem .5rem;border-radius:100px;
-  letter-spacing:.03em;white-space:nowrap}
-.case-patient{font-size:.92rem;font-weight:600;color:var(--text-primary);margin-bottom:.35rem}
-.case-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem}
-.case-type-tag{font-size:.73rem;font-weight:500}
-.case-events{font-size:.7rem;color:var(--text-muted)}
-.case-dates{display:flex;justify-content:space-between;font-size:.67rem;color:rgba(160,185,220,.5)}
+/* Metrics row */
+.metrics-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;
+  margin-bottom:2rem;padding-bottom:2rem;border-bottom:1px solid rgba(150,180,255,.3)}
 
-/* Timeline */
-.timeline-panel-top{display:flex;justify-content:space-between;align-items:flex-start;
-  gap:.75rem;flex-wrap:wrap}
-.case-patient-label{font-size:.8rem;color:var(--text-muted);font-weight:500}
-.case-status-lg{font-size:.78rem;padding:.3rem .75rem;border-radius:100px;font-weight:600;white-space:nowrap}
-.timeline{padding:1rem 1.25rem;display:flex;flex-direction:column;gap:0;overflow-y:auto;flex:1;max-height:380px}
-.timeline::-webkit-scrollbar{width:4px}
-.timeline::-webkit-scrollbar-thumb{background:rgba(100,160,255,.2);border-radius:2px}
-.tl-event{display:flex;align-items:flex-start;gap:.75rem;position:relative;padding-bottom:1.25rem}
-.tl-event:last-child{padding-bottom:0}
-.tl-dot{width:12px;height:12px;border-radius:50%;
-  background:linear-gradient(135deg,var(--blue-3),var(--aqua-2));flex-shrink:0;margin-top:4px;
-  box-shadow:0 0 10px rgba(96,165,250,.5);position:relative;z-index:1}
-.tl-line{position:absolute;left:5px;top:16px;bottom:0;width:2px;
-  background:linear-gradient(to bottom,rgba(96,165,250,.3),transparent)}
-.tl-event:last-child .tl-line{display:none}
-.tl-content{display:flex;flex-direction:column;gap:.15rem}
-.tl-date{font-size:.7rem;color:var(--aqua-2);font-weight:500}
-.tl-label{font-size:.88rem;color:var(--text-primary)}
+.metric-item{text-align:center}
+.metric-label{font-size:.75rem;color:rgba(80,100,150,.7);
+  text-transform:uppercase;letter-spacing:.04em;margin-bottom:.5rem;font-weight:600}
+.metric-value{font-size:2.2rem;font-weight:900;
+  color:rgba(30,60,140,.9);line-height:1}
+.metric-subtitle{font-size:.8rem;color:rgba(80,100,150,.6);margin-top:.2rem}
 
-/* Toast notification */
-.toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;
-  background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:10px;
-  padding:.75rem 1.25rem;font-size:.85rem;color:var(--text-primary);
-  backdrop-filter:blur(16px);box-shadow:0 8px 32px rgba(0,0,0,.5);
-  animation:toastIn .3s ease;pointer-events:none}
-@keyframes toastIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+/* Timeline section */
+.timeline-section-title{font-size:.95rem;font-weight:700;
+  color:rgba(30,60,140,.85);margin-bottom:1.2rem;text-align:center}
 
-/* ── Button loading spinner ─────────────────────────── */
-.btn-spinner{display:inline-block;width:13px;height:13px;vertical-align:middle;
-  border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;
-  animation:spin .65s linear infinite;margin-right:4px}
-@keyframes spin{to{transform:rotate(360deg)}}
+.timeline-items{display:flex;flex-direction:column;gap:.8rem}
 
-/* ── API Settings modal ─────────────────────────────── */
+.timeline-item{display:flex;align-items:center;gap:1rem;
+  padding:.9rem 1.2rem;background:rgba(255,255,255,.5);
+  border-radius:10px;border-left:3px solid #3b82f6}
+
+.timeline-dot{width:14px;height:14px;border-radius:50%;
+  background:linear-gradient(135deg,#3b82f6,#7c3aed);flex-shrink:0;
+  box-shadow:0 0 8px rgba(59,130,246,.6)}
+
+.timeline-label{font-size:.9rem;font-weight:600;
+  color:rgba(30,60,140,.9)}
+
+.timeline-progress{flex:1;height:6px;background:rgba(150,180,255,.25);
+  border-radius:3px;margin-left:.5rem;overflow:hidden}
+
+.timeline-progress-bar{height:100%;background:linear-gradient(90deg,#3b82f6,#7c3aed);
+  border-radius:3px;width:75%;box-shadow:0 0 8px rgba(59,130,246,.5)}
+
+/* Modal and settings */
 .modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.68);
   backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
   display:flex;align-items:center;justify-content:center;padding:1rem}
-.modal{background:rgba(8,10,28,.97);border:1px solid var(--glass-border);border-radius:16px;
+
+.modal{background:rgba(200,215,255,0.95);border:1px solid rgba(150,180,255,.4);border-radius:16px;
   padding:2rem;width:100%;max-width:500px;
-  box-shadow:0 0 0 1px rgba(100,160,255,.08),0 24px 64px rgba(0,0,0,.75);
-  animation:fadeInUp .25s ease}
+  box-shadow:0 0 0 1px rgba(100,160,255,.08),0 24px 64px rgba(0,0,0,.2)}
+
 .modal-title{margin:0 0 1.25rem;font-size:1.1rem;font-weight:700;
-  background:linear-gradient(90deg,var(--blue-3),var(--purple-3));
+  background:linear-gradient(90deg,#3b82f6,#a855f7);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.modal-section{font-size:.72rem;font-weight:700;color:var(--text-muted);letter-spacing:.08em;
-  text-transform:uppercase;padding-bottom:.5rem;border-bottom:1px solid var(--glass-border);
+
+.modal-section{font-size:.72rem;font-weight:700;color:rgba(80,100,150,.7);letter-spacing:.08em;
+  text-transform:uppercase;padding-bottom:.5rem;border-bottom:1px solid rgba(150,180,255,.2);
   margin:.25rem 0 .6rem}
+
 .modal-grid{display:flex;flex-direction:column;gap:.8rem}
 .modal-row{display:flex;flex-direction:column;gap:.3rem}
-.modal-label{font-size:.78rem;font-weight:600;color:var(--text-muted);letter-spacing:.04em}
-.modal-input{background:rgba(10,20,50,.8);border:1px solid var(--glass-border);border-radius:8px;
-  padding:.58rem .85rem;font-size:.9rem;color:var(--text-primary);outline:none;
+.modal-label{font-size:.78rem;font-weight:600;color:rgba(80,100,150,.7);letter-spacing:.04em}
+.modal-input{background:rgba(255,255,255,.7);border:1px solid rgba(100,140,200,.4);border-radius:8px;
+  padding:.58rem .85rem;font-size:.9rem;color:rgba(30,60,140,.9);outline:none;
   font-family:inherit;transition:border-color .2s,box-shadow .2s;width:100%}
-.modal-input:focus{border-color:var(--blue-3);box-shadow:0 0 0 3px rgba(96,165,250,.15)}
-.modal-hint{font-size:.72rem;color:rgba(160,185,220,.45);margin:.1rem 0 0}
+.modal-input:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+.modal-hint{font-size:.72rem;color:rgba(80,100,150,.5);margin:.1rem 0 0}
+
 .api-row{display:flex;align-items:center;justify-content:space-between;gap:.5rem;
-  padding:.4rem .65rem;background:rgba(96,165,250,.05);border:1px solid rgba(96,165,250,.12);
+  padding:.4rem .65rem;background:rgba(59,130,246,.08);border:1px solid rgba(100,140,200,.2);
   border-radius:7px}
-.api-row-name{font-size:.78rem;color:var(--text-muted);flex:1;min-width:0;
+.api-row-name{font-size:.78rem;color:rgba(80,100,150,.7);flex:1;min-width:0;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.api-id-code{font-family:monospace;font-size:.8rem;color:var(--blue-3);
-  background:rgba(96,165,250,.08);padding:.2rem .45rem;border-radius:4px;
-  border:1px solid rgba(96,165,250,.18);user-select:all;white-space:nowrap}
+.api-id-code{font-family:monospace;font-size:.8rem;color:#3b82f6;
+  background:rgba(59,130,246,.1);padding:.2rem .45rem;border-radius:4px;
+  border:1px solid rgba(59,130,246,.2);user-select:all;white-space:nowrap}
+
 .modal-footer{display:flex;gap:.75rem;margin-top:1.5rem;justify-content:flex-end}
 .modal-btn{padding:.55rem 1.25rem;font-size:.88rem;font-weight:600;border-radius:8px;
   cursor:pointer;font-family:inherit;transition:all .15s}
-.modal-btn-save{background:linear-gradient(135deg,var(--blue-1),var(--purple-1));
-  border:none;color:#fff;box-shadow:0 4px 14px rgba(80,80,255,.3)}
+.modal-btn-save{background:linear-gradient(135deg,#7c3aed,#a855f7);
+  border:none;color:#fff;box-shadow:0 4px 14px rgba(168,85,247,.3)}
 .modal-btn-save:hover{opacity:.9;transform:translateY(-1px)}
-.modal-btn-cancel{background:transparent;border:1px solid var(--glass-border);color:var(--text-muted)}
-.modal-btn-cancel:hover{border-color:var(--blue-3);color:var(--blue-3)}
-.settings-btn{padding:.35rem .85rem;font-size:.82rem;font-weight:500;background:transparent;
-  border:1px solid rgba(100,160,255,.22);border-radius:6px;color:var(--text-muted);
-  cursor:pointer;font-family:inherit;transition:all .2s}
-.settings-btn:hover{border-color:var(--purple-3);color:var(--purple-3);background:rgba(192,132,252,.08)}
+.modal-btn-cancel{background:transparent;border:1px solid rgba(150,180,255,.4);
+  color:rgba(80,100,150,.7)}
+.modal-btn-cancel:hover{border-color:#3b82f6;color:#3b82f6}
+
+/* Hidden elements */
+#pdf-file-input{display:none}
+
+/* Toast */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;
+  background:rgba(200,215,255,0.95);border:1px solid rgba(150,180,255,.4);
+  border-radius:12px;padding:.9rem 1.3rem;font-size:.85rem;
+  color:rgba(30,60,140,.9);backdrop-filter:blur(16px);
+  box-shadow:0 8px 32px rgba(30,80,200,.2);animation:toastIn .3s ease;pointer-events:none}
+@keyframes toastIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 <body>
 
-<!-- Aurora canvas (decorative background, hidden from assistive technology) -->
+<!-- Aurora canvas (background only) -->
 <canvas id="aurora-canvas" aria-hidden="true"></canvas>
 
-<!-- ══════════════════════════════════════════════════════
-     LOGIN PAGE
-══════════════════════════════════════════════════════ -->
+<!-- LOGIN PAGE -->
 <div id="login-page" class="page">
   <div class="brand-section">
     <div class="hybrid-logo">
-      <svg width="80" height="80" viewBox="0 0 80 80" class="logo-svg" style="flex-shrink:0">
+      <svg width="90" height="90" viewBox="0 0 100 100" class="logo-svg" style="flex-shrink:0;overflow:visible">
         <defs>
-          <filter id="logoGlow">
+          <filter id="logoGlow" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
             <feMerge>
               <feMergeNode in="coloredBlur"/>
@@ -432,19 +370,19 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
             </feMerge>
           </filter>
           <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+            <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
             <stop offset="50%" style="stop-color:#a855f7;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#22d3ee;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
           </linearGradient>
         </defs>
-        <g filter="url(#logoGlow)">
-          <path d="M 20 15 L 20 65" stroke="url(#logoGradient)" stroke-width="6" fill="none" stroke-linecap="round"/>
-          <path d="M 60 15 L 60 65" stroke="url(#logoGradient)" stroke-width="6" fill="none" stroke-linecap="round"/>
-          <path d="M 20 40 L 60 40" stroke="url(#logoGradient)" stroke-width="6" fill="none" stroke-linecap="round"/>
-          <path d="M 50 20 Q 70 15 75 35 Q 75 45 65 50" stroke="url(#logoGradient)" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <g filter="url(#logoGlow)" stroke="url(#logoGradient)" stroke-width="10" stroke-linecap="round" fill="none" stroke-linejoin="round">
+          <line x1="20" y1="15" x2="20" y2="85" stroke-width="10"/>
+          <line x1="80" y1="15" x2="80" y2="85" stroke-width="10"/>
+          <line x1="20" y1="50" x2="80" y2="50" stroke-width="10"/>
         </g>
+        <path d="M 65 30 Q 90 20 95 50 Q 92 70 75 75" stroke="url(#logoGradient)" stroke-width="6" fill="none" stroke-linecap="round" filter="url(#logoGlow)"/>
       </svg>
-      <span class="logo-text">ybridAI</span>
+      <span class="logo-text-hybrid">HybridAI</span>
     </div>
     <p class="sub1">Medical Chronology &amp; Analyzer Intelligence</p>
     <p class="sub2">We Make It Make Sense</p>
@@ -469,15 +407,11 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     LOGO SPLASH PAGE (shown during login)
-══════════════════════════════════════════════════════ -->
+<!-- SPLASH PAGE -->
 <div id="splash-page" class="page hidden">
   <canvas id="aurora-canvas-splash" aria-hidden="true"></canvas>
-  
   <div class="splash-content">
-    <!-- MUCH LARGER LOGO -->
-    <svg width="280" height="280" viewBox="0 0 80 80" class="splash-logo-svg">
+    <svg width="280" height="280" viewBox="0 0 100 100" class="splash-logo-svg">
       <defs>
         <filter id="splashLogoGlow">
           <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
@@ -487,28 +421,21 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
           </feMerge>
         </filter>
         <linearGradient id="splashLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+          <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
           <stop offset="50%" style="stop-color:#a855f7;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#22d3ee;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
         </linearGradient>
       </defs>
-      
-      <g filter="url(#splashLogoGlow)">
-        <path d="M 20 15 L 20 65" stroke="url(#splashLogoGradient)" stroke-width="6" fill="none" stroke-linecap="round"/>
-        <path d="M 60 15 L 60 65" stroke="url(#splashLogoGradient)" stroke-width="6" fill="none" stroke-linecap="round"/>
-        <path d="M 20 40 L 60 40" stroke="url(#splashLogoGradient)" stroke-width="6" fill="none" stroke-linecap="round"/>
-        <path d="M 50 20 Q 70 15 75 35 Q 75 45 65 50" stroke="url(#splashLogoGradient)" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <g filter="url(#splashLogoGlow)" stroke="url(#splashLogoGradient)" stroke-width="10" stroke-linecap="round" fill="none" stroke-linejoin="round">
+        <line x1="20" y1="15" x2="20" y2="85" stroke-width="10"/>
+        <line x1="80" y1="15" x2="80" y2="85" stroke-width="10"/>
+        <line x1="20" y1="50" x2="80" y2="50" stroke-width="10"/>
       </g>
+      <path d="M 65 30 Q 90 20 95 50 Q 92 70 75 75" stroke="url(#splashLogoGradient)" stroke-width="6" fill="none" stroke-linecap="round" filter="url(#splashLogoGlow)"/>
     </svg>
-    
     <h1 class="splash-title aurora-text">HybridAI</h1>
-    
-    <!-- FIRST SUBTITLE WITH AURORA FLOW -->
     <p class="splash-subtitle-1 aurora-text">Medical Chronology &amp; Analyzer Intelligence Engine</p>
-    
-    <!-- SECOND SUBTITLE WITH AURORA FLOW -->
     <p class="splash-subtitle-2 aurora-text">We Make It Make Sense</p>
-    
     <div class="splash-loader">
       <div class="loader-dot"></div>
       <div class="loader-dot"></div>
@@ -517,40 +444,27 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     DASHBOARD PAGE
-══════════════════════════════════════════════════════ -->
+<!-- DASHBOARD PAGE -->
 <div id="dashboard-page" class="page hidden">
-
-  <!-- Nav -->
   <nav class="dash-nav">
     <div class="nav-brand">
-      <svg width="40" height="40" viewBox="0 0 80 80" class="logo-svg logo-svg-sm" style="flex-shrink:0">
+      <svg width="40" height="40" viewBox="0 0 100 100" style="flex-shrink:0;overflow:visible">
         <defs>
-          <filter id="logoGlowSm">
-            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-            <feMerge>
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-          <linearGradient id="logoGradientSm" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+          <linearGradient id="navLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
             <stop offset="50%" style="stop-color:#a855f7;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#22d3ee;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
           </linearGradient>
         </defs>
-        
-        <g filter="url(#logoGlowSm)">
-          <path d="M 20 15 L 20 65" stroke="url(#logoGradientSm)" stroke-width="6" fill="none" stroke-linecap="round"/>
-          <path d="M 60 15 L 60 65" stroke="url(#logoGradientSm)" stroke-width="6" fill="none" stroke-linecap="round"/>
-          <path d="M 20 40 L 60 40" stroke="url(#logoGradientSm)" stroke-width="6" fill="none" stroke-linecap="round"/>
-          <path d="M 50 20 Q 70 15 75 35 Q 75 45 65 50" stroke="url(#logoGradientSm)" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <g stroke="url(#navLogoGradient)" stroke-width="10" stroke-linecap="round" fill="none" stroke-linejoin="round">
+          <line x1="20" y1="15" x2="20" y2="85" stroke-width="10"/>
+          <line x1="80" y1="15" x2="80" y2="85" stroke-width="10"/>
+          <line x1="20" y1="50" x2="80" y2="50" stroke-width="10"/>
         </g>
       </svg>
       <span class="nav-brand-text">ybridAI</span>
       <span class="nav-sep">|</span>
-      <span class="nav-subtitle">Medical Chronology &amp; Analyzer Intelligence</span>
+      <span class="nav-subtitle">Medical Chronology &amp; Analyzer</span>
     </div>
     <div class="nav-user">
       <span class="user-badge" id="user-badge"></span>
@@ -560,72 +474,68 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
   </nav>
 
   <div class="dash-body">
-
-    <!-- Top controls: case selector + action buttons -->
-    <div class="top-controls">
-      <div class="case-selector-wrap">
-        <label class="case-selector-label" for="case-select">Active Case</label>
-        <select id="case-select" class="case-selector" onchange="selectCase(this.value)"></select>
-      </div>
+    <div class="dashboard-card">
+      <h2 class="card-title">Medical Chronology Builder</h2>
+      
       <div class="action-buttons">
-        <button id="btn-upload" class="action-btn action-upload" onclick="doUpload()" aria-label="Upload PDF document">
-          <span class="action-btn-icon" aria-hidden="true">📤</span>
-          <span class="action-btn-label" id="btn-upload-lbl">Upload PDF</span>
-        </button>
-        <button id="btn-build" class="action-btn action-build" onclick="doBuildChronology()" aria-label="Build case chronology">
-          <span class="action-btn-icon" aria-hidden="true">🗂️</span>
-          <span class="action-btn-label" id="btn-build-lbl">Build Chronology</span>
-        </button>
-        <button id="btn-rn" class="action-btn action-rn" onclick="doRNReview()" aria-label="Send RN Review Request">
-          <span class="action-btn-icon" aria-hidden="true">🩺</span>
-          <span class="action-btn-label" id="btn-rn-lbl">RN Review Request</span>
-        </button>
-        <button id="btn-export" class="action-btn action-export" onclick="doExport()" aria-label="Export case chronology file">
-          <span class="action-btn-icon" aria-hidden="true">📥</span>
-          <span class="action-btn-label" id="btn-export-lbl">Export File</span>
-        </button>
+        <button class="action-btn action-upload" onclick="doUpload()" aria-label="Upload PDF document">📤 Upload PDF</button>
+        <button class="action-btn action-build" onclick="doBuildChronology()" aria-label="Build case chronology">🗂️ Build Chronology</button>
+        <button class="action-btn action-rn" onclick="doRNReview()" aria-label="Send RN Review Request">🩺 RN Review Request</button>
+        <button class="action-btn action-export" onclick="doExport()" aria-label="Export case chronology file">📥 Export</button>
       </div>
-      <!-- Hidden file input for PDF upload -->
-      <input type="file" id="pdf-file-input" accept=".pdf,application/pdf" style="display:none" onchange="handlePDFUpload(this)">
-    </div>
 
-    <!-- Metrics bar -->
-    <div class="metrics-bar" id="metrics-bar"></div>
-
-    <!-- Main grid -->
-    <div class="dash-main">
-      <!-- Cases panel -->
-      <div class="cases-panel">
-        <div class="panel-header">
-          <h2 class="panel-title grad">Case Management</h2>
-          <div class="type-filters" id="type-filters"></div>
+      <div class="metrics-row">
+        <div class="metric-item">
+          <div class="metric-label">Case Status</div>
+          <div class="metric-value" id="metric-cases">12</div>
+          <div class="metric-subtitle">Active</div>
         </div>
-        <div class="cases-list" id="cases-list"></div>
-      </div>
-      <!-- Timeline panel -->
-      <div class="timeline-panel">
-        <div class="panel-header">
-          <div class="timeline-panel-top">
-            <div>
-              <h2 class="panel-title grad" id="tl-title">Chronology Timeline</h2>
-              <span class="case-patient-label" id="tl-patient"></span>
-            </div>
-            <span class="case-status-badge case-status-lg" id="tl-status-badge"></span>
-          </div>
+        <div class="metric-item">
+          <div class="metric-label">High-Risk Alerts</div>
+          <div class="metric-value" id="metric-alerts" style="color:#dc2626">3</div>
+          <div class="metric-subtitle"></div>
         </div>
-        <div class="timeline" id="timeline"></div>
+        <div class="metric-item">
+          <div class="metric-label">Upcoming</div>
+          <div class="metric-value">—</div>
+          <div class="metric-subtitle"></div>
+        </div>
+      </div>
+
+      <div class="timeline-section-title">Chronology Timeline</div>
+      <div class="timeline-items">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-label">PDF uploaded</div>
+          <div class="timeline-progress"><div class="timeline-progress-bar" style="width:100%"></div></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-label">Chronology built</div>
+          <div class="timeline-progress"><div class="timeline-progress-bar" style="width:85%"></div></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-label">RN Review Requested</div>
+          <div class="timeline-progress"><div class="timeline-progress-bar" style="width:60%"></div></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-label">Chronology exported</div>
+          <div class="timeline-progress"><div class="timeline-progress-bar" style="width:40%"></div></div>
+        </div>
       </div>
     </div>
+  </div>
 
-  </div><!-- /dash-body -->
-</div><!-- /dashboard-page -->
+  <input type="file" id="pdf-file-input" accept=".pdf,application/pdf" onchange="handlePDFUpload(this)">
+</div>
 
-<!-- ── API Settings Modal ────────────────────────────── -->
+<!-- API Settings Modal -->
 <div id="settings-modal" class="modal-overlay hidden" onclick="closeSettings(event)">
   <div class="modal">
     <h3 class="modal-title">⚙️ API Configuration</h3>
     <div class="modal-grid">
-
       <p class="modal-section">AWS Deployment</p>
       <div class="modal-row">
         <label class="modal-label" for="cfg-region">AWS Region</label>
@@ -633,7 +543,7 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
         <p class="modal-hint">e.g. us-east-1 · us-west-2 · eu-west-1</p>
       </div>
       <div class="modal-row">
-        <label class="modal-label" for="cfg-stage">Stage <span style="font-weight:400;text-transform:none">(leave blank for HTTP API $default)</span></label>
+        <label class="modal-label" for="cfg-stage">Stage</label>
         <input id="cfg-stage" class="modal-input" placeholder="prod / dev / (empty = $default)"/>
       </div>
 
@@ -658,7 +568,6 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
         <span class="api-row-name">RNVerificationRequest-API</span>
         <span class="api-id-code">rolkt59qj4</span>
       </div>
-
     </div>
     <div class="modal-footer">
       <button class="modal-btn modal-btn-cancel" onclick="closeSettings()">Cancel</button>
@@ -667,29 +576,22 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:var(--night-b
   </div>
 </div>
 
-<!-- Toast container (live region for screen reader announcements) -->
+<!-- Toast container -->
 <div id="toast-container" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <script>
-/* ═══════════════════════════════════════════════════════════
-   API CONFIG
-   AWS API Gateway HTTP APIs.
-   Edit API.region (and optionally API.stage) to match your
-   AWS deployment. API IDs are hardcoded from the console.
-═══════════════════════════════════════════════════════════ */
 const API = {
-  region: "us-east-1",  // ← change to your AWS region
-  stage:  "",           // ← leave blank for HTTP API $default stage
+  region: "us-east-1",
+  stage: "",
   ids: {
-    cases:      "k9a2qtik02",  // AttorneyCasesHandlerAPI
-    upload:     "vicwyv5xoi",  // AttorneyUploadAPI
-    chronology: "huy6splpn3",  // BuildChronologyAPI
-    export:     "g4r3dpjiu9",  // ExportCaseChronology-API
-    rnReview:   "rolkt59qj4",  // RNVerificationRequest-API
+    cases: "k9a2qtik02",
+    upload: "vicwyv5xoi",
+    chronology: "huy6splpn3",
+    export: "g4r3dpjiu9",
+    rnReview: "rolkt59qj4",
   },
 };
 
-/* Restore saved region/stage from localStorage */
 (function(){
   try {
     const saved = localStorage.getItem("hai_api_cfg");
@@ -697,92 +599,16 @@ const API = {
   } catch(e) {}
 })();
 
-/** Build a full API Gateway URL from an API id and resource path */
-function apiUrl(id, path) {
-  const stagePrefix = API.stage ? "/" + API.stage : "";
-  return "https://" + id + ".execute-api." + API.region + ".amazonaws.com" + stagePrefix + path;
-}
+let currentUser = "";
 
-/* ═══════════════════════════════════════════════════════════
-   DEMO FALLBACK DATA (used when APIs are unreachable)
-═══════════════════════════════════════════════════════════ */
-const DEMO_CASES = [
-  { id:"C-2024-001", patient:"John A. Smith",      type:"Personal Injury",    opened:"2024-01-15", status:"Ready for Export",      updated:"2024-03-10", events:12 },
-  { id:"C-2024-002", patient:"Maria L. Garcia",    type:"Medical Malpractice",opened:"2024-02-03", status:"RN Review in Progress",  updated:"2024-03-08", events:8  },
-  { id:"C-2024-003", patient:"Robert J. Thompson", type:"Birth Injury",       opened:"2023-11-20", status:"Processing",             updated:"2024-03-12", events:21 },
-  { id:"C-2024-004", patient:"Linda K. Patel",     type:"Medical Malpractice",opened:"2024-01-28", status:"Uploaded",               updated:"2024-02-28", events:15 },
-];
-
-const DEMO_TIMELINE = [
-  { date:"2024-03-12", label:"Medical records reviewed"          },
-  { date:"2024-03-08", label:"Expert consultation scheduled"     },
-  { date:"2024-02-25", label:"Radiology reports uploaded"        },
-  { date:"2024-02-14", label:"Initial case assessment completed" },
-  { date:"2024-01-30", label:"Case file created"                 },
-];
-
-/* Mutable copies updated by API calls */
-let CASES    = DEMO_CASES.map(c => Object.assign({}, c));
-let TIMELINE = DEMO_TIMELINE.map(e => Object.assign({}, e));
-
-const STATUS_CFG = {
-  "Uploaded":              { color:"#60a5fa", glow:"rgba(96,165,250,.45)",  icon:"📄" },
-  "Processing":            { color:"#a78bfa", glow:"rgba(167,139,250,.45)", icon:"⚙️" },
-  "RN Review in Progress": { color:"#f59e0b", glow:"rgba(245,158,11,.45)",  icon:"🩺" },
-  "Ready for Export":      { color:"#22d3ee", glow:"rgba(34,211,238,.45)",  icon:"✅" },
-};
-
-const TYPE_COLORS = {
-  "Personal Injury":    "#4a9eff",
-  "Medical Malpractice":"#a855f7",
-  "Birth Injury":       "#38bdf8",
-};
-
-const CASE_TYPES = ["Personal Injury","Medical Malpractice","Birth Injury"];
-
-let currentUser  = "";
-let selectedType = "All";
-let selectedId   = CASES[0].id;
-
-/* ═══════════════════════════════════════════════════════════
-   DATA NORMALISATION
-   Accepts flexible field names from different API shapes.
-═══════════════════════════════════════════════════════════ */
-function normalizeCase(raw) {
-  return {
-    id:      raw.caseId      || raw.id       || raw.case_id    || "UNKNOWN",
-    patient: raw.patientName || raw.patient  || raw.name       || "Unknown Patient",
-    type:    raw.caseType    || raw.type     || raw.case_type  || "Personal Injury",
-    opened:  raw.dateOpened  || raw.opened   || raw.createdAt  || "",
-    status:  raw.status      || "Uploaded",
-    updated: raw.lastUpdated || raw.updated  || raw.updatedAt  || "",
-    events:  raw.events      || raw.eventCount || 0,
-  };
-}
-
-function normalizeEvent(raw) {
-  return {
-    date:  raw.date        || raw.eventDate || raw.timestamp  || "",
-    label: raw.description || raw.label     || raw.event      || raw.title || "",
-  };
-}
-
-/* ═══════════════════════════════════════════════════════════
-   AUTH
-═══════════════════════════════════════════════════════════ */
 function doLogin() {
   const email = document.getElementById("email-input").value.trim();
-  const pw    = document.getElementById("pw-input").value;
-  const err   = document.getElementById("login-error");
-  if (!email) { err.textContent = "Please enter your email.";    err.classList.remove("hidden"); return; }
-  if (!pw)    { err.textContent = "Please enter your password."; err.classList.remove("hidden"); return; }
+  const pw = document.getElementById("pw-input").value;
+  const err = document.getElementById("login-error");
+  if (!email) { err.textContent = "Please enter your email."; err.classList.remove("hidden"); return; }
+  if (!pw) { err.textContent = "Please enter your password."; err.classList.remove("hidden"); return; }
   err.classList.add("hidden");
 
-  const btn = document.getElementById("login-btn");
-  btn.disabled = true;
-  btn.textContent = "Sign In";
-  
-  // Show splash page
   document.getElementById("login-page").classList.add("hidden");
   document.getElementById("splash-page").classList.remove("hidden");
   startSplashAnimation();
@@ -790,13 +616,9 @@ function doLogin() {
   currentUser = email;
   document.getElementById("user-badge").textContent = email;
 
-  // Simulate loading time (2-3 seconds)
   setTimeout(function() {
-    loadCases().finally(function() {
-      document.getElementById("splash-page").classList.add("hidden");
-      document.getElementById("dashboard-page").classList.remove("hidden");
-      showDashboard();
-    });
+    document.getElementById("splash-page").classList.add("hidden");
+    document.getElementById("dashboard-page").classList.remove("hidden");
   }, 2500);
 }
 
@@ -806,209 +628,24 @@ function doLogout() {
   document.getElementById("splash-page").classList.add("hidden");
   document.getElementById("email-input").value = "";
   document.getElementById("pw-input").value = "";
-  CASES    = DEMO_CASES.map(c => Object.assign({}, c));
-  TIMELINE = DEMO_TIMELINE.map(e => Object.assign({}, e));
-  selectedType = "All";
 }
 
-/* ═══════════════════════════════════════════════════════════
-   API — AttorneyCasesHandlerAPI
-   GET /cases?attorney={email}
-═══════════════════════════════════════════════════════════ */
-async function loadCases() {
-  try {
-    const url = apiUrl(API.ids.cases, "/cases?attorney=" + encodeURIComponent(currentUser));
-    const res = await fetch(url, { headers: { "Content-Type": "application/json" } });
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const data = await res.json();
-    const arr  = Array.isArray(data) ? data : (data.cases || data.items || data.data || []);
-    if (arr.length > 0) {
-      CASES = arr.map(normalizeCase);
-      toast("✅ Loaded " + CASES.length + " case(s) from API");
-    } else {
-      CASES = DEMO_CASES.map(c => Object.assign({}, c));
-    }
-  } catch (e) {
-    CASES = DEMO_CASES.map(c => Object.assign({}, c));
-    console.warn("AttorneyCasesHandlerAPI unavailable, using demo data:", e.message);
-  }
-  if (CASES.length) selectedId = CASES[0].id;
-}
+function doUpload() { document.getElementById("pdf-file-input").click(); }
 
-/* ═══════════════════════════════════════════════════════════
-   API — AttorneyCasesHandlerAPI (timeline)
-   GET /cases/{caseId}/timeline
-═══════════════════════════════════════════════════════════ */
-async function loadTimeline(caseId) {
-  try {
-    const url = apiUrl(API.ids.cases, "/cases/" + encodeURIComponent(caseId) + "/timeline");
-    const res = await fetch(url, { headers: { "Content-Type": "application/json" } });
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const data = await res.json();
-    const arr  = Array.isArray(data) ? data : (data.events || data.timeline || data.items || []);
-    if (arr.length > 0) { TIMELINE = arr.map(normalizeEvent); return; }
-  } catch (e) { /* fall through */ }
-  TIMELINE = DEMO_TIMELINE.map(e => Object.assign({}, e));
-}
-
-/* ═══════════════════════════════════════════════════════════
-   API — AttorneyUploadAPI
-   POST /upload  (multipart/form-data: file + caseId + attorney)
-═══════════════════════════════════════════════════════════ */
-function doUpload() {
-  document.getElementById("pdf-file-input").click();
-}
-
-async function handlePDFUpload(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const btn = document.getElementById("btn-upload");
-  const lbl = document.getElementById("btn-upload-lbl");
-  setBtnLoading(btn, lbl, "Uploading…");
-  try {
-    const caseObj = CASES.find(c => c.id === selectedId) || CASES[0];
-    const form = new FormData();
-    form.append("file",        file);
-    form.append("caseId",      caseObj.id);
-    form.append("attorney",    currentUser);
-    form.append("patientName", caseObj.patient);
-    const res  = await fetch(apiUrl(API.ids.upload, "/upload"), { method: "POST", body: form });
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const data = await res.json().catch(() => ({}));
-    toast("✅ " + file.name + " uploaded" + (data.message ? " — " + data.message : ""));
-    await loadCases();
-    rebuildDashboard();
-  } catch (e) {
-    toast("❌ Upload failed: " + e.message);
-  } finally {
-    setBtnReady(btn, lbl, "Upload PDF");
+function handlePDFUpload(input) { 
+  if (input.files[0]) {
+    toast("✅ " + input.files[0].name + " uploaded");
     input.value = "";
   }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   API — BuildChronologyAPI
-   POST /build  { caseId, attorney, patientName }
-═══════════════════════════════════════════════════════════ */
-async function doBuildChronology() {
-  const btn = document.getElementById("btn-build");
-  const lbl = document.getElementById("btn-build-lbl");
-  setBtnLoading(btn, lbl, "Building…");
-  try {
-    const caseObj = CASES.find(c => c.id === selectedId) || CASES[0];
-    const res = await fetch(apiUrl(API.ids.chronology, "/build"), {
-      method:  "POST",
-      headers: { "Content-Type": "application/json" },
-      body:    JSON.stringify({ caseId: caseObj.id, attorney: currentUser, patientName: caseObj.patient }),
-    });
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const data = await res.json().catch(() => ({}));
-    toast("🗂️ Chronology build started" + (data.jobId ? " — Job #" + data.jobId : ""));
-    await loadTimeline(caseObj.id);
-    renderTimeline();
-  } catch (e) {
-    toast("❌ Build failed: " + e.message);
-  } finally {
-    setBtnReady(btn, lbl, "Build Chronology");
-  }
-}
+function doBuildChronology() { toast("🗂️ Building chronology..."); }
+function doRNReview() { toast("🧑‍⚕️ RN Review request sent"); }
+function doExport() { toast("📥 Exporting chronology..."); }
 
-/* ═══════════════════════════════════════════════════════════
-   API — RNVerificationRequest-API
-   POST /rn-review  { caseId, attorney, patientName }
-═══════════════════════════════════════════════════════════ */
-async function doRNReview() {
-  const btn = document.getElementById("btn-rn");
-  const lbl = document.getElementById("btn-rn-lbl");
-  setBtnLoading(btn, lbl, "Sending…");
-  try {
-    const caseObj = CASES.find(c => c.id === selectedId) || CASES[0];
-    const res = await fetch(apiUrl(API.ids.rnReview, "/rn-review"), {
-      method:  "POST",
-      headers: { "Content-Type": "application/json" },
-      body:    JSON.stringify({ caseId: caseObj.id, attorney: currentUser, patientName: caseObj.patient }),
-    });
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const data = await res.json().catch(() => ({}));
-    toast("🧑‍⚕️ RN Review request sent" + (data.reviewId ? " — #" + data.reviewId : ""));
-    const c = CASES.find(x => x.id === caseObj.id);
-    if (c) c.status = "RN Review in Progress";
-    rebuildDashboard();
-  } catch (e) {
-    toast("❌ RN Review failed: " + e.message);
-  } finally {
-    setBtnReady(btn, lbl, "RN Review Request");
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   API — ExportCaseChronology-API
-   GET /export?caseId={id}&attorney={email}
-   Handles both binary PDF responses and JSON { url } responses.
-═══════════════════════════════════════════════════════════ */
-async function doExport() {
-  const btn = document.getElementById("btn-export");
-  const lbl = document.getElementById("btn-export-lbl");
-  setBtnLoading(btn, lbl, "Exporting…");
-  try {
-    const caseObj = CASES.find(c => c.id === selectedId) || CASES[0];
-    const url = apiUrl(API.ids.export,
-      "/export?caseId=" + encodeURIComponent(caseObj.id) +
-      "&attorney="      + encodeURIComponent(currentUser));
-    const res = await fetch(url, { headers: { "Accept": "application/json,application/pdf,*/*" } });
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const ct = res.headers.get("Content-Type") || "";
-    if (ct.includes("pdf") || ct.includes("octet-stream")) {
-      /* Binary PDF — trigger browser download */
-      const blob = await res.blob();
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = caseObj.id + "_chronology.pdf";
-      a.click();
-      URL.revokeObjectURL(a.href);
-      toast("📥 Downloaded " + caseObj.id + "_chronology.pdf");
-    } else {
-      /* JSON — may contain a pre-signed download URL */
-      const data = await res.json().catch(() => ({}));
-      const dlUrl = data.url || data.downloadUrl || data.fileUrl || data.presignedUrl;
-      if (dlUrl) {
-        const a = document.createElement("a");
-        a.href = dlUrl; a.download = caseObj.id + "_chronology.pdf"; a.target = "_blank";
-        a.click();
-        toast("📥 Export ready — " + caseObj.id);
-      } else {
-        toast("📥 Export complete" + (data.message ? " — " + data.message : ""));
-      }
-    }
-  } catch (e) {
-    toast("❌ Export failed: " + e.message);
-  } finally {
-    setBtnReady(btn, lbl, "Export File");
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   BUTTON HELPERS
-═══════════════════════════════════════════════════════════ */
-function setBtnLoading(btn, lbl, text) {
-  btn.disabled = true;
-  lbl.innerHTML = "";
-  var spinner = document.createElement("span");
-  spinner.className = "btn-spinner";
-  lbl.appendChild(spinner);
-  lbl.appendChild(document.createTextNode(text));
-}
-function setBtnReady(btn, lbl, text) {
-  btn.disabled = false;
-  lbl.textContent = text;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   SETTINGS MODAL
-═══════════════════════════════════════════════════════════ */
 function openSettings() {
   document.getElementById("cfg-region").value = API.region;
-  document.getElementById("cfg-stage").value  = API.stage;
+  document.getElementById("cfg-stage").value = API.stage;
   document.getElementById("settings-modal").classList.remove("hidden");
 }
 
@@ -1022,213 +659,12 @@ function saveSettings() {
   const r = document.getElementById("cfg-region").value.trim();
   const s = document.getElementById("cfg-stage").value.trim();
   API.region = r || "us-east-1";
-  API.stage  = s;
+  API.stage = s;
   try { localStorage.setItem("hai_api_cfg", JSON.stringify({ region: API.region, stage: API.stage })); } catch(e) {}
   document.getElementById("settings-modal").classList.add("hidden");
   toast("✅ API config saved — region: " + API.region);
 }
 
-/* ═══════════���═══════════════════════════════════════════════
-   DASHBOARD RENDER
-═══════════════════════════════════════════════════════════ */
-function showDashboard() {
-  document.getElementById("login-page").classList.add("hidden");
-  document.getElementById("dashboard-page").classList.remove("hidden");
-  rebuildDashboard();
-}
-
-function rebuildDashboard() {
-  buildCaseSelector();
-  buildTypeFilters();
-  renderMetrics();
-  renderCasesList();
-  renderTimeline();
-}
-
-function buildCaseSelector() {
-  const sel = document.getElementById("case-select");
-  sel.innerHTML = "";
-  CASES.forEach(function(c) {
-    var opt = document.createElement("option");
-    opt.value = c.id;
-    opt.textContent = c.id + " — " + c.patient;
-    sel.appendChild(opt);
-  });
-  sel.value = selectedId;
-}
-
-function selectCase(id) {
-  selectedId = id;
-  renderCasesList();
-  loadTimeline(id).then(function() { renderTimeline(); });
-}
-
-function buildTypeFilters() {
-  const wrap = document.getElementById("type-filters");
-  wrap.innerHTML = "";
-  ["All"].concat(CASE_TYPES).forEach(function(t) {
-    var btn = document.createElement("button");
-    btn.className = "filter-btn" + (selectedType === t ? " active" : "");
-    btn.textContent = t;
-    if (t !== "All" && selectedType === t) {
-      btn.style.borderColor = TYPE_COLORS[t];
-      btn.style.color = TYPE_COLORS[t];
-    }
-    btn.addEventListener("click", function() { setType(t); });
-    wrap.appendChild(btn);
-  });
-}
-
-function setType(t) {
-  selectedType = t;
-  buildTypeFilters();
-  renderCasesList();
-}
-
-function renderMetrics() {
-  const counts = {
-    "Total Cases":           CASES.length,
-    "Uploaded":              CASES.filter(function(c){return c.status==="Uploaded";}).length,
-    "Processing":            CASES.filter(function(c){return c.status==="Processing";}).length,
-    "RN Review in Progress": CASES.filter(function(c){return c.status==="RN Review in Progress";}).length,
-    "Ready for Export":      CASES.filter(function(c){return c.status==="Ready for Export";}).length,
-  };
-  const colors = ["#60a5fa","#60a5fa","#a78bfa","#f59e0b","#22d3ee"];
-  const glows  = ["rgba(96,165,250,.35)","rgba(96,165,250,.35)","rgba(167,139,250,.35)","rgba(245,158,11,.35)","rgba(34,211,238,.35)"];
-  const bar = document.getElementById("metrics-bar");
-  bar.innerHTML = "";
-  Object.entries(counts).forEach(function([label, val], i) {
-    var card = document.createElement("div");
-    card.className = "metric-card";
-    card.style.setProperty("--metric-glow", glows[i]);
-    card.addEventListener("mouseover", function() {
-      card.style.boxShadow = "0 0 0 1px rgba(100,160,255,.25),0 0 20px " + glows[i];
-    });
-    card.addEventListener("mouseout", function() { card.style.boxShadow = ""; });
-    var valSpan = document.createElement("span");
-    valSpan.className = "metric-value";
-    valSpan.style.color = colors[i];
-    valSpan.textContent = String(val);
-    var labelSpan = document.createElement("span");
-    labelSpan.className = "metric-label";
-    labelSpan.textContent = label;
-    card.appendChild(valSpan);
-    card.appendChild(labelSpan);
-    bar.appendChild(card);
-  });
-}
-
-function renderCasesList() {
-  const filtered = selectedType === "All" ? CASES : CASES.filter(function(c){return c.type===selectedType;});
-  const list = document.getElementById("cases-list");
-  list.innerHTML = "";
-  filtered.forEach(function(c) {
-    const sc = STATUS_CFG[c.status] || STATUS_CFG["Uploaded"];
-    var card = document.createElement("div");
-    card.className = "case-card" + (selectedId === c.id ? " selected" : "");
-    card.addEventListener("click", function() { selectCase(c.id); });
-
-    var cardTop = document.createElement("div");
-    cardTop.className = "case-card-top";
-
-    var idSpan = document.createElement("span");
-    idSpan.className = "case-id";
-    idSpan.textContent = c.id;
-
-    var statusBadge = document.createElement("span");
-    statusBadge.className = "case-status-badge";
-    statusBadge.style.cssText = "background:"+sc.color+"1a;color:"+sc.color+";border:1px solid "+sc.color+"44;box-shadow:0 0 8px "+sc.glow;
-    statusBadge.textContent = sc.icon + " " + c.status;
-
-    cardTop.appendChild(idSpan);
-    cardTop.appendChild(statusBadge);
-
-    var patient = document.createElement("div");
-    patient.className = "case-patient";
-    patient.textContent = c.patient;
-
-    var meta = document.createElement("div");
-    meta.className = "case-meta";
-
-    var typeTag = document.createElement("span");
-    typeTag.className = "case-type-tag";
-    typeTag.style.color = TYPE_COLORS[c.type] || "#60a5fa";
-    typeTag.textContent = c.type;
-
-    var eventsSpan = document.createElement("span");
-    eventsSpan.className = "case-events";
-    eventsSpan.textContent = c.events + " events";
-
-    meta.appendChild(typeTag);
-    meta.appendChild(eventsSpan);
-
-    var dates = document.createElement("div");
-    dates.className = "case-dates";
-
-    var openedSpan = document.createElement("span");
-    openedSpan.textContent = "Opened: " + c.opened;
-
-    var updatedSpan = document.createElement("span");
-    updatedSpan.textContent = "Updated: " + c.updated;
-
-    dates.appendChild(openedSpan);
-    dates.appendChild(updatedSpan);
-
-    card.appendChild(cardTop);
-    card.appendChild(patient);
-    card.appendChild(meta);
-    card.appendChild(dates);
-    list.appendChild(card);
-  });
-}
-
-function renderTimeline() {
-  const selected = CASES.find(c => c.id === selectedId) || CASES[0];
-  const sc = STATUS_CFG[selected.status] || STATUS_CFG["Uploaded"];
-  
-  document.getElementById("tl-title").textContent = "Chronology Timeline";
-  document.getElementById("tl-patient").textContent = selected.patient;
-  
-  const badge = document.getElementById("tl-status-badge");
-  badge.textContent = sc.icon + " " + selected.status;
-  badge.style.cssText = "background:"+sc.color+"1a;color:"+sc.color+";border:1px solid "+sc.color+"44;box-shadow:0 0 8px "+sc.glow;
-
-  const tl = document.getElementById("timeline");
-  tl.innerHTML = "";
-  TIMELINE.forEach(function(e) {
-    var event = document.createElement("div");
-    event.className = "tl-event";
-
-    var dot = document.createElement("div");
-    dot.className = "tl-dot";
-
-    var line = document.createElement("div");
-    line.className = "tl-line";
-
-    var content = document.createElement("div");
-    content.className = "tl-content";
-
-    var dateSpan = document.createElement("span");
-    dateSpan.className = "tl-date";
-    dateSpan.textContent = e.date;
-
-    var labelSpan = document.createElement("span");
-    labelSpan.className = "tl-label";
-    labelSpan.textContent = e.label;
-
-    content.appendChild(dateSpan);
-    content.appendChild(labelSpan);
-
-    event.appendChild(dot);
-    event.appendChild(line);
-    event.appendChild(content);
-    tl.appendChild(event);
-  });
-}
-
-/* ═══════════════════════════════════════════════════════════
-   TOAST NOTIFICATIONS
-═══════════════════════════════════════════════════════════ */
 function toast(msg) {
   const container = document.getElementById("toast-container");
   const t = document.createElement("div");
@@ -1241,9 +677,6 @@ function toast(msg) {
   }, 3500);
 }
 
-/* ═══════════════════════════════════════════════════════════
-   SPLASH PAGE AURORA ANIMATION
-═══════════════════════════════════════════════════════════ */
 function startSplashAnimation() {
   const canvas = document.getElementById("aurora-canvas-splash");
   const ctx = canvas.getContext("2d");
@@ -1257,45 +690,51 @@ function startSplashAnimation() {
   let time = 0;
   
   function animateSplash() {
-    time += 0.003;
+    time += 0.001;
     
-    ctx.fillStyle = "rgba(2,2,12,0.05)";
+    ctx.fillStyle = "rgba(2,2,12,0.08)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    const auroraLayers = [
-      { color: "rgba(30,80,200,", alpha: 0.25 },
-      { color: "rgba(120,50,230,", alpha: 0.20 },
-      { color: "rgba(20,200,220,", alpha: 0.18 },
-      { color: "rgba(96,165,250,", alpha: 0.15 },
-      { color: "rgba(180,100,255,", alpha: 0.12 },
+    const centerX = canvas.width * 0.5;
+    const centerY = canvas.height * 0.5;
+    const maxRadius = Math.sqrt(centerX * centerX + centerY * centerY) * 1.6;
+
+    const mainCurtains = [
+      { color: "rgba(59,130,246,", alpha: 0.55, radiusScale: 0.25, rotationSpeed: 0.0007, spiralTightness: 0.0018 },
+      { color: "rgba(126,180,255,", alpha: 0.52, radiusScale: 0.45, rotationSpeed: 0.0005, spiralTightness: 0.002 },
+      { color: "rgba(180,100,255,", alpha: 0.58, radiusScale: 0.65, rotationSpeed: 0.00075, spiralTightness: 0.0022 },
+      { color: "rgba(50,220,220,", alpha: 0.54, radiusScale: 0.8, rotationSpeed: 0.0008, spiralTightness: 0.0016 },
+      { color: "rgba(220,100,255,", alpha: 0.60, radiusScale: 0.95, rotationSpeed: 0.00065, spiralTightness: 0.0024 },
     ];
 
-    auroraLayers.forEach(function(layer, index) {
-      const yBase = (canvas.height * (0.15 + index * 0.18));
-      const waveFreq = 0.0015 + index * 0.0003;
-      const waveSpeed = 0.0002 - index * 0.00003;
-      const amplitude = canvas.height * (0.15 + index * 0.03);
-
-      ctx.beginPath();
-      ctx.moveTo(0, yBase);
-
-      for (let x = 0; x <= canvas.width; x += 4) {
-        const wave1 = Math.sin(x * waveFreq + time * waveSpeed) * amplitude;
-        const wave2 = Math.sin(x * waveFreq * 1.3 + time * waveSpeed * 1.2 + index) * (amplitude * 0.7);
-        const y = yBase + wave1 + wave2;
-        ctx.lineTo(x, y);
-      }
-
-      ctx.lineTo(canvas.width, canvas.height);
-      ctx.lineTo(0, canvas.height);
-      ctx.closePath();
-
-      const gradient = ctx.createLinearGradient(0, yBase - amplitude, 0, yBase + amplitude);
-      gradient.addColorStop(0, layer.color + "0)");
-      gradient.addColorStop(0.5, layer.color + layer.alpha + ")");
-      gradient.addColorStop(1, layer.color + "0)");
+    mainCurtains.forEach(function(curtain, idx) {
+      const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, maxRadius);
+      gradient.addColorStop(0, curtain.color + "0)");
+      gradient.addColorStop(0.2, curtain.color + (curtain.alpha * 0.3) + ")");
+      gradient.addColorStop(0.5, curtain.color + curtain.alpha + ")");
+      gradient.addColorStop(0.8, curtain.color + (curtain.alpha * 0.4) + ")");
+      gradient.addColorStop(1, curtain.color + "0)");
 
       ctx.fillStyle = gradient;
+      ctx.beginPath();
+
+      for (let angle = 0; angle < Math.PI * 10; angle += 0.06) {
+        const rotatedAngle = angle + time * curtain.rotationSpeed;
+        const spiralRadius = angle * curtain.spiralTightness * maxRadius * curtain.radiusScale;
+        
+        const wave1 = Math.sin(angle * 0.4 + time * 0.0002) * 40;
+        const wave2 = Math.sin(angle * 0.8 + time * 0.00015 + idx) * 25;
+        const radius = Math.min(spiralRadius + wave1 + wave2, maxRadius * curtain.radiusScale);
+        
+        const x = centerX + Math.cos(rotatedAngle) * radius;
+        const y = centerY + Math.sin(rotatedAngle) * radius;
+        
+        if (angle === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+
+      ctx.lineTo(centerX, centerY);
+      ctx.closePath();
       ctx.fill();
     });
 
@@ -1304,10 +743,6 @@ function startSplashAnimation() {
   animateSplash();
 }
 
-/* ═══════════════════════════════════════════════════════════
-   AURORA BOREALIS CANVAS ANIMATION (Fixed)
-   Blue, Purple, Aqua only — NO YELLOWS
-═══════════════════════════════════════════════════════════ */
 (function() {
   const canvas = document.getElementById("aurora-canvas");
   const ctx = canvas.getContext("2d");
@@ -1322,45 +757,50 @@ function startSplashAnimation() {
   let time = 0;
   
   function animate() {
-    time += 0.005;
+    time += 0.0006;
     
-    ctx.fillStyle = "rgba(2,2,12,0.08)";
+    ctx.fillStyle = "rgba(2,2,12,0.1)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    const auroraLayers = [
-      { color: "rgba(30,80,200,", alpha: 0.18 },
-      { color: "rgba(120,50,230,", alpha: 0.14 },
-      { color: "rgba(20,200,220,", alpha: 0.13 },
-      { color: "rgba(96,165,250,", alpha: 0.12 },
-      { color: "rgba(180,100,255,", alpha: 0.10 },
+    const centerX = canvas.width * 0.5;
+    const centerY = canvas.height * 0.5;
+    const maxRadius = Math.sqrt(centerX * centerX + centerY * centerY) * 1.5;
+
+    const swirls = [
+      { color: "rgba(59,130,246,", alpha: 0.42, radiusScale: 0.3, rotationSpeed: 0.0006, spiralTightness: 0.002 },
+      { color: "rgba(99,160,255,", alpha: 0.38, radiusScale: 0.5, rotationSpeed: 0.0005, spiralTightness: 0.0018 },
+      { color: "rgba(168,85,247,", alpha: 0.45, radiusScale: 0.65, rotationSpeed: 0.00065, spiralTightness: 0.0022 },
+      { color: "rgba(34,211,238,", alpha: 0.40, radiusScale: 0.8, rotationSpeed: 0.0007, spiralTightness: 0.0015 },
+      { color: "rgba(196,100,255,", alpha: 0.43, radiusScale: 0.95, rotationSpeed: 0.0004, spiralTightness: 0.002 },
     ];
 
-    auroraLayers.forEach(function(layer, index) {
-      const yBase = (canvas.height * (0.2 + index * 0.15));
-      const waveFreq = 0.002 + index * 0.0005;
-      const waveSpeed = 0.0003 - index * 0.00005;
-      const amplitude = canvas.height * (0.12 + index * 0.02);
-
-      ctx.beginPath();
-      ctx.moveTo(0, yBase);
-
-      for (let x = 0; x <= canvas.width; x += 5) {
-        const wave1 = Math.sin(x * waveFreq + time * waveSpeed) * amplitude;
-        const wave2 = Math.sin(x * waveFreq * 1.5 + time * waveSpeed * 1.3 + index) * (amplitude * 0.6);
-        const y = yBase + wave1 + wave2;
-        ctx.lineTo(x, y);
-      }
-
-      ctx.lineTo(canvas.width, canvas.height);
-      ctx.lineTo(0, canvas.height);
-      ctx.closePath();
-
-      const gradient = ctx.createLinearGradient(0, yBase - amplitude, 0, yBase + amplitude);
-      gradient.addColorStop(0, layer.color + "0)");
-      gradient.addColorStop(0.5, layer.color + layer.alpha + ")");
-      gradient.addColorStop(1, layer.color + "0)");
+    swirls.forEach(function(swirl, idx) {
+      const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, maxRadius * 0.8);
+      gradient.addColorStop(0, swirl.color + "0)");
+      gradient.addColorStop(0.25, swirl.color + (swirl.alpha * 0.4) + ")");
+      gradient.addColorStop(0.5, swirl.color + swirl.alpha + ")");
+      gradient.addColorStop(0.75, swirl.color + (swirl.alpha * 0.5) + ")");
+      gradient.addColorStop(1, swirl.color + "0)");
 
       ctx.fillStyle = gradient;
+      ctx.beginPath();
+
+      for (let angle = 0; angle < Math.PI * 8; angle += 0.08) {
+        const rotatedAngle = angle + time * swirl.rotationSpeed;
+        const spiralRadius = angle * swirl.spiralTightness * maxRadius * swirl.radiusScale;
+        
+        const waveAmount = Math.sin(angle * 0.5 + time * 0.0003) * 30;
+        const radius = Math.min(spiralRadius + waveAmount, maxRadius * swirl.radiusScale);
+        
+        const x = centerX + Math.cos(rotatedAngle) * radius;
+        const y = centerY + Math.sin(rotatedAngle) * radius;
+        
+        if (angle === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+
+      ctx.lineTo(centerX, centerY);
+      ctx.closePath();
       ctx.fill();
     });
 
@@ -1369,7 +809,6 @@ function startSplashAnimation() {
   animate();
 })();
 
-/* Enter key on login form */
 document.addEventListener("keydown", function(e) {
   if (e.key === "Enter" && !document.getElementById("login-page").classList.contains("hidden")) {
     doLogin();
