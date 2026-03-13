@@ -1,909 +1,181 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HybridAI - Medical Chronology Builder</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: "Segoe UI", sans-serif;
-            background: #020617;
-            color: white;
-            overflow: hidden;
-        }
-        #auroraCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-        }
-        .login-container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(12px);
-            padding: 50px;
-            border-radius: 20px;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
-            text-align: center;
-            z-index: 1000;
-        }
-        .login-logo {
-            font-size: 50px;
-            font-weight: 700;
-            background: linear-gradient(270deg, #64c8ff, #4361ee, #7209b7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
-        }
-        .login-subtitle {
-            font-size: 16px;
-            color: #b0e0ff;
-            margin-top: 10px;
-        }
-        .login-btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(90deg, #4361ee, #7209b7);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(120, 120, 255, 0.7);
-            transition: 0.3s;
-            margin-top: 20px;
-        }
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 35px rgba(150, 130, 255, 1);
-        }
-        .panel {
-            max-width: 1100px;
-            margin: 40px auto;
-            background: rgba(255, 255, 255, 0.08);
-            padding: 40px;
-            border-radius: 20px;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
-            position: relative;
-            z-index: 1;
-        }
-        .logout-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 10px 20px;
-            background: linear-gradient(90deg, #ff6b6b, #ee5a6f);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .logout-btn:hover {
-            transform: translateY(-2px);
-        }
-        .logoText {
-            font-size: 60px;
-            font-weight: 700;
-            background: linear-gradient(270deg, #64c8ff, #4361ee, #7209b7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-align: center;
-        }
-        .subtitle {
-            font-size: 24px;
-            font-weight: 700;
-            text-align: center;
-            margin-top: 10px;
-            color: #e0f8ff;
-        }
-        .cases-section {
-            margin: 30px 0;
-        }
-        .cases-section label {
-            display: block;
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #e0f8ff;
-        }
-        #casesDropdown {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid rgba(76, 201, 240, 0.5);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.08);
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .button-row {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 40px 0;
-        }
-        button {
-            flex: 1;
-            padding: 18px;
-            border: none;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            background: linear-gradient(90deg, #4361ee, #7209b7);
-            color: white;
-            transition: 0.3s;
-        }
-        button:hover {
-            transform: translateY(-2px);
-        }
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-        .cards {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 20px;
-        }
-        .card {
-            background: rgba(255, 255, 255, 0.08);
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-        }
-        .metric {
-            font-size: 50px;
-            font-weight: 700;
-            color: #e0f8ff;
-            margin-top: 10px;
-        }
-        .error-message {
-            background: rgba(255, 100, 100, 0.2);
-            color: #ff6b6b;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #ff6b6b;
-            display: none;
-        }
-        .success-message {
-            background: rgba(100, 200, 100, 0.2);
-            color: #64c864;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #64c864;
-            display: none;
-        }
-        .hidden { display: none !important; }
-    </style>
-</head>
-<body>
+const { DynamoDBClient, QueryCommand } = require('@aws-sdk/client-dynamodb');
+const { unmarshall } = require('@aws-sdk/util-dynamodb');
 
-<canvas id="auroraCanvas"></canvas>
-<input type="file" id="fileInput" accept=".pdf" style="display:none">
-
-<!-- LOGIN SCREEN -->
-<div id="loginScreen" class="login-container">
-    <div class="login-logo">HybridAI</div>
-    <div class="login-subtitle">Medical Chronology Builder & Analyzer</div>
-    <div class="login-subtitle">We Make It Make Sense</div>
-    <button class="login-btn" id="signinBtn" type="button">Sign In with Cognito</button>
-</div>
-
-<!-- DASHBOARD SCREEN -->
-<div id="dashboardScreen" class="hidden">
-    <div class="panel">
-        <button class="logout-btn" id="logoutBtn" type="button">Logout</button>
-        
-        <div class="logoText">HybridAI</div>
-        <div class="subtitle">Medical Chronology Builder & Analyzer</div>
-        
-        <div id="errorMessage" class="error-message"></div>
-        <div id="successMessage" class="success-message"></div>
-        
-        <div class="cases-section">
-            <label for="casesDropdown">Select Case:</label>
-            <select id="casesDropdown">
-                <option value="">Loading cases...</option>
-            </select>
-        </div>
-
-        <div class="button-row">
-            <button id="uploadBtn" type="button">Click to Upload PDF</button>
-            <button id="buildChronBtn" type="button">Build Chronology</button>
-            <button id="rnReviewBtn" type="button">RN Review Request</button>
-            <button id="exportBtn" type="button">Export Files</button>
-        </div>
-        
-        <div class="cards">
-            <div class="card">
-                <h3>Case Status</h3>
-                <div id="caseStatus">Uploaded</div>
-            </div>
-            <div class="card">
-                <h3>High-Risk Alerts</h3>
-                <div class="metric" id="highRisk">0</div>
-            </div>
-            <div class="card">
-                <h3>Cases Uploaded</h3>
-                <div class="metric" id="casesUploaded">0</div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script src="https://sdk.amazonaws.com/js/aws-sdk-2.1201.0.min.js"></script>
-<script>
-// ============================================================================
-// API ENDPOINT CONFIGURATION
-// ============================================================================
-const API_ENDPOINTS = {
-    GET_CASES: 'https://k9a2qtik02.execute-api.us-west-2.amazonaws.com/prod/cases',
-    UPLOAD: 'https://vicwyv5xoi.execute-api.us-west-2.amazonaws.com/prod/upload',
-    BUILD_CHRONOLOGY: 'https://huy6splpn3.execute-api.us-west-2.amazonaws.com/prod/build',
-    RN_REVIEW: 'https://rolkt59qj4.execute-api.us-west-2.amazonaws.com/prod/rn/request',
-    EXPORT: 'https://g4r3dpjiu9.execute-api.us-west-2.amazonaws.com/prod/export'
-};
-
-// ============================================================================
-// COGNITO CONFIGURATION
-// ============================================================================
-const COGNITO_DOMAIN = 'https://us-west-2o3tpxrglb.auth.us-west-2.amazoncognito.com';
-const CLIENT_ID = '5dm1etldt5tea0olbf4k8r67jh';
-const REDIRECT_URI = 'https://hybridaimedlegal.com';
-const SCOPES = 'email openid';
-
-let currentUser = null;
-
-// ============================================================================
-// UTILITY FUNCTIONS
-// ============================================================================
-
-function showError(message) {
-    const errorDiv = document.getElementById('errorMessage');
-    errorDiv.textContent = message;
-    errorDiv.style.display = 'block';
-    setTimeout(() => {
-        errorDiv.style.display = 'none';
-    }, 5000);
-    console.error('ERROR:', message);
-}
-
-function showSuccess(message) {
-    const successDiv = document.getElementById('successMessage');
-    successDiv.textContent = message;
-    successDiv.style.display = 'block';
-    setTimeout(() => {
-        successDiv.style.display = 'none';
-    }, 5000);
-    console.log('SUCCESS:', message);
-}
-
-function setButtonLoading(buttonId, isLoading) {
-    const btn = document.getElementById(buttonId);
-    if (btn) {
-        btn.disabled = isLoading;
-        btn.style.opacity = isLoading ? '0.6' : '1';
-    }
-}
-
-// ============================================================================
-// INITIALIZATION
-// ============================================================================
-
-console.log('HybridAI app initializing...');
-console.log('Cognito Domain:', COGNITO_DOMAIN);
-console.log('API Endpoints:', API_ENDPOINTS);
-
-window.addEventListener('load', function() {
-    console.log('Page loaded, setting up event listeners');
-    
-    const urlParams = new URLSearchParams(window.location.search);
-    const authCode = urlParams.get('code');
-    
-    console.log('URL params:', { code: authCode ? 'present' : 'missing' });
-    
-    if (authCode) {
-        console.log('Auth code found in URL, exchanging for token...');
-        exchangeCodeForToken(authCode);
-    } else {
-        console.log('No auth code, showing login screen');
-        showLoginScreen();
-        setupLoginButton();
-    }
-    
-    setupAuroraCanvas();
+const dynamoClient = new DynamoDBClient({
+    region: process.env.REGION || 'us-west-2'
 });
 
-function setupLoginButton() {
-    const signinBtn = document.getElementById('signinBtn');
-    if (signinBtn) {
-        signinBtn.onclick = function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('Sign in button clicked - redirecting to Cognito');
-            
-            const authUrl = `${COGNITO_DOMAIN}/oauth2/authorize?client_id=${CLIENT_ID}&response_type=code&scope=${encodeURIComponent(SCOPES)}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
-            console.log('Redirecting to:', authUrl);
-            window.location.href = authUrl;
-        };
-    }
-}
+const TABLE_NAME = process.env.TABLE_NAME || 'Cases';
+const CORS_ORIGIN = 'https://hybridaimedlegal.com';
 
-function showLoginScreen() {
-    document.getElementById('loginScreen').classList.remove('hidden');
-    document.getElementById('dashboardScreen').classList.add('hidden');
-}
+const corsHeaders = {
+    'Access-Control-Allow-Origin': CORS_ORIGIN,
+    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token',
+    'Access-Control-Expose-Headers': 'Content-Type,Authorization,X-Amz-Date',
+    'Access-Control-Max-Age': '86400',
+    'Content-Type': 'application/json'
+};
 
-function showDashboard() {
-    document.getElementById('loginScreen').classList.add('hidden');
-    document.getElementById('dashboardScreen').classList.remove('hidden');
-    initializeDashboard();
-}
+/**
+ * Handle OPTIONS CORS preflight requests
+ */
+const handleOptions = () => {
+    return {
+        statusCode: 200,
+        headers: corsHeaders,
+        body: ''
+    };
+};
 
-async function exchangeCodeForToken(code) {
+/**
+ * Handle GET /cases request
+ */
+const handleGetCases = async (event) => {
     try {
-        console.log('Exchanging code for token...');
-        const response = await fetch(`${COGNITO_DOMAIN}/oauth2/token`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams({
-                grant_type: 'authorization_code',
-                client_id: CLIENT_ID,
-                code: code,
-                redirect_uri: REDIRECT_URI,
-                audience: CLIENT_ID
-            })
-        });
-
-        const data = await response.json();
-        console.log('Token response status:', response.status);
-        console.log('Token response has access_token:', !!data.access_token);
-        console.log('Token claims:', data);
-
-        if (data.access_token) {
-            console.log('✓ Access token received, storing...');
-            localStorage.setItem('access_token', data.access_token);
-            localStorage.setItem('id_token', data.id_token);
-            currentUser = data;
-            
-            window.history.replaceState({}, document.title, window.location.pathname);
-            
-            console.log('✓ Showing dashboard');
-            showDashboard();
-        } else {
-            console.error('No access token in response:', data);
-            showError('Failed to get access token from Cognito');
-            showLoginScreen();
-            setupLoginButton();
-        }
-    } catch (err) {
-        console.error('Token exchange error:', err);
-        showError('Token exchange failed: ' + err.message);
-        showLoginScreen();
-        setupLoginButton();
-    }
-}
-
-function initializeDashboard() {
-    loadCases();
-    setupFileUpload();
-    setupButtons();
-    setupLogoutButton();
-}
-
-function setupLogoutButton() {
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.onclick = function(e) {
-            e.preventDefault();
-            console.log('Logout button clicked');
-            currentUser = null;
-            localStorage.clear();
-            sessionStorage.clear();
-            const logoutUrl = `${COGNITO_DOMAIN}/logout?client_id=${CLIENT_ID}&logout_uri=${encodeURIComponent(REDIRECT_URI)}`;
-            console.log('Redirecting to logout:', logoutUrl);
-            window.location.href = logoutUrl;
-        };
-    }
-}
-
-// ============================================================================
-// CASES LOADING
-// ============================================================================
-
-async function loadCases() {
-    try {
-        const token = localStorage.getItem('access_token');
-        if (!token) {
-            console.warn('No token for loadCases');
-            return;
-        }
-
-        console.log('\n=== LOADING CASES ===');
-        console.log('API Endpoint:', API_ENDPOINTS.GET_CASES);
-        console.log('Token exists:', !!token);
-
-        const response = await fetch(API_ENDPOINTS.GET_CASES, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        console.log('Response status:', response.status);
-        console.log('Response ok:', response.ok);
-
-        // Handle 401 - Token expired
-        if (response.status === 401) {
-            console.error('Token expired or invalid (401)');
-            localStorage.clear();
-            showError('Your session has expired. Please log in again.');
-            showLoginScreen();
-            setupLoginButton();
-            return;
-        }
-
-        // Handle other errors
-        if (!response.ok) {
-            console.error('Failed to load cases, status:', response.status);
-            const errorText = await response.text();
-            console.error('Error response:', errorText);
-            showError('Failed to load cases. Status: ' + response.status);
-            return;
-        }
-
-        const result = await response.json();
-        console.log('✓ Cases loaded successfully');
-        console.log('Cases count:', result.cases ? result.cases.length : 0);
-
-        if (result.success && result.cases && result.cases.length > 0) {
-            const dropdown = document.getElementById('casesDropdown');
-            dropdown.innerHTML = '<option value="">-- Select a Case --</option>';
-            
-            result.cases.forEach(caseItem => {
-                const option = document.createElement('option');
-                option.value = caseItem.caseId;
-                const firmName = caseItem.firmId || 'Unknown Firm';
-                option.textContent = `Case: ${caseItem.caseId} | Firm: ${firmName}`;
-                dropdown.appendChild(option);
-            });
-            
-            console.log('✓ Dropdown populated with', result.cases.length, 'cases');
-            showSuccess(`Loaded ${result.cases.length} case(s)`);
-        } else {
-            console.log('No cases found or unsuccessful response');
-            const dropdown = document.getElementById('casesDropdown');
-            dropdown.innerHTML = '<option value="">No cases found</option>';
-            showError('No cases found. Response: ' + JSON.stringify(result));
-        }
-
-        console.log('=== LOADING CASES COMPLETE ===\n');
-    } catch (err) {
-        console.error('Error loading cases:', err);
-        console.error('Error type:', err.name);
-        console.error('Error message:', err.message);
-        showError('Error loading cases: ' + err.message);
-    }
-}
-
-// ============================================================================
-// FILE UPLOAD
-// ============================================================================
-
-function setupFileUpload() {
-    const fileInput = document.getElementById('fileInput');
-    const uploadBtn = document.getElementById('uploadBtn');
-
-    uploadBtn.addEventListener('click', () => {
-        console.log('Upload button clicked');
+        console.log('=== GET CASES START ===');
+        console.log('Full Event:', JSON.stringify(event, null, 2));
         
-        const caseId = document.getElementById('casesDropdown').value;
-        if (!caseId) {
-            showError('Please select a case first');
-            return;
-        }
+        // Extract JWT claims from authorizer
+        const claims = event.requestContext?.authorizer?.jwt?.claims;
+        console.log('JWT Claims:', JSON.stringify(claims, null, 2));
         
-        fileInput.click();
-    });
-
-    fileInput.addEventListener('change', async (event) => {
-        const file = event.target.files[0];
-        if (!file) {
-            console.warn('No file selected');
-            return;
-        }
-
-        console.log('=== FILE UPLOAD START ===');
-        console.log('File name:', file.name);
-        console.log('File size:', file.size, 'bytes');
-        console.log('File type:', file.type);
-
-        setButtonLoading('uploadBtn', true);
-
-        try {
-            const token = localStorage.getItem('access_token');
-            if (!token) {
-                console.error('No access token found in localStorage');
-                showError('Authentication error: No access token. Please log in again.');
-                localStorage.clear();
-                showLoginScreen();
-                setupLoginButton();
-                return;
-            }
-            console.log('✓ Access token found');
-
-            const caseId = document.getElementById('casesDropdown').value;
-            if (!caseId) {
-                showError('Please select a case first');
-                setButtonLoading('uploadBtn', false);
-                return;
-            }
-
-            const payload = { 
-                fileName: file.name,
-                caseId: caseId
+        if (!claims) {
+            console.error('❌ No claims found in authorizer');
+            return {
+                statusCode: 401,
+                headers: corsHeaders,
+                body: JSON.stringify({ 
+                    success: false, 
+                    error: 'Unauthorized: Missing JWT claims' 
+                })
             };
-            console.log('Payload:', payload);
-
-            console.log('\n--- STEP 1: Requesting presigned URL ---');
-            console.log('API Endpoint:', API_ENDPOINTS.UPLOAD);
-
-            const handshakeResponse = await fetch(API_ENDPOINTS.UPLOAD, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            });
-
-            console.log('API Response Status:', handshakeResponse.status);
-
-            if (handshakeResponse.status === 401) {
-                console.error('Token is invalid or expired (401)');
-                localStorage.clear();
-                showError('Your session has expired. Please log in again.');
-                showLoginScreen();
-                setupLoginButton();
-                setButtonLoading('uploadBtn', false);
-                return;
-            }
-
-            if (!handshakeResponse.ok && handshakeResponse.status !== 201) {
-                console.error('API Response not OK. Status:', handshakeResponse.status);
-                const errorText = await handshakeResponse.text();
-                console.error('API Error Response:', errorText);
-                showError(`Upload failed: API returned status ${handshakeResponse.status}`);
-                setButtonLoading('uploadBtn', false);
-                return;
-            }
-
-            let result;
-            try {
-                result = await handshakeResponse.json();
-                console.log('✓ API Response parsed successfully');
-                console.log('API Response Body:', result);
-            } catch (parseErr) {
-                console.error('Failed to parse API response as JSON:', parseErr);
-                showError('Upload failed: Could not parse API response');
-                setButtonLoading('uploadBtn', false);
-                return;
-            }
-
-            console.log('\n--- STEP 2: Extracting upload URL ---');
-            const uploadUrl = result.uploadUrl || result.url;
-            
-            if (!uploadUrl) {
-                console.error('No uploadUrl or url in response:', result);
-                showError('Upload failed: No upload URL returned from server');
-                setButtonLoading('uploadBtn', false);
-                return;
-            }
-            console.log('✓ Upload URL received');
-
-            console.log('\n--- STEP 3: Uploading file to S3 ---');
-
-            const s3Response = await fetch(uploadUrl, {
-                method: 'PUT',
-                body: file,
-                headers: { 'Content-Type': file.type || 'application/pdf' }
-            });
-
-            console.log('S3 Response Status:', s3Response.status);
-
-            if (s3Response.ok || s3Response.status === 200 || s3Response.status === 201) {
-                console.log('✓ File uploaded to S3 successfully!');
-                console.log('=== FILE UPLOAD COMPLETE ===\n');
-                showSuccess('File uploaded successfully!');
-                loadCases();
-            } else {
-                console.error('S3 Upload failed with status:', s3Response.status);
-                showError(`S3 Upload failed with status ${s3Response.status}`);
-            }
-        } catch (err) {
-            console.error('=== UPLOAD ERROR ===');
-            console.error('Error message:', err.message);
-            console.error('Error type:', err.name);
-            showError('Upload failed: ' + err.message);
-        } finally {
-            setButtonLoading('uploadBtn', false);
-            fileInput.value = '';
         }
-    });
-}
-
-// ============================================================================
-// BUTTON HANDLERS
-// ============================================================================
-
-function setupButtons() {
-    document.getElementById('buildChronBtn').addEventListener('click', async () => {
-        try {
-            const token = localStorage.getItem('access_token');
-            if (!token) {
-                showError('Please log in first');
-                return;
-            }
-
-            const caseId = document.getElementById('casesDropdown').value;
-            if (!caseId) {
-                showError('Please select a case first');
-                return;
-            }
-
-            setButtonLoading('buildChronBtn', true);
-            console.log('Building chronology for case:', caseId);
-
-            const response = await fetch(API_ENDPOINTS.BUILD_CHRONOLOGY, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ caseId })
-            });
-
-            if (response.status === 401) {
-                localStorage.clear();
-                showError('Session expired. Please log in again.');
-                showLoginScreen();
-                setupLoginButton();
-                setButtonLoading('buildChronBtn', false);
-                return;
-            }
-
-            if (!response.ok) {
-                showError(`Build failed with status ${response.status}`);
-                setButtonLoading('buildChronBtn', false);
-                return;
-            }
-
-            const result = await response.json();
-            
-            if (result.success) {
-                showSuccess('Chronology built successfully!');
-                console.log('Chronology built:', result);
-            } else {
-                showError('Error building chronology: ' + (result.error || 'Unknown error'));
-            }
-        } catch (err) {
-            showError('Build chronology error: ' + err.message);
-            console.error('Build error:', err);
-        } finally {
-            setButtonLoading('buildChronBtn', false);
-        }
-    });
-
-    document.getElementById('rnReviewBtn').addEventListener('click', async () => {
-        try {
-            const token = localStorage.getItem('access_token');
-            if (!token) {
-                showError('Please log in first');
-                return;
-            }
-
-            const caseId = document.getElementById('casesDropdown').value;
-            if (!caseId) {
-                showError('Please select a case first');
-                return;
-            }
-
-            setButtonLoading('rnReviewBtn', true);
-            console.log('Requesting RN review for case:', caseId);
-
-            const response = await fetch(API_ENDPOINTS.RN_REVIEW, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ caseId })
-            });
-
-            if (response.status === 401) {
-                localStorage.clear();
-                showError('Session expired. Please log in again.');
-                showLoginScreen();
-                setupLoginButton();
-                setButtonLoading('rnReviewBtn', false);
-                return;
-            }
-
-            if (!response.ok) {
-                showError(`RN Review failed with status ${response.status}`);
-                setButtonLoading('rnReviewBtn', false);
-                return;
-            }
-
-            const result = await response.json();
-            
-            if (result.success) {
-                showSuccess('RN Review requested successfully!');
-                console.log('RN Review requested:', result);
-            } else {
-                showError('Error requesting RN review: ' + (result.error || 'Unknown error'));
-            }
-        } catch (err) {
-            showError('RN review error: ' + err.message);
-            console.error('RN review error:', err);
-        } finally {
-            setButtonLoading('rnReviewBtn', false);
-        }
-    });
-
-    document.getElementById('exportBtn').addEventListener('click', async () => {
-        try {
-            const token = localStorage.getItem('access_token');
-            if (!token) {
-                showError('Please log in first');
-                return;
-            }
-
-            const caseId = document.getElementById('casesDropdown').value;
-            if (!caseId) {
-                showError('Please select a case first');
-                return;
-            }
-
-            setButtonLoading('exportBtn', true);
-            console.log('Exporting case:', caseId);
-
-            const response = await fetch(API_ENDPOINTS.EXPORT, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ caseId })
-            });
-
-            if (response.status === 401) {
-                localStorage.clear();
-                showError('Session expired. Please log in again.');
-                showLoginScreen();
-                setupLoginButton();
-                setButtonLoading('exportBtn', false);
-                return;
-            }
-
-            if (!response.ok) {
-                showError(`Export failed with status ${response.status}`);
-                setButtonLoading('exportBtn', false);
-                return;
-            }
-
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `chronology-${caseId}-${new Date().toISOString().split('T')[0]}.zip`;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            
-            showSuccess('Export downloaded successfully!');
-            console.log('Export completed');
-        } catch (err) {
-            showError('Export error: ' + err.message);
-            console.error('Export error:', err);
-        } finally {
-            setButtonLoading('exportBtn', false);
-        }
-    });
-}
-
-// ============================================================================
-// AURORA CANVAS ANIMATION
-// ============================================================================
-
-function setupAuroraCanvas() {
-    const canvas = document.getElementById('auroraCanvas');
-    const ctx = canvas.getContext('2d');
-    let width = canvas.width = window.innerWidth;
-    let height = canvas.height = window.innerHeight;
-
-    class AuroraParticle {
-        constructor() {
-            this.x = Math.random() * width;
-            this.y = Math.random() * height * 0.6;
-            this.vx = (Math.random() - 0.5) * 0.3;
-            this.vy = (Math.random() - 0.5) * 0.2;
-            this.life = Math.random() * 0.5 + 0.5;
-            this.maxLife = this.life;
-            this.size = Math.random() * 80 + 20;
-        }
-
-        update() {
-            this.x += this.vx;
-            this.y += this.vy;
-            this.life -= 0.003;
-        }
-
-        draw() {
-            const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
-            const alpha = this.life / this.maxLife;
-            gradient.addColorStop(0, `rgba(100, 200, 255, ${alpha * 0.6})`);
-            gradient.addColorStop(0.5, `rgba(100, 150, 255, ${alpha * 0.3})`);
-            gradient.addColorStop(1, `rgba(100, 150, 255, 0)`);
-            
-            ctx.fillStyle = gradient;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fill();
-        }
-    }
-
-    const particles = [];
-
-    function createParticles() {
-        for (let i = 0; i < 3; i++) {
-            particles.push(new AuroraParticle());
-        }
-    }
-
-    function animate() {
-        ctx.clearRect(0, 0, width, height);
         
-        particles.forEach((particle, index) => {
-            if (particle.life > 0) {
-                particle.update();
-                particle.draw();
-            } else {
-                particles.splice(index, 1);
+        // Extract user identifiers - try multiple claim types
+        const userId = claims.sub || claims.username || claims['cognito:username'];
+        const email = claims.email;
+        const firmId = claims['custom:firmId'];
+        const attorneyId = claims['custom:attorneyId'];
+        
+        console.log('✓ Extracted User Info:', { userId, email, firmId, attorneyId });
+        
+        if (!userId) {
+            console.error('❌ Missing userId/sub in claims');
+            return {
+                statusCode: 401,
+                headers: corsHeaders,
+                body: JSON.stringify({ 
+                    success: false, 
+                    error: 'Unauthorized: Missing user identifier' 
+                })
+            };
+        }
+        
+        // Query cases by userId (Partition Key)
+        console.log(`✓ Querying ${TABLE_NAME} for userId: ${userId}`);
+        
+        const command = new QueryCommand({
+            TableName: TABLE_NAME,
+            KeyConditionExpression: 'userId = :userId',
+            ExpressionAttributeValues: {
+                ':userId': { S: userId }
             }
         });
         
-        if (Math.random() < 0.1) {
-            createParticles();
+        console.log('DynamoDB Query Command:', JSON.stringify(command.input, null, 2));
+        console.log('Executing DynamoDB Query...');
+        
+        const result = await dynamoClient.send(command);
+        
+        console.log('✓ Query succeeded. Items returned:', result.Items?.length || 0);
+        console.log('DynamoDB Result:', JSON.stringify(result, null, 2));
+        
+        // Unmarshall DynamoDB items
+        const cases = (result.Items || []).map(item => {
+            const unmarshalled = unmarshall(item);
+            console.log('Unmarshalled Case:', JSON.stringify(unmarshalled, null, 2));
+            return unmarshalled;
+        });
+        
+        console.log('✓ Total Cases Found:', cases.length);
+        
+        if (cases.length === 0) {
+            console.log('ℹ️ No cases found for user');
         }
         
-        requestAnimationFrame(animate);
+        // Format response
+        const response = {
+            statusCode: 200,
+            headers: corsHeaders,
+            body: JSON.stringify({
+                success: true,
+                userId: userId,
+                email: email,
+                firmId: firmId,
+                attorneyId: attorneyId,
+                cases: cases,
+                count: cases.length,
+                timestamp: new Date().toISOString()
+            })
+        };
+        
+        console.log('✓ Response Body:', JSON.stringify(JSON.parse(response.body), null, 2));
+        console.log('=== GET CASES COMPLETE ===\n');
+        
+        return response;
+        
+    } catch (err) {
+        console.error('=== GET CASES ERROR ===');
+        console.error('Error Type:', err.name);
+        console.error('Error Message:', err.message);
+        console.error('Error Code:', err.code);
+        console.error('Error Stack:', err.stack);
+        
+        return {
+            statusCode: 500,
+            headers: corsHeaders,
+            body: JSON.stringify({
+                success: false,
+                error: 'Internal Server Error',
+                details: err.message
+            })
+        };
     }
+};
 
-    animate();
-
-    window.addEventListener('resize', () => {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-    });
-}
-</script>
-
-</body>
-</html>
+/**
+ * Lambda handler
+ */
+exports.handler = async (event) => {
+    console.log('\n' + '='.repeat(80));
+    console.log('ATTORNEY CASES HANDLER');
+    console.log('='.repeat(80) + '\n');
+    
+    const method = event.requestContext?.http?.method || event.httpMethod || 'GET';
+    const path = event.requestContext?.http?.path || event.rawPath || event.path || '/';
+    
+    console.log('Method:', method);
+    console.log('Path:', path);
+    
+    if (method === 'OPTIONS') {
+        console.log('Handling OPTIONS preflight');
+        return handleOptions();
+    }
+    
+    if (method === 'GET' && (path === '/cases' || path.includes('/cases'))) {
+        console.log('Handling GET /cases');
+        return await handleGetCases(event);
+    }
+    
+    console.log('❌ Route not found:', method, path);
+    return {
+        statusCode: 404,
+        headers: corsHeaders,
+        body: JSON.stringify({
+            success: false,
+            error: 'Not Found',
+            details: `${method} ${path} is not supported`
+        })
+    };
+};
