@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* ============================================================
    HybridAI - Medical Chronology & Analyzer Intelligence
    Aurora Borealis Theme: Night sky, Blues, Purples, Light Aquas
