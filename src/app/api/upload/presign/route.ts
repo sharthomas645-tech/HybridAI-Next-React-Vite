@@ -2,6 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { generatePresignedUploadUrl, MAX_FILE_SIZE } from "@/lib/s3";
 import { getSession } from "@/lib/auth";
 
+// Allow only safe MIME types for PHI file uploads
+const ALLOWED_CONTENT_TYPES = [
+  "application/pdf",
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/tiff",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/octet-stream",
+];
+
 export async function POST(request: NextRequest) {
   const session = await getSession();
   if (!session) {
@@ -20,6 +31,16 @@ export async function POST(request: NextRequest) {
     if (!fileName || !contentType || !caseId) {
       return NextResponse.json(
         { error: "Missing required fields: fileName, contentType, caseId" },
+        { status: 400 }
+      );
+    }
+
+    if (
+      typeof contentType !== "string" ||
+      !ALLOWED_CONTENT_TYPES.includes(contentType.split(";")[0].trim())
+    ) {
+      return NextResponse.json(
+        { error: "Content type not allowed" },
         { status: 400 }
       );
     }

@@ -24,6 +24,11 @@ export function sanitizeFileName(fileName: string): string {
   return base.replace(/[^a-zA-Z0-9._-]/g, "_");
 }
 
+export function sanitizeCaseId(caseId: string): string {
+  // Allow only alphanumeric, hyphens, and underscores in case IDs
+  return caseId.replace(/[^a-zA-Z0-9_-]/g, "_").slice(0, 64);
+}
+
 export interface PresignedUrlResult {
   uploadUrl: string;
   fileKey: string;
@@ -47,7 +52,8 @@ export async function generatePresignedUploadUrl(
   }
 
   const safe = sanitizeFileName(fileName);
-  const fileKey = `${UPLOAD_PREFIX}${caseId}/${randomUUID()}_${safe}`;
+  const safeCaseId = sanitizeCaseId(caseId);
+  const fileKey = `${UPLOAD_PREFIX}${safeCaseId}/${randomUUID()}_${safe}`;
 
   const commandParams: {
     Bucket: string;
