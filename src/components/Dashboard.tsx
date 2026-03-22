@@ -1,5 +1,8 @@
+"use client";
+
 import { useState, type FC } from "react";
-import { signOut } from "aws-amplify/auth";
+import { useRouter } from "next/navigation";
+import { buildLogoutUrl } from "@/lib/cognito";
 
 type CaseType = "Personal Injury" | "Medical Malpractice" | "Birth Injury";
 type CaseStatus = "Uploaded" | "Processing" | "RN Review in Progress" | "Ready for Export";
@@ -16,7 +19,6 @@ interface Case {
 
 interface DashboardProps {
   user: { username: string; email: string };
-  onLogout: () => void;
 }
 
 const DEMO_CASES: Case[] = [
@@ -81,20 +83,14 @@ const statusConfig: Record<CaseStatus, { color: string; glow: string; icon: stri
 
 const CASE_TYPES: CaseType[] = ["Personal Injury", "Medical Malpractice", "Birth Injury"];
 
-const ACTION_BUTTONS: { label: string; icon: string; cls: string }[] = [
-  { label: "Upload PDF",        icon: "📤", cls: "action-btn action-upload"    },
-  { label: "Build Chronology",  icon: "🗂️", cls: "action-btn action-build"     },
-  { label: "RN Review Request", icon: "🩺", cls: "action-btn action-rn"        },
-  { label: "Export File",       icon: "📥", cls: "action-btn action-export"    },
-];
-
-const Dashboard: FC<DashboardProps> = ({ user, onLogout }) => {
+const Dashboard: FC<DashboardProps> = ({ user }) => {
+  const router = useRouter();
   const [selectedCaseType, setSelectedCaseType] = useState<CaseType | "All">("All");
   const [selectedCaseId, setSelectedCaseId] = useState<string>(DEMO_CASES[0].id);
 
   const handleLogout = async () => {
-    await signOut();
-    onLogout();
+    await fetch("/api/auth/logout", { method: "POST" });
+    window.location.href = buildLogoutUrl();
   };
 
   const filteredCases =
@@ -112,9 +108,15 @@ const Dashboard: FC<DashboardProps> = ({ user, onLogout }) => {
     ready:    DEMO_CASES.filter((c) => c.status === "Ready for Export").length,
   };
 
+  const actionButtons = [
+    { label: "Upload PDF",        icon: "📤", cls: "action-btn action-upload",  onClick: () => router.push("/upload") },
+    { label: "Build Chronology",  icon: "🗂️", cls: "action-btn action-build",   onClick: undefined },
+    { label: "RN Review Request", icon: "🩺", cls: "action-btn action-rn",      onClick: undefined },
+    { label: "Export File",       icon: "📥", cls: "action-btn action-export",  onClick: undefined },
+  ];
+
   return (
     <div className="dashboard-container">
-      {/* Top Nav */}
       <nav className="dashboard-nav">
         <div className="nav-brand">
           <img src="/hybridai.png" alt="HybridAI" className="nav-logo-img" />
@@ -130,8 +132,6 @@ const Dashboard: FC<DashboardProps> = ({ user, onLogout }) => {
       </nav>
 
       <div className="dashboard-body">
-
-        {/* Case Selector + Action Buttons Bar */}
         <div className="top-controls">
           <div className="case-selector-wrap">
             <label className="case-selector-label" htmlFor="case-select">Active Case</label>
@@ -150,8 +150,8 @@ const Dashboard: FC<DashboardProps> = ({ user, onLogout }) => {
           </div>
 
           <div className="action-buttons">
-            {ACTION_BUTTONS.map((btn) => (
-              <button key={btn.label} className={btn.cls}>
+            {actionButtons.map((btn) => (
+              <button key={btn.label} className={btn.cls} onClick={btn.onClick}>
                 <span className="action-btn-icon">{btn.icon}</span>
                 <span className="action-btn-label">{btn.label}</span>
               </button>
@@ -159,7 +159,6 @@ const Dashboard: FC<DashboardProps> = ({ user, onLogout }) => {
           </div>
         </div>
 
-        {/* Metrics Bar */}
         <div className="metrics-bar">
           {[
             { label: "Total Cases",           value: metrics.total,      color: "#60a5fa", glow: "rgba(96,165,250,0.35)"  },
@@ -176,7 +175,6 @@ const Dashboard: FC<DashboardProps> = ({ user, onLogout }) => {
         </div>
 
         <div className="dashboard-main">
-          {/* Left Panel - Cases */}
           <div className="cases-panel">
             <div className="panel-header">
               <h2 className="panel-title gradient-text-inline">Case Management</h2>
@@ -240,7 +238,6 @@ const Dashboard: FC<DashboardProps> = ({ user, onLogout }) => {
             </div>
           </div>
 
-          {/* Right Panel - Timeline / Details */}
           <div className="timeline-panel">
             <div className="panel-header">
               <div className="timeline-panel-top">

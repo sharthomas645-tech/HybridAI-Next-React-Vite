@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HybridAI Banner</title>
+
+<style>
+body{
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#e5e5e5;
+font-family:"Segoe UI",sans-serif;
+}
+
+/* Banner container */
+.banner{
+width:700px;
+border-radius:8px;
+overflow:hidden;
+box-shadow:0 10px 40px rgba(0,0,0,0.25);
+}
+
+/* Image styling */
+.banner img{
+width:100%;
+display:block;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="banner">
+<img src="hybridai-banner.png" alt="HybridAI">
+</div>
+
+</body>
+</html>
