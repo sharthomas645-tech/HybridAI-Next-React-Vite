@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { SESSION_COOKIE } from "@/lib/auth";
 
-const PROTECTED_ROUTES = ["/dashboard", "/upload", "/chronology", "/verification"];
+const PROTECTED_ROUTES = ["/dashboard", "/upload", "/chronology", "/verification", "/splash"];
 const PUBLIC_ROUTES = ["/", "/auth/callback"];
 
 export function middleware(request: NextRequest) {
@@ -46,6 +46,7 @@ export const config = {
     "/upload/:path*",
     "/chronology/:path*",
     "/verification/:path*",
+    "/splash",
     "/auth/callback",
   ],
 };
