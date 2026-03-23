@@ -37,14 +37,14 @@ const AuroraBackground: FC = () => {
     ];
 
     const layers: AuroraLayer[] = [
-      { offset: 0.0, speed: 0.0003, amplitude: 0.14, frequency: 2.1, color: auroraColors[0], alpha: 0.30, yBase: 0.42 },
-      { offset: 1.2, speed: 0.0004, amplitude: 0.12, frequency: 1.8, color: auroraColors[1], alpha: 0.25, yBase: 0.52 },
-      { offset: 2.4, speed: 0.00025, amplitude: 0.16, frequency: 2.5, color: auroraColors[2], alpha: 0.22, yBase: 0.38 },
-      { offset: 0.7, speed: 0.00035, amplitude: 0.10, frequency: 3.0, color: auroraColors[3], alpha: 0.28, yBase: 0.60 },
-      { offset: 3.1, speed: 0.00028, amplitude: 0.13, frequency: 1.5, color: auroraColors[4], alpha: 0.20, yBase: 0.46 },
-      { offset: 1.8, speed: 0.00045, amplitude: 0.09, frequency: 2.8, color: auroraColors[5], alpha: 0.18, yBase: 0.56 },
-      { offset: 0.4, speed: 0.00022, amplitude: 0.15, frequency: 2.2, color: auroraColors[6], alpha: 0.16, yBase: 0.35 },
-      { offset: 2.9, speed: 0.00038, amplitude: 0.11, frequency: 1.9, color: auroraColors[7], alpha: 0.20, yBase: 0.64 },
+      { offset: 0.0, speed: 0.00003, amplitude: 0.14, frequency: 2.1, color: auroraColors[0], alpha: 0.30, yBase: 0.42 },
+      { offset: 1.2, speed: 0.00004, amplitude: 0.12, frequency: 1.8, color: auroraColors[1], alpha: 0.25, yBase: 0.52 },
+      { offset: 2.4, speed: 0.000025, amplitude: 0.16, frequency: 2.5, color: auroraColors[2], alpha: 0.22, yBase: 0.38 },
+      { offset: 0.7, speed: 0.000035, amplitude: 0.10, frequency: 3.0, color: auroraColors[3], alpha: 0.28, yBase: 0.60 },
+      { offset: 3.1, speed: 0.000028, amplitude: 0.13, frequency: 1.5, color: auroraColors[4], alpha: 0.20, yBase: 0.46 },
+      { offset: 1.8, speed: 0.000045, amplitude: 0.09, frequency: 2.8, color: auroraColors[5], alpha: 0.18, yBase: 0.56 },
+      { offset: 0.4, speed: 0.000022, amplitude: 0.15, frequency: 2.2, color: auroraColors[6], alpha: 0.16, yBase: 0.35 },
+      { offset: 2.9, speed: 0.000038, amplitude: 0.11, frequency: 1.9, color: auroraColors[7], alpha: 0.20, yBase: 0.64 },
     ];
 
     interface Particle {
