@@ -20,20 +20,14 @@ export default function HybridHero() {
       <div className="hh-content">
         <div className="hh-brand">
 
-          {/* Abstract stylised "H" logo-mark */}
-          <div className="hh-logo-wrap" role="img" aria-label="HybridAI H logo">
-            <div className="hh-h-left" />
-            <div className="hh-h-cross" />
-            <div className="hh-h-right" />
-            <div className="hh-logo-glow" aria-hidden="true" />
-          </div>
-
           {/* Wordmark + subtitle */}
           <div className="hh-text">
             <h1 className="hh-title" aria-label="HybridAI">
               <span className="hh-hybrid">Hybrid</span>
-              <span className="hh-ai">AI</span>
-              <sup className="hh-tm">™</sup>
+              <span className="hh-ai-wrap">
+                <sup className="hh-tm">™</sup>
+                <span className="hh-ai">AI</span>
+              </span>
             </h1>
             <p className="hh-sub1">Medical Chronology &amp; Analyzer</p>
             <p className="hh-sub2">Intelligence System</p>
