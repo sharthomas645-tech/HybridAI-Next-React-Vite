@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { generatePKCE, buildAuthUrl } from "@/lib/entra-auth";
-import AuroraBackground from "@/components/AuroraBackground";
+import HybridHero from "@/components/HybridHero";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
@@ -28,13 +28,8 @@ export default function LoginPage() {
 
   return (
     <>
-      <AuroraBackground />
-      <div className="login-container">
-        <div className="brand-section">
-          <img src="/hybridai.png" alt="HybridAI" className="hybrid-logo-img" />
-          <h1 className="subtitle-1">Medical Chronology &amp; Analyzer Intelligence</h1>
-          <h2 className="subtitle-2">We Make It Make Sense</h2>
-        </div>
+      <HybridHero />
+      <div className="login-container login-container--hero">
 
         <div className="login-card">
           <h3 className="login-title">Attorney Access Portal</h3>
