@@ -51,61 +51,59 @@ export default function FileUpload({ userEmail: _userEmail }: FileUploadProps) {
       setUploads((prev) => [record, ...prev]);
 
       try {
-        const presignRes = await fetch("/api/upload/presign", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            fileName: file.name,
-            contentType: file.type || "application/octet-stream",
-            caseId,
-            fileSize: file.size,
-          }),
-        });
-
-        if (!presignRes.ok) {
-          const err = (await presignRes.json()) as { error?: string };
-          throw new Error(err.error ?? "Failed to get upload URL");
-        }
-
-        const { uploadUrl, fileKey } = (await presignRes.json()) as {
-          uploadUrl: string;
-          fileKey: string;
-        };
-
-        setUploads((prev) =>
-          prev.map((u) => (u.id === id ? { ...u, progress: 20 } : u))
-        );
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("caseId", caseId);
+        formData.append("fileName", file.name);
+        formData.append("contentType", file.type || "application/octet-stream");
 
         await new Promise<void>((resolve, reject) => {
           const xhr = new XMLHttpRequest();
           xhr.upload.addEventListener("progress", (e) => {
             if (e.lengthComputable) {
-              const pct = Math.round(20 + (e.loaded / e.total) * 75);
+              const pct = Math.round((e.loaded / e.total) * 95);
               setUploads((prev) =>
                 prev.map((u) => (u.id === id ? { ...u, progress: pct } : u))
               );
             }
           });
           xhr.addEventListener("load", () => {
-            if (xhr.status >= 200 && xhr.status < 300) resolve();
-            else reject(new Error(`S3 upload failed: ${xhr.status}`));
+            if (xhr.status >= 200 && xhr.status < 300) {
+              try {
+                const data = JSON.parse(xhr.responseText) as {
+                  fileKey?: string;
+                  error?: string;
+                };
+                if (data.error) {
+                  reject(new Error(data.error));
+                } else {
+                  setUploads((prev) =>
+                    prev.map((u) =>
+                      u.id === id
+                        ? { ...u, status: "done", progress: 100, fileKey: data.fileKey }
+                        : u
+                    )
+                  );
+                  resolve();
+                }
+              } catch {
+                reject(new Error("Invalid upload response"));
+              }
+            } else {
+              let msg = `Upload failed: ${xhr.status}`;
+              try {
+                const err = JSON.parse(xhr.responseText) as { error?: string };
+                if (err.error) msg = err.error;
+              } catch { /* ignore */ }
+              reject(new Error(msg));
+            }
           });
           xhr.addEventListener("error", () =>
             reject(new Error("Network error during upload"))
           );
-          xhr.open("PUT", uploadUrl);
-          xhr.setRequestHeader(
-            "Content-Type",
-            file.type || "application/octet-stream"
-          );
-          xhr.send(file);
+          xhr.open("POST", "/api/upload");
+          xhr.send(formData);
         });
-
-        setUploads((prev) =>
-          prev.map((u) =>
-            u.id === id ? { ...u, status: "done", progress: 100, fileKey } : u
-          )
-        );
       } catch (err) {
         const msg = err instanceof Error ? err.message : "Upload failed";
         setUploads((prev) =>

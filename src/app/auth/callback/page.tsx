@@ -17,7 +17,7 @@ export default function CallbackPage() {
 
       if (errorParam) {
         const desc = params.get("error_description") ?? errorParam;
-        setErrorMessage(desc);
+        setErrorMessage(decodeURIComponent(desc.replace(/\+/g, " ")));
         setStatus("error");
         return;
       }
@@ -72,7 +72,7 @@ export default function CallbackPage() {
               <div className="loading-spinner" style={{ margin: "0 auto 1rem" }} />
               <h3 className="login-title">Completing Sign In…</h3>
               <p style={{ color: "var(--text-muted)", fontSize: "0.88rem" }}>
-                Securely exchanging authorization tokens.
+                Securely exchanging authorization tokens with Microsoft and AWS.
               </p>
             </>
           ) : (

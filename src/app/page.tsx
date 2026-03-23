@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { generatePKCE, buildAuthUrl } from "@/lib/cognito";
+import { generatePKCE, buildAuthUrl } from "@/lib/entra-auth";
 import AuroraBackground from "@/components/AuroraBackground";
 
 export default function LoginPage() {
@@ -39,7 +39,7 @@ export default function LoginPage() {
         <div className="login-card">
           <h3 className="login-title">Attorney Access Portal</h3>
           <p style={{ textAlign: "center", fontSize: "0.88rem", color: "var(--text-muted)", marginBottom: "1.5rem" }}>
-            Sign in with your HybridAI credentials via our secure Cognito identity provider.
+            Sign in with your Microsoft account via Azure Active Directory.
           </p>
           {error && <p className="error-message">{error}</p>}
           <button
@@ -51,10 +51,18 @@ export default function LoginPage() {
             {loading ? (
               <span className="btn-loading">
                 <span className="spinner" />
-                Redirecting to Cognito…
+                Redirecting to Microsoft…
               </span>
             ) : (
-              <>🔐 Sign In with Cognito</>
+              <>
+                <svg width="20" height="20" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="1" y="1" width="9" height="9" fill="#f25022" />
+                  <rect x="11" y="1" width="9" height="9" fill="#7fba00" />
+                  <rect x="1" y="11" width="9" height="9" fill="#00a4ef" />
+                  <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
+                </svg>
+                Sign in with Microsoft
+              </>
             )}
           </button>
           <p className="login-footer">

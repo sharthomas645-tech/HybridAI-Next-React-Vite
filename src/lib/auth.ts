@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { decodeJwtPayload } from "./cognito";
+import { decodeJwtPayload } from "./entra-auth";
 
 export const SESSION_COOKIE = "hybridai_session";
 export const COOKIE_MAX_AGE = 60 * 60; // 1 hour
@@ -10,6 +10,8 @@ export interface SessionData {
   email: string;
   username: string;
   expiresAt: number;
+  /** AWS bearer token obtained via token-exchange Lambda */
+  awsToken?: string;
 }
 
 /** Read and validate the session from httpOnly cookie (server-side only) */
@@ -27,16 +29,22 @@ export async function getSession(): Promise<SessionData | null> {
   }
 }
 
-/** Build session data from token response */
+/** Build session data from Entra ID token response and optional AWS token */
 export function buildSession(
   accessToken: string,
   idToken: string,
-  expiresIn: number
+  expiresIn: number,
+  awsToken?: string
 ): SessionData {
   const payload = decodeJwtPayload(idToken);
-  const email = (payload["email"] as string) ?? "";
+  const email =
+    (payload["preferred_username"] as string) ??
+    (payload["email"] as string) ??
+    (payload["upn"] as string) ??
+    "";
   const username =
-    (payload["cognito:username"] as string) ??
+    (payload["name"] as string) ??
+    (payload["given_name"] as string) ??
     (payload["sub"] as string) ??
     email;
   return {
@@ -45,5 +53,6 @@ export function buildSession(
     email,
     username,
     expiresAt: Date.now() + expiresIn * 1000,
+    awsToken,
   };
 }

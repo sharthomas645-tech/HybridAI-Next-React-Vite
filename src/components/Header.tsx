@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { buildLogoutUrl } from "@/lib/cognito";
+import { buildLogoutUrl } from "@/lib/entra-auth";
 
 interface HeaderProps {
   user: { username: string; email: string };
@@ -49,6 +49,32 @@ export default function Header({ user }: HeaderProps) {
           }}
         >
           Upload Files
+        </Link>
+        <Link
+          href="/chronology"
+          style={{
+            fontSize: "0.82rem",
+            color: "var(--text-muted)",
+            textDecoration: "none",
+            padding: "0.35rem 0.75rem",
+            borderRadius: "6px",
+            transition: "background 0.2s",
+          }}
+        >
+          Chronology
+        </Link>
+        <Link
+          href="/verification"
+          style={{
+            fontSize: "0.82rem",
+            color: "var(--text-muted)",
+            textDecoration: "none",
+            padding: "0.35rem 0.75rem",
+            borderRadius: "6px",
+            transition: "background 0.2s",
+          }}
+        >
+          RN Verify
         </Link>
         <div className="nav-user">
           <span className="user-badge">{user.email || user.username}</span>
