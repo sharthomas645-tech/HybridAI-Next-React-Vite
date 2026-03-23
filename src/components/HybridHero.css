@@ -325,6 +325,20 @@
     0 0 28px rgba(0, 140, 255, 0.20);
 }
 
+/* ── Slot for children (login card, etc.) ───────────────── */
+.hh-slot {
+  position: absolute;
+  bottom: 6vh;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: 0 1rem;
+}
+
 /* ── Responsive ─────────────────────────────────────────── */
 @media (max-width: 600px) {
   .hh-brand {

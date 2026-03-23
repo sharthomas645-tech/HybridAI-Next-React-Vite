@@ -1,6 +1,11 @@
+import { ReactNode } from "react";
 import "./HybridHero.css";
 
-export default function HybridHero() {
+interface HybridHeroProps {
+  children?: ReactNode;
+}
+
+export default function HybridHero({ children }: HybridHeroProps) {
   return (
     <section className="hh-root" aria-label="HybridAI hero banner">
       {/* Deep-blue gradient background is applied via CSS on hh-root */}
@@ -36,6 +41,13 @@ export default function HybridHero() {
 
         </div>
       </div>
+
+      {/* Slot for centered overlay content (e.g. login card) */}
+      {children && (
+        <div className="hh-slot">
+          {children}
+        </div>
+      )}
     </section>
   );
 }
