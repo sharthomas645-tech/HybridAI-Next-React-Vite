@@ -1,16 +1,30 @@
-// PKCE helpers and Cognito token exchange utilities
+// Entra ID (Azure AD) PKCE auth utilities
+// Replaces cognito.ts — uses same PKCE pattern with Entra ID endpoints
 
-export const COGNITO_CONFIG = {
-  clientId: process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID ?? "3qkc2c9ucqhhcc483e1os7qdu4",
-  domain: process.env.NEXT_PUBLIC_COGNITO_DOMAIN ?? "hybridai.auth.us-west-2.amazoncognito.com",
-  region: process.env.NEXT_PUBLIC_COGNITO_REGION ?? "us-west-2",
-  userPoolId: process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID ?? "",
-  redirectUri:
-    typeof window !== "undefined"
-      ? `${window.location.origin}/auth/callback`
-      : process.env.NEXTAUTH_URL
-        ? `${process.env.NEXTAUTH_URL}/auth/callback`
-        : "http://localhost:3000/auth/callback",
+export const ENTRA_CONFIG = {
+  tenantId:
+    process.env.NEXT_PUBLIC_ENTRA_TENANT_ID ??
+    "c9ca4727-50d1-4e96-b036-671173f94737",
+  clientId:
+    process.env.NEXT_PUBLIC_ENTRA_CLIENT_ID ??
+    "f2907ece-23bb-4e42-87d4-a812798454fa",
+  get authority() {
+    return (
+      process.env.NEXT_PUBLIC_ENTRA_AUTHORITY ??
+      `https://login.microsoftonline.com/${this.tenantId}`
+    );
+  },
+  get redirectUri() {
+    if (typeof window !== "undefined") {
+      return `${window.location.origin}/auth/callback`;
+    }
+    const base =
+      process.env.NEXT_PUBLIC_APP_URL ??
+      process.env.NEXTAUTH_URL ??
+      "http://localhost:3000";
+    return `${base}/auth/callback`;
+  },
+  scopes: ["openid", "email", "profile"],
 };
 
 /** Generate a cryptographically random string for PKCE */
@@ -45,36 +59,38 @@ export async function generatePKCE(): Promise<PKCEPair> {
   return { codeVerifier, codeChallenge };
 }
 
-/** Build the Cognito authorization URL for PKCE login */
+/** Build the Entra ID authorization URL for PKCE login */
 export function buildAuthUrl(codeChallenge: string): string {
-  const redirectUri = COGNITO_CONFIG.redirectUri;
   const params = new URLSearchParams({
-    client_id: COGNITO_CONFIG.clientId,
+    client_id: ENTRA_CONFIG.clientId,
     response_type: "code",
-    scope: "openid email profile",
-    redirect_uri: redirectUri,
+    scope: ENTRA_CONFIG.scopes.join(" "),
+    redirect_uri: ENTRA_CONFIG.redirectUri,
     code_challenge: codeChallenge,
     code_challenge_method: "S256",
+    response_mode: "query",
   });
-  return `https://${COGNITO_CONFIG.domain}/oauth2/authorize?${params.toString()}`;
+  return `${ENTRA_CONFIG.authority}/oauth2/v2.0/authorize?${params.toString()}`;
 }
 
-/** Build the Cognito logout URL */
+/** Build the Entra ID logout URL */
 export function buildLogoutUrl(): string {
-  const redirectUri = COGNITO_CONFIG.redirectUri.replace("/auth/callback", "");
+  const postLogoutUri =
+    process.env.NEXT_PUBLIC_APP_URL ??
+    (typeof window !== "undefined" ? window.location.origin : "http://localhost:3000");
   const params = new URLSearchParams({
-    client_id: COGNITO_CONFIG.clientId,
-    logout_uri: redirectUri,
+    post_logout_redirect_uri: postLogoutUri,
   });
-  return `https://${COGNITO_CONFIG.domain}/logout?${params.toString()}`;
+  return `${ENTRA_CONFIG.authority}/oauth2/v2.0/logout?${params.toString()}`;
 }
 
-export interface TokenResponse {
+export interface EntraTokenResponse {
   access_token: string;
   id_token: string;
   refresh_token?: string;
   expires_in: number;
   token_type: string;
+  scope: string;
 }
 
 /** Decode a JWT payload (client-side only, no signature verification) */

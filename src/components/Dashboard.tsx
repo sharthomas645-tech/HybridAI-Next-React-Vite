@@ -2,7 +2,7 @@
 
 import { useState, type FC } from "react";
 import { useRouter } from "next/navigation";
-import { buildLogoutUrl } from "@/lib/cognito";
+import { buildLogoutUrl } from "@/lib/entra-auth";
 
 type CaseType = "Personal Injury" | "Medical Malpractice" | "Birth Injury";
 type CaseStatus = "Uploaded" | "Processing" | "RN Review in Progress" | "Ready for Export";
@@ -110,9 +110,9 @@ const Dashboard: FC<DashboardProps> = ({ user }) => {
 
   const actionButtons = [
     { label: "Upload PDF",        icon: "📤", cls: "action-btn action-upload",  onClick: () => router.push("/upload") },
-    { label: "Build Chronology",  icon: "🗂️", cls: "action-btn action-build",   onClick: undefined },
-    { label: "RN Review Request", icon: "🩺", cls: "action-btn action-rn",      onClick: undefined },
-    { label: "Export File",       icon: "📥", cls: "action-btn action-export",  onClick: undefined },
+    { label: "Build Chronology",  icon: "🗂️", cls: "action-btn action-build",   onClick: () => router.push("/chronology") },
+    { label: "RN Review Request", icon: "🩺", cls: "action-btn action-rn",      onClick: () => router.push("/verification") },
+    { label: "Export File",       icon: "📥", cls: "action-btn action-export",  onClick: () => router.push("/chronology") },
   ];
 
   return (
