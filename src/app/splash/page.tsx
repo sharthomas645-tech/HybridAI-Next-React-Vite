@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
 
 const SPLASH_DURATION = 5000; // ms
 
 export default function SplashPage() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const [fading, setFading] = useState(false);
   const [remaining, setRemaining] = useState(Math.ceil(SPLASH_DURATION / 1000));
 
@@ -20,7 +20,7 @@ export default function SplashPage() {
     }, SPLASH_DURATION - 700);
 
     const redirectTimeout = setTimeout(() => {
-      router.replace("/dashboard");
+      navigate("/dashboard", { replace: true });
     }, SPLASH_DURATION);
 
     const interval = setInterval(() => {
@@ -39,7 +39,7 @@ export default function SplashPage() {
       clearTimeout(redirectTimeout);
       clearInterval(interval);
     };
-  }, [router]);
+  }, [navigate]);
 
   return (
     <>

@@ -1,11 +1,19 @@
-"use client";
-
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
+import { exchangeCodeForTokens } from "@/lib/entra-auth";
+import { buildSession, saveSession } from "@/lib/auth";
+import { AWS_APIS } from "@/lib/constants";
 import AuroraBackground from "@/components/AuroraBackground";
 
+interface AwsTokenExchangeResponse {
+  token?: string;
+  access_token?: string;
+  expires_in?: number;
+  message?: string;
+}
+
 export default function CallbackPage() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const [status, setStatus] = useState<"processing" | "error">("processing");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -40,18 +48,40 @@ export default function CallbackPage() {
       const redirectUri = `${window.location.origin}/auth/callback`;
 
       try {
-        const res = await fetch("/api/auth/token", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ code, codeVerifier, redirectUri }),
-        });
+        // Step 1: Exchange code with Entra ID
+        const tokens = await exchangeCodeForTokens(code, codeVerifier, redirectUri);
 
-        if (!res.ok) {
-          const data = (await res.json()) as { error?: string; detail?: string };
-          throw new Error(data.detail ?? data.error ?? "Authentication failed");
+        // Step 2: Exchange Entra ID id_token for AWS token (best-effort)
+        let awsToken: string | undefined;
+        try {
+          const awsRes = await fetch(
+            `${AWS_APIS.TOKEN_EXCHANGE}/token-exchange`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${tokens.id_token}`,
+              },
+              body: JSON.stringify({ id_token: tokens.id_token }),
+            }
+          );
+          if (awsRes.ok) {
+            const awsData = (await awsRes.json()) as AwsTokenExchangeResponse;
+            awsToken = awsData.token ?? awsData.access_token;
+          }
+        } catch {
+          // AWS exchange is best-effort; don't block login
         }
 
-        router.replace("/splash");
+        const session = buildSession(
+          tokens.access_token,
+          tokens.id_token,
+          tokens.expires_in,
+          awsToken
+        );
+        saveSession(session);
+
+        navigate("/splash", { replace: true });
       } catch (err) {
         const msg = err instanceof Error ? err.message : "Authentication failed";
         setErrorMessage(msg);
@@ -60,7 +90,7 @@ export default function CallbackPage() {
     };
 
     handleCallback();
-  }, [router]);
+  }, [navigate]);
 
   return (
     <>

@@ -1,16 +1,22 @@
-"use client";
-
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { generatePKCE, buildAuthUrl } from "@/lib/entra-auth";
+import { getSession } from "@/lib/auth";
 import HybridHero from "@/components/HybridHero";
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
+    // If already authenticated, go straight to dashboard
+    if (getSession()) {
+      navigate("/dashboard", { replace: true });
+      return;
+    }
     sessionStorage.removeItem("pkce_verifier");
-  }, []);
+  }, [navigate]);
 
   const handleLogin = async () => {
     setError("");

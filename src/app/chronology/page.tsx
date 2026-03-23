@@ -1,12 +1,12 @@
-import { redirect } from "next/navigation";
+import { Navigate } from "react-router-dom";
 import { getSession } from "@/lib/auth";
 import AuroraBackground from "@/components/AuroraBackground";
 import Header from "@/components/Header";
 import ChronologyClient from "./ChronologyClient";
 
-export default async function ChronologyPage() {
-  const session = await getSession();
-  if (!session) redirect("/");
+export default function ChronologyPage() {
+  const session = getSession();
+  if (!session) return <Navigate to="/" replace />;
 
   return (
     <>
