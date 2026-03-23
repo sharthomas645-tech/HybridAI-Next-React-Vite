@@ -1,0 +1,1043 @@
+/* ============================================================
+   HybridHero.css — Ultra-premium cinematic hero banner
+   Pure CSS construction: layered gradients, aurora effects,
+   glass morphism, starfield, dimensional light trails.
+   ============================================================ */
+
+/* ── Root container ─────────────────────────────────────── */
+.hh-root {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem 4rem;
+  background: #01010a; /* deep space black as safety fallback */
+}
+
+/* ============================================================
+   BACKGROUND LAYERS
+   ============================================================ */
+
+/* Deep multi-stop base gradient */
+.hh-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse 120% 60% at 50% 110%, rgba(0, 30, 100, 0.85) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 50% at 70% 90%, rgba(0, 10, 60, 0.7) 0%, transparent 65%),
+    radial-gradient(ellipse 100% 80% at 20% 80%, rgba(10, 0, 50, 0.6) 0%, transparent 60%),
+    linear-gradient(
+      175deg,
+      #00010f 0%,
+      #010418 12%,
+      #020828 25%,
+      #030c38 40%,
+      #040e3a 55%,
+      #030824 70%,
+      #020615 85%,
+      #010212 100%
+    );
+  pointer-events: none;
+}
+
+/* ============================================================
+   STARFIELD — CSS box-shadow technique
+   Three pseudo-elements: small (1px), medium (1.5px), bright (2px)
+   ============================================================ */
+
+.hh-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Small stars — 60 scattered across full viewport */
+.hh-stars--sm {
+  z-index: 2;
+}
+.hh-stars--sm::before {
+  content: "";
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow:
+    54px 23px rgba(255, 255, 255, 0.70),
+    112px 87px rgba(220, 240, 255, 0.60),
+    178px 34px rgba(255, 255, 255, 0.75),
+    243px 156px rgba(200, 230, 255, 0.55),
+    312px 45px rgba(255, 255, 255, 0.65),
+    389px 198px rgba(220, 240, 255, 0.60),
+    456px 67px rgba(255, 255, 255, 0.80),
+    523px 234px rgba(200, 230, 255, 0.50),
+    601px 12px rgba(255, 255, 255, 0.70),
+    678px 134px rgba(220, 240, 255, 0.65),
+    745px 256px rgba(200, 230, 255, 0.55),
+    812px 89px rgba(255, 255, 255, 0.75),
+    889px 167px rgba(220, 240, 255, 0.60),
+    956px 43px rgba(255, 255, 255, 0.80),
+    1023px 201px rgba(200, 230, 255, 0.58),
+    1090px 123px rgba(255, 255, 255, 0.68),
+    1167px 267px rgba(220, 240, 255, 0.55),
+    1234px 56px rgba(255, 255, 255, 0.82),
+    1301px 178px rgba(200, 230, 255, 0.60),
+    1368px 312px rgba(220, 240, 255, 0.50),
+    1435px 94px rgba(255, 255, 255, 0.72),
+    1502px 245px rgba(200, 230, 255, 0.62),
+    1569px 134px rgba(220, 240, 255, 0.58),
+    1636px 67px rgba(255, 255, 255, 0.76),
+    1703px 189px rgba(200, 230, 255, 0.60),
+    1782px 45px rgba(255, 255, 255, 0.80),
+    1867px 267px rgba(220, 240, 255, 0.55),
+    78px 334px rgba(255, 255, 255, 0.65),
+    156px 412px rgba(200, 230, 255, 0.52),
+    234px 289px rgba(220, 240, 255, 0.60),
+    312px 478px rgba(255, 255, 255, 0.55),
+    390px 356px rgba(200, 230, 255, 0.65),
+    467px 523px rgba(220, 240, 255, 0.48),
+    545px 401px rgba(255, 255, 255, 0.62),
+    623px 489px rgba(200, 230, 255, 0.55),
+    701px 367px rgba(220, 240, 255, 0.60),
+    779px 434px rgba(255, 255, 255, 0.68),
+    857px 312px rgba(200, 230, 255, 0.52),
+    935px 478px rgba(220, 240, 255, 0.58),
+    1013px 356px rgba(255, 255, 255, 0.65),
+    1091px 523px rgba(200, 230, 255, 0.48),
+    1169px 401px rgba(220, 240, 255, 0.62),
+    1247px 567px rgba(255, 255, 255, 0.55),
+    1325px 389px rgba(200, 230, 255, 0.60),
+    1403px 523px rgba(220, 240, 255, 0.52),
+    1481px 401px rgba(255, 255, 255, 0.70),
+    1559px 478px rgba(200, 230, 255, 0.56),
+    1637px 356px rgba(220, 240, 255, 0.64),
+    1715px 423px rgba(255, 255, 255, 0.60),
+    1840px 545px rgba(200, 230, 255, 0.50),
+    23px 589px rgba(220, 240, 255, 0.58),
+    100px 645px rgba(255, 255, 255, 0.62),
+    178px 512px rgba(200, 230, 255, 0.55),
+    256px 678px rgba(220, 240, 255, 0.50),
+    334px 556px rgba(255, 255, 255, 0.65),
+    412px 623px rgba(200, 230, 255, 0.58),
+    490px 589px rgba(220, 240, 255, 0.52),
+    568px 656px rgba(255, 255, 255, 0.60),
+    646px 523px rgba(200, 230, 255, 0.55),
+    724px 689px rgba(220, 240, 255, 0.48);
+  animation: hh-twinkle 8s ease-in-out infinite alternate;
+}
+
+/* Medium stars */
+.hh-stars--md {
+  z-index: 2;
+}
+.hh-stars--md::before {
+  content: "";
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow:
+    89px 45px 1px rgba(255, 255, 255, 0.85),
+    234px 178px 1px rgba(200, 235, 255, 0.78),
+    456px 34px 1px rgba(255, 255, 255, 0.90),
+    678px 234px 1px rgba(210, 240, 255, 0.80),
+    890px 89px 1px rgba(255, 255, 255, 0.85),
+    1012px 267px 1px rgba(200, 235, 255, 0.75),
+    1234px 134px 1px rgba(255, 255, 255, 0.88),
+    1456px 289px 1px rgba(210, 240, 255, 0.82),
+    1678px 67px 1px rgba(255, 255, 255, 0.80),
+    1890px 178px 1px rgba(200, 235, 255, 0.75),
+    145px 367px 1px rgba(255, 255, 255, 0.78),
+    367px 289px 1px rgba(210, 240, 255, 0.82),
+    589px 412px 1px rgba(255, 255, 255, 0.75),
+    811px 334px 1px rgba(200, 235, 255, 0.80),
+    1033px 456px 1px rgba(255, 255, 255, 0.85),
+    1255px 389px 1px rgba(210, 240, 255, 0.78),
+    1477px 512px 1px rgba(255, 255, 255, 0.82),
+    1699px 434px 1px rgba(200, 235, 255, 0.75),
+    45px 534px 1px rgba(255, 255, 255, 0.80),
+    267px 612px 1px rgba(210, 240, 255, 0.78),
+    489px 556px 1px rgba(255, 255, 255, 0.72),
+    711px 634px 1px rgba(200, 235, 255, 0.85),
+    933px 578px 1px rgba(255, 255, 255, 0.78),
+    1155px 656px 1px rgba(210, 240, 255, 0.82),
+    1377px 601px 1px rgba(255, 255, 255, 0.75),
+    1599px 723px 1px rgba(200, 235, 255, 0.80),
+    1821px 567px 1px rgba(255, 255, 255, 0.85),
+    123px 745px 1px rgba(210, 240, 255, 0.75),
+    345px 812px 1px rgba(255, 255, 255, 0.70),
+    567px 756px 1px rgba(200, 235, 255, 0.78);
+  animation: hh-twinkle 11s ease-in-out infinite alternate-reverse;
+}
+
+/* Bright stars — larger with glow */
+.hh-stars--lg {
+  z-index: 3;
+}
+.hh-stars--lg::before {
+  content: "";
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow:
+    178px 56px 2px rgba(255, 255, 255, 0.95),
+    456px 123px 3px rgba(200, 240, 255, 0.90),
+    789px 45px 2px rgba(255, 255, 255, 1.00),
+    1067px 178px 2px rgba(200, 240, 255, 0.92),
+    1345px 89px 3px rgba(255, 255, 255, 0.95),
+    1623px 234px 2px rgba(200, 240, 255, 0.88),
+    1890px 123px 2px rgba(255, 255, 255, 0.90),
+    234px 423px 2px rgba(200, 240, 255, 0.92),
+    567px 367px 3px rgba(255, 255, 255, 0.95),
+    901px 489px 2px rgba(200, 240, 255, 0.88),
+    1235px 401px 2px rgba(255, 255, 255, 0.90),
+    1568px 534px 3px rgba(200, 240, 255, 0.92),
+    1901px 367px 2px rgba(255, 255, 255, 0.85),
+    123px 634px 2px rgba(200, 240, 255, 0.90),
+    456px 712px 3px rgba(255, 255, 255, 0.95),
+    789px 656px 2px rgba(200, 240, 255, 0.88),
+    1123px 789px 2px rgba(255, 255, 255, 0.90),
+    1456px 723px 3px rgba(200, 240, 255, 0.92),
+    1789px 656px 2px rgba(255, 255, 255, 0.85),
+    567px 845px 2px rgba(200, 240, 255, 0.90);
+  animation: hh-twinkle 6s ease-in-out infinite alternate;
+}
+
+/* ============================================================
+   ATMOSPHERIC DEPTH GLOWS
+   Deep radial gradients creating perceived dimensionality
+   ============================================================ */
+
+.hh-atmos {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+/* Top-left deep blue glow */
+.hh-atmos--tl {
+  z-index: 3;
+  width: 900px;
+  height: 700px;
+  top: -250px;
+  left: -300px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 60, 200, 0.22) 0%,
+    rgba(0, 40, 150, 0.14) 35%,
+    rgba(0, 20, 80, 0.08) 60%,
+    transparent 80%
+  );
+  filter: blur(40px);
+}
+
+/* Bottom-right cyan-violet glow */
+.hh-atmos--br {
+  z-index: 3;
+  width: 1100px;
+  height: 800px;
+  bottom: -300px;
+  right: -350px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 200, 240, 0.20) 0%,
+    rgba(80, 60, 220, 0.14) 30%,
+    rgba(0, 100, 200, 0.08) 55%,
+    transparent 78%
+  );
+  filter: blur(55px);
+}
+
+/* Center ambient depth */
+.hh-atmos--center {
+  z-index: 3;
+  width: 1400px;
+  height: 600px;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 80, 180, 0.18) 0%,
+    rgba(20, 40, 120, 0.12) 40%,
+    transparent 75%
+  );
+  filter: blur(60px);
+}
+
+/* Focal bloom point — upper-center */
+.hh-atmos--focal {
+  z-index: 4;
+  width: 600px;
+  height: 300px;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 180, 255, 0.12) 0%,
+    rgba(0, 120, 220, 0.08) 50%,
+    transparent 80%
+  );
+  filter: blur(30px);
+  animation: hh-bloom-pulse 9s ease-in-out infinite;
+}
+
+/* ============================================================
+   AURORA WAVE LAYERS — 7 diagonal bands
+   Each layer is a wide rotated rectangle with vertical gradient.
+   Combined they create dimensional aurora borealis effect.
+   ============================================================ */
+
+.hh-aurora {
+  position: absolute;
+  pointer-events: none;
+  transform-origin: center center;
+}
+
+/* ── Aurora 1: Intense cyan primary sweep ── */
+.hh-aurora--1 {
+  z-index: 5;
+  width: 180%;
+  height: 420px;
+  bottom: -160px;
+  left: -40%;
+  transform: rotate(-15deg);
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 190, 255, 0.06) 15%,
+    rgba(0, 215, 255, 0.22) 32%,
+    rgba(0, 235, 255, 0.52) 50%,
+    rgba(0, 220, 255, 0.38) 65%,
+    rgba(0, 190, 255, 0.15) 80%,
+    transparent 100%
+  );
+  filter: blur(22px);
+  animation: hh-aurora-1 14s ease-in-out infinite;
+}
+
+/* ── Aurora 2: Deep electric blue ── */
+.hh-aurora--2 {
+  z-index: 5;
+  width: 200%;
+  height: 580px;
+  bottom: -240px;
+  left: -50%;
+  transform: rotate(-18deg);
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 80, 255, 0.04) 18%,
+    rgba(15, 100, 255, 0.18) 36%,
+    rgba(20, 140, 255, 0.45) 52%,
+    rgba(15, 110, 255, 0.28) 68%,
+    rgba(0, 70, 220, 0.10) 83%,
+    transparent 100%
+  );
+  filter: blur(35px);
+  animation: hh-aurora-2 18s ease-in-out infinite;
+}
+
+/* ── Aurora 3: Deep violet / indigo ── */
+.hh-aurora--3 {
+  z-index: 4;
+  width: 220%;
+  height: 720px;
+  bottom: -320px;
+  left: -60%;
+  transform: rotate(-11deg);
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(90, 0, 200, 0.04) 20%,
+    rgba(120, 40, 240, 0.14) 38%,
+    rgba(140, 60, 255, 0.32) 54%,
+    rgba(110, 30, 220, 0.18) 70%,
+    rgba(80, 0, 180, 0.07) 85%,
+    transparent 100%
+  );
+  filter: blur(50px);
+  animation: hh-aurora-3 22s ease-in-out infinite;
+}
+
+/* ── Aurora 4: Bright aqua — tight high-intensity band ── */
+.hh-aurora--4 {
+  z-index: 6;
+  width: 160%;
+  height: 280px;
+  bottom: -60px;
+  left: -20%;
+  transform: rotate(-22deg);
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 240, 255, 0.08) 20%,
+    rgba(0, 255, 245, 0.35) 42%,
+    rgba(0, 240, 255, 0.68) 54%,
+    rgba(0, 240, 255, 0.35) 66%,
+    rgba(0, 220, 240, 0.10) 82%,
+    transparent 100%
+  );
+  filter: blur(14px);
+  animation: hh-aurora-4 10s ease-in-out infinite;
+}
+
+/* ── Aurora 5: Blue-white shimmer ── */
+.hh-aurora--5 {
+  z-index: 6;
+  width: 170%;
+  height: 260px;
+  bottom: 20px;
+  left: 5%;
+  transform: rotate(-20deg);
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(160, 225, 255, 0.05) 22%,
+    rgba(180, 235, 255, 0.22) 42%,
+    rgba(210, 245, 255, 0.55) 55%,
+    rgba(180, 235, 255, 0.22) 68%,
+    rgba(150, 215, 255, 0.06) 84%,
+    transparent 100%
+  );
+  filter: blur(10px);
+  animation: hh-aurora-5 8s ease-in-out infinite;
+}
+
+/* ── Aurora 6: Wide deep indigo base ── */
+.hh-aurora--6 {
+  z-index: 4;
+  width: 260%;
+  height: 950px;
+  bottom: -500px;
+  left: -80%;
+  transform: rotate(-8deg);
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(30, 0, 120, 0.05) 25%,
+    rgba(60, 10, 180, 0.18) 45%,
+    rgba(80, 20, 210, 0.30) 56%,
+    rgba(60, 10, 160, 0.15) 70%,
+    rgba(30, 0, 100, 0.05) 86%,
+    transparent 100%
+  );
+  filter: blur(60px);
+  animation: hh-aurora-6 28s ease-in-out infinite;
+}
+
+/* ── Aurora 7: Teal edge accent ── */
+.hh-aurora--7 {
+  z-index: 7;
+  width: 140%;
+  height: 180px;
+  bottom: 60px;
+  left: 30%;
+  transform: rotate(-26deg);
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 210, 180, 0.08) 25%,
+    rgba(0, 235, 210, 0.38) 46%,
+    rgba(0, 245, 225, 0.65) 55%,
+    rgba(0, 235, 210, 0.38) 64%,
+    rgba(0, 200, 170, 0.08) 78%,
+    transparent 100%
+  );
+  filter: blur(8px);
+  animation: hh-aurora-7 7s ease-in-out infinite;
+}
+
+/* ============================================================
+   DIAGONAL LIGHT TRAILS — lower-right emphasis
+   High-intensity thin beams sweeping across the lower quadrant
+   ============================================================ */
+
+.hh-trail {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 2px;
+  transform-origin: right center;
+}
+
+/* Trail 1: Bright cyan, primary beam */
+.hh-trail--1 {
+  z-index: 8;
+  width: 720px;
+  height: 2px;
+  bottom: 28%;
+  right: -120px;
+  transform: rotate(-28deg);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 210, 255, 0.45) 20%,
+    rgba(0, 235, 255, 0.90) 50%,
+    rgba(0, 220, 255, 0.75) 72%,
+    transparent 100%
+  );
+  filter: blur(1px);
+  box-shadow:
+    0 0 8px rgba(0, 220, 255, 0.80),
+    0 0 22px rgba(0, 220, 255, 0.45),
+    0 0 50px rgba(0, 200, 255, 0.20);
+  animation: hh-trail-shimmer 5s ease-in-out infinite;
+}
+
+/* Trail 2: White core, very fine */
+.hh-trail--2 {
+  z-index: 9;
+  width: 520px;
+  height: 1px;
+  bottom: 32%;
+  right: 30px;
+  transform: rotate(-32deg);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(210, 245, 255, 0.55) 25%,
+    rgba(240, 252, 255, 0.95) 50%,
+    rgba(220, 248, 255, 0.80) 72%,
+    transparent 100%
+  );
+  box-shadow:
+    0 0 4px rgba(220, 248, 255, 0.90),
+    0 0 14px rgba(200, 240, 255, 0.50);
+  animation: hh-trail-shimmer 4s ease-in-out infinite 0.8s;
+}
+
+/* Trail 3: Electric blue, wider fill beam */
+.hh-trail--3 {
+  z-index: 8;
+  width: 950px;
+  height: 4px;
+  bottom: 21%;
+  right: -180px;
+  transform: rotate(-24deg);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(20, 100, 255, 0.30) 15%,
+    rgba(40, 150, 255, 0.65) 35%,
+    rgba(60, 180, 255, 0.88) 50%,
+    rgba(40, 150, 255, 0.65) 68%,
+    rgba(20, 100, 255, 0.30) 84%,
+    transparent 100%
+  );
+  filter: blur(2px);
+  box-shadow:
+    0 0 15px rgba(40, 150, 255, 0.70),
+    0 0 40px rgba(30, 120, 255, 0.35),
+    0 0 80px rgba(20, 90, 255, 0.15);
+  animation: hh-trail-shimmer 7s ease-in-out infinite 1.5s;
+}
+
+/* Trail 4: Aqua, short sharp accent */
+.hh-trail--4 {
+  z-index: 9;
+  width: 580px;
+  height: 2px;
+  bottom: 17%;
+  right: 80px;
+  transform: rotate(-36deg);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 240, 220, 0.40) 22%,
+    rgba(0, 255, 230, 0.88) 50%,
+    rgba(0, 245, 220, 0.60) 72%,
+    transparent 100%
+  );
+  filter: blur(1px);
+  box-shadow:
+    0 0 6px rgba(0, 245, 225, 0.80),
+    0 0 18px rgba(0, 230, 210, 0.40);
+  animation: hh-trail-shimmer 6s ease-in-out infinite 2.2s;
+}
+
+/* Trail 5: Violet, broad soft sweep */
+.hh-trail--5 {
+  z-index: 7;
+  width: 1150px;
+  height: 6px;
+  bottom: 38%;
+  right: -250px;
+  transform: rotate(-20deg);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(100, 20, 220, 0.15) 15%,
+    rgba(140, 60, 255, 0.45) 38%,
+    rgba(170, 80, 255, 0.65) 52%,
+    rgba(140, 60, 255, 0.45) 66%,
+    rgba(100, 20, 220, 0.15) 83%,
+    transparent 100%
+  );
+  filter: blur(3px);
+  box-shadow:
+    0 0 20px rgba(140, 60, 255, 0.50),
+    0 0 55px rgba(110, 30, 220, 0.25);
+  animation: hh-trail-shimmer 9s ease-in-out infinite 0.4s;
+}
+
+/* ============================================================
+   RADIAL BLOOM FOCAL POINTS
+   Concentrated bright glows at strategic positions
+   ============================================================ */
+
+.hh-bloom {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+/* Bloom 1: Lower-right primary bloom */
+.hh-bloom--1 {
+  z-index: 8;
+  width: 600px;
+  height: 500px;
+  bottom: -100px;
+  right: -150px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 200, 255, 0.32) 0%,
+    rgba(0, 150, 230, 0.22) 25%,
+    rgba(20, 80, 200, 0.12) 50%,
+    rgba(0, 40, 120, 0.05) 72%,
+    transparent 88%
+  );
+  filter: blur(18px);
+  animation: hh-bloom-pulse 12s ease-in-out infinite;
+}
+
+/* Bloom 2: Center-right secondary bloom */
+.hh-bloom--2 {
+  z-index: 7;
+  width: 450px;
+  height: 350px;
+  bottom: 25%;
+  right: 5%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(60, 180, 255, 0.25) 0%,
+    rgba(20, 100, 220, 0.15) 30%,
+    rgba(0, 60, 160, 0.07) 60%,
+    transparent 85%
+  );
+  filter: blur(25px);
+  animation: hh-bloom-pulse 16s ease-in-out infinite 3s;
+}
+
+/* Bloom 3: Center upper accent bloom */
+.hh-bloom--3 {
+  z-index: 6;
+  width: 500px;
+  height: 250px;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 160, 255, 0.18) 0%,
+    rgba(20, 80, 200, 0.10) 40%,
+    transparent 75%
+  );
+  filter: blur(30px);
+  animation: hh-bloom-pulse 20s ease-in-out infinite 6s;
+}
+
+/* ============================================================
+   FOG / MIST ATMOSPHERIC OVERLAYS
+   Semi-transparent planes creating depth layering illusion
+   ============================================================ */
+
+.hh-fog {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Fog 1: lower depth fog */
+.hh-fog--1 {
+  z-index: 9;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 35%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(1, 4, 20, 0.20) 50%,
+    rgba(1, 4, 20, 0.55) 100%
+  );
+  filter: blur(4px);
+}
+
+/* Fog 2: side fog for vignette depth */
+.hh-fog--2 {
+  z-index: 9;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 100% at 0% 50%, rgba(0, 1, 10, 0.35) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 100% at 100% 50%, rgba(0, 1, 10, 0.35) 0%, transparent 65%);
+}
+
+/* ============================================================
+   EDGE VIGNETTE
+   Darkens corners and edges for cinematic framing
+   ============================================================ */
+.hh-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 110% 110% at 50% 50%,
+    transparent 45%,
+    rgba(0, 0, 8, 0.25) 65%,
+    rgba(0, 0, 8, 0.55) 82%,
+    rgba(0, 0, 8, 0.80) 100%
+  );
+}
+
+/* ============================================================
+   MAIN CONTENT
+   ============================================================ */
+
+.hh-content {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  text-align: center;
+  max-width: 900px;
+  width: 100%;
+  padding: 0 1rem;
+}
+
+/* ── Brand row ───────────────────────────────────────────── */
+.hh-brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.6rem;
+  margin-bottom: 1.2rem;
+}
+
+/* ── Glass H Logo ───────────────────────────────────────── */
+.hh-logo {
+  flex-shrink: 0;
+  filter:
+    drop-shadow(0 0 12px rgba(0, 210, 255, 0.75))
+    drop-shadow(0 0 28px rgba(0, 180, 255, 0.45))
+    drop-shadow(0 0 60px rgba(0, 140, 230, 0.22));
+  animation: hh-logo-glow 6s ease-in-out infinite;
+}
+
+.hh-logo-svg {
+  display: block;
+  width: 72px;
+  height: 90px;
+}
+
+/* ── Wordmark ───────────────────────────────────────────── */
+.hh-wordmark {
+  position: relative;
+  filter: drop-shadow(0 0 18px rgba(0, 200, 255, 0.30));
+}
+
+.hh-title {
+  margin: 0;
+  padding: 0;
+  font-size: clamp(3.2rem, 8vw, 6.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  display: flex;
+  align-items: flex-start;
+}
+
+/* "Hybrid" — clean white with soft glow */
+.hh-hybrid {
+  color: #ffffff;
+  text-shadow:
+    0 0 20px rgba(200, 235, 255, 0.50),
+    0 0 50px rgba(180, 220, 255, 0.20);
+}
+
+/* "AI" — aqua/cyan gradient */
+.hh-ai {
+  background: linear-gradient(
+    135deg,
+    #67e8f9 0%,
+    #22d3ee 25%,
+    #38bdf8 55%,
+    #7dd3fc 80%,
+    #bae6fd 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.70));
+}
+
+/* ™ mark */
+.hh-tm {
+  font-size: 0.28em;
+  font-weight: 500;
+  vertical-align: super;
+  letter-spacing: 0;
+  color: rgba(200, 240, 255, 0.70);
+  margin-left: 0.08em;
+  text-shadow: 0 0 8px rgba(100, 220, 255, 0.50);
+}
+
+/* ── Glowing Divider ────────────────────────────────────── */
+.hh-divider {
+  width: clamp(220px, 45vw, 420px);
+  height: 1px;
+  margin: 1.1rem auto 1.25rem;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 180, 255, 0.35) 15%,
+    rgba(0, 220, 255, 0.75) 35%,
+    rgba(180, 245, 255, 0.95) 50%,
+    rgba(0, 220, 255, 0.75) 65%,
+    rgba(0, 180, 255, 0.35) 83%,
+    transparent 100%
+  );
+  box-shadow:
+    0 0 4px rgba(0, 220, 255, 0.70),
+    0 0 12px rgba(0, 200, 255, 0.40),
+    0 0 28px rgba(0, 180, 255, 0.18);
+  animation: hh-divider-pulse 4s ease-in-out infinite;
+}
+
+/* ── Subtitle ───────────────────────────────────────────── */
+.hh-subtitle {
+  margin: 0 0 0.3rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.hh-sub-line {
+  display: block;
+  font-size: clamp(0.82rem, 2.2vw, 1.12rem);
+  font-weight: 400;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: rgba(190, 225, 255, 0.82);
+  text-shadow:
+    0 0 12px rgba(120, 200, 255, 0.40),
+    0 0 28px rgba(80, 170, 255, 0.18);
+}
+
+/* ── Children slot (e.g. login card) ───────────────────── */
+.hh-slot {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 2.6rem;
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+/* Starfield twinkle */
+@keyframes hh-twinkle {
+  0%   { opacity: 0.55; }
+  30%  { opacity: 0.85; }
+  60%  { opacity: 0.70; }
+  100% { opacity: 1.00; }
+}
+
+/* Aurora layer animations — each unique drift */
+@keyframes hh-aurora-1 {
+  0%, 100% { transform: rotate(-15deg) translateY(0)    scaleX(1.00); opacity: 0.90; }
+  35%       { transform: rotate(-14deg) translateY(-22px) scaleX(1.02); opacity: 1.00; }
+  70%       { transform: rotate(-16deg) translateY(12px)  scaleX(0.98); opacity: 0.80; }
+}
+
+@keyframes hh-aurora-2 {
+  0%, 100% { transform: rotate(-18deg) translateY(0)    scaleX(1.00); opacity: 0.85; }
+  40%       { transform: rotate(-17deg) translateY(-18px) scaleX(1.03); opacity: 0.95; }
+  75%       { transform: rotate(-19deg) translateY(15px)  scaleX(0.97); opacity: 0.75; }
+}
+
+@keyframes hh-aurora-3 {
+  0%, 100% { transform: rotate(-11deg) translateY(0)    scaleX(1.00); opacity: 0.80; }
+  45%       { transform: rotate(-10deg) translateY(-25px) scaleX(1.02); opacity: 0.92; }
+  80%       { transform: rotate(-12deg) translateY(10px)  scaleX(0.99); opacity: 0.72; }
+}
+
+@keyframes hh-aurora-4 {
+  0%, 100% { transform: rotate(-22deg) translateY(0)    scaleX(1.00); opacity: 0.95; }
+  30%       { transform: rotate(-21deg) translateY(-15px) scaleX(1.04); opacity: 1.00; }
+  65%       { transform: rotate(-23deg) translateY(8px)   scaleX(0.96); opacity: 0.85; }
+}
+
+@keyframes hh-aurora-5 {
+  0%, 100% { transform: rotate(-20deg) translateY(0)    scaleX(1.00); opacity: 0.90; }
+  38%       { transform: rotate(-19deg) translateY(-12px) scaleX(1.03); opacity: 1.00; }
+  72%       { transform: rotate(-21deg) translateY(10px)  scaleX(0.97); opacity: 0.80; }
+}
+
+@keyframes hh-aurora-6 {
+  0%, 100% { transform: rotate(-8deg) translateY(0)    scaleX(1.00); opacity: 0.75; }
+  50%       { transform: rotate(-7deg) translateY(-30px) scaleX(1.01); opacity: 0.90; }
+}
+
+@keyframes hh-aurora-7 {
+  0%, 100% { transform: rotate(-26deg) translateY(0)    scaleX(1.00); opacity: 0.92; }
+  25%       { transform: rotate(-25deg) translateY(-10px) scaleX(1.05); opacity: 1.00; }
+  60%       { transform: rotate(-27deg) translateY(6px)   scaleX(0.95); opacity: 0.82; }
+}
+
+/* Light trail shimmer */
+@keyframes hh-trail-shimmer {
+  0%, 100% { opacity: 0.65; }
+  45%       { opacity: 1.00; }
+  75%       { opacity: 0.80; }
+}
+
+/* Bloom pulsation */
+@keyframes hh-bloom-pulse {
+  0%, 100% { opacity: 0.75; transform: scale(1.00); }
+  50%       { opacity: 1.00; transform: scale(1.06); }
+}
+
+/* Logo glow breathe */
+@keyframes hh-logo-glow {
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 10px rgba(0, 210, 255, 0.60))
+      drop-shadow(0 0 24px rgba(0, 180, 255, 0.35))
+      drop-shadow(0 0 55px rgba(0, 140, 230, 0.18));
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 18px rgba(0, 230, 255, 0.90))
+      drop-shadow(0 0 40px rgba(0, 200, 255, 0.55))
+      drop-shadow(0 0 80px rgba(0, 160, 240, 0.28));
+  }
+}
+
+/* Divider pulse */
+@keyframes hh-divider-pulse {
+  0%, 100% { opacity: 0.80; box-shadow: 0 0 4px rgba(0, 220, 255, 0.60), 0 0 12px rgba(0, 200, 255, 0.30), 0 0 28px rgba(0, 180, 255, 0.12); }
+  50%       { opacity: 1.00; box-shadow: 0 0 8px rgba(0, 230, 255, 0.90), 0 0 22px rgba(0, 210, 255, 0.55), 0 0 48px rgba(0, 185, 255, 0.25); }
+}
+
+/* ============================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .hh-root {
+    padding: 2.5rem 1rem 3.5rem;
+  }
+
+  .hh-brand-row {
+    gap: 1rem;
+    flex-wrap: nowrap;
+  }
+
+  .hh-logo-svg {
+    width: 52px;
+    height: 65px;
+  }
+
+  .hh-title {
+    font-size: clamp(2.4rem, 10vw, 3.8rem);
+  }
+
+  .hh-sub-line {
+    letter-spacing: 0.12em;
+    font-size: clamp(0.72rem, 2.8vw, 0.92rem);
+  }
+
+  .hh-divider {
+    width: clamp(160px, 70vw, 320px);
+  }
+
+  /* Simplify some heavy effects on mobile for performance */
+  .hh-aurora--6 {
+    filter: blur(50px);
+    opacity: 0.7;
+  }
+
+  .hh-aurora--3 {
+    filter: blur(42px);
+  }
+
+  .hh-trail--3,
+  .hh-trail--5 {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .hh-brand-row {
+    gap: 0.75rem;
+  }
+
+  .hh-logo-svg {
+    width: 42px;
+    height: 52px;
+  }
+
+  .hh-title {
+    font-size: clamp(2rem, 12vw, 3rem);
+  }
+
+  .hh-sub-line {
+    letter-spacing: 0.08em;
+    font-size: 0.72rem;
+  }
+
+  .hh-slot {
+    margin-top: 2rem;
+  }
+}
+
+/* Reduce motion: disable all animations if user prefers */
+@media (prefers-reduced-motion: reduce) {
+  .hh-aurora--1,
+  .hh-aurora--2,
+  .hh-aurora--3,
+  .hh-aurora--4,
+  .hh-aurora--5,
+  .hh-aurora--6,
+  .hh-aurora--7,
+  .hh-trail--1,
+  .hh-trail--2,
+  .hh-trail--3,
+  .hh-trail--4,
+  .hh-trail--5,
+  .hh-bloom--1,
+  .hh-bloom--2,
+  .hh-bloom--3,
+  .hh-stars--sm::before,
+  .hh-stars--md::before,
+  .hh-stars--lg::before,
+  .hh-logo,
+  .hh-atmos--focal,
+  .hh-divider {
+    animation: none;
+  }
+}
