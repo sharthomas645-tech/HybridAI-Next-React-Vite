@@ -51,7 +51,7 @@ export default function CallbackPage() {
           throw new Error(data.detail ?? data.error ?? "Authentication failed");
         }
 
-        router.replace("/dashboard");
+        router.replace("/splash");
       } catch (err) {
         const msg = err instanceof Error ? err.message : "Authentication failed";
         setErrorMessage(msg);
