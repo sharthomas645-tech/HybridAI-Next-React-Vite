@@ -89,6 +89,13 @@ html, body {
   gap: 2.5rem;
 }
 
+/* When HybridHero is the background, push the login card to the lower portion */
+.login-container--hero {
+  justify-content: flex-end;
+  padding-bottom: 6vh;
+  gap: 0;
+}
+
 .brand-section {
   text-align: center;
   animation: fadeInDown 0.8s ease both;
