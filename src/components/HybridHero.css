@@ -235,6 +235,8 @@
   align-items: baseline;
   gap: 0;
   position: relative;
+  white-space: nowrap;
+  flex-wrap: nowrap;
 }
 
 /* "Hybrid" — crisp white */
@@ -245,13 +247,14 @@
     0 0 20px rgba(100, 170, 255, 0.25);
 }
 
-/* "AI" wrapper — positions ™ above AI */
+/* "AI" wrapper — positions ™ beside AI */
 .hh-ai-wrap {
   position: relative;
   display: inline-flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   line-height: 1;
+  gap: 0.1em;
 }
 
 /* "AI" — light aqua gradient */
