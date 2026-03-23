@@ -212,6 +212,14 @@
   animation: hh-fade-in 1s ease both;
 }
 
+/* ── H hexagon logo mark ────────────────────────────────── */
+.hh-logo {
+  width: clamp(3rem, 7vw, 5.5rem);
+  height: auto;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 12px rgba(0, 200, 255, 0.55));
+}
+
 @keyframes hh-fade-in {
   from { opacity: 0; transform: translateY(-18px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -272,7 +280,7 @@
   filter: drop-shadow(0 0 10px rgba(0, 200, 255, 0.55));
 }
 
-/* Trademark — above AI */
+/* Trademark — superscript above AI */
 .hh-tm {
   font-size: 0.22em;
   font-weight: 600;
@@ -280,8 +288,8 @@
   letter-spacing: 0;
   line-height: 1;
   text-shadow: 0 0 8px rgba(0, 200, 255, 0.40);
-  align-self: flex-end;
-  margin-bottom: -0.1em;
+  align-self: flex-start;
+  margin-top: 0.1em;
 }
 
 /* Subtitle line 1 */
