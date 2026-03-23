@@ -19,7 +19,7 @@ export default function Header({ user }: HeaderProps) {
   return (
     <nav className="dashboard-nav" style={{ position: "relative", zIndex: 10 }}>
       <div className="nav-brand">
-        <img src="/hybridai.png" alt="HybridAI" className="nav-logo-img" />
+        <img src="/hybridai.svg" alt="HybridAI" className="nav-logo-img" />
         <span className="nav-separator">|</span>
         <span className="nav-subtitle">Medical Chronology &amp; Analyzer Intelligence</span>
       </div>

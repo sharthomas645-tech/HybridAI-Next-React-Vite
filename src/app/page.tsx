@@ -31,7 +31,7 @@ export default function LoginPage() {
       <AuroraBackground />
       <div className="login-container">
         <div className="brand-section">
-          <img src="/hybridai.png" alt="HybridAI" className="hybrid-logo-img" />
+          <img src="/hybridai.svg" alt="HybridAI" className="hybrid-logo-img" />
           <h1 className="subtitle-1">Medical Chronology &amp; Analyzer Intelligence</h1>
           <h2 className="subtitle-2">We Make It Make Sense</h2>
         </div>
