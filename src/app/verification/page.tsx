@@ -1,3 +1,5 @@
+"use client";
+
 import { Navigate } from "react-router-dom";
 import { getSession } from "@/lib/auth";
 import AuroraBackground from "@/components/AuroraBackground";
