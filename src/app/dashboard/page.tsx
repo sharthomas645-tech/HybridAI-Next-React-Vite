@@ -1,11 +1,11 @@
-import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
+import { Navigate } from "react-router-dom";
 import DashboardClient from "@/components/Dashboard";
 import AuroraBackground from "@/components/AuroraBackground";
 
-export default async function DashboardPage() {
-  const session = await getSession();
-  if (!session) redirect("/");
+export default function DashboardPage() {
+  const session = getSession();
+  if (!session) return <Navigate to="/" replace />;
 
   return (
     <>

@@ -3,9 +3,10 @@ import "./HybridHero.css";
 
 interface HybridHeroProps {
   children?: ReactNode;
+  user?: { username: string; email: string };
 }
 
-export default function HybridHero({ children }: HybridHeroProps) {
+export default function HybridHero({ children, user: _user }: HybridHeroProps) {
   return (
     <section className="hh-root" aria-label="HybridAI hero banner">
       {/* Deep-blue gradient background is applied via CSS on hh-root */}

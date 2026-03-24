@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FC } from "react";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
 import { buildLogoutUrl } from "@/lib/entra-auth";
 
 type CaseType = "Personal Injury" | "Medical Malpractice" | "Birth Injury";
@@ -156,7 +156,7 @@ const metricConfig = [
 ];
 
 const Dashboard: FC<DashboardProps> = ({ user }) => {
-  const router = useRouter();
+  const navigate = useNavigate();
   const [selectedCaseType, setSelectedCaseType] = useState<CaseType | "All">("All");
   const [selectedCaseId, setSelectedCaseId]     = useState<string>(DEMO_CASES[0].id);
   const [alerts, setAlerts]                     = useState<Alert[]>(INITIAL_ALERTS);
@@ -280,19 +280,19 @@ const Dashboard: FC<DashboardProps> = ({ user }) => {
 
         {/* ── Action Buttons ──────────────────────────────────────── */}
         <div className="action-buttons-row">
-          <button className="action-btn-lg action-upload" onClick={() => router.push("/upload")}>
+          <button className="action-btn-lg action-upload" onClick={() => navigate("/upload")}>
             <span className="action-btn-lg-icon">📤</span>
             <span className="action-btn-lg-label">Upload Files</span>
           </button>
-          <button className="action-btn-lg action-build" onClick={() => router.push("/chronology")}>
+          <button className="action-btn-lg action-build" onClick={() => navigate("/chronology")}>
             <span className="action-btn-lg-icon">🗂️</span>
             <span className="action-btn-lg-label">Build Chronology</span>
           </button>
-          <button className="action-btn-lg action-rn" onClick={() => router.push("/verification")}>
+          <button className="action-btn-lg action-rn" onClick={() => navigate("/verification")}>
             <span className="action-btn-lg-icon">🩺</span>
             <span className="action-btn-lg-label">Request RN Review</span>
           </button>
-          <button className="action-btn-lg action-export" onClick={() => router.push("/chronology")}>
+          <button className="action-btn-lg action-export" onClick={() => navigate("/chronology")}>
             <span className="action-btn-lg-icon">📥</span>
             <span className="action-btn-lg-label">Export Case</span>
           </button>
@@ -438,7 +438,7 @@ const Dashboard: FC<DashboardProps> = ({ user }) => {
             <div className="active-case-files">
               <div className="active-files-header">
                 <span>Case Files ({activeCaseFiles.length})</span>
-                <button className="add-file-btn" onClick={() => router.push("/upload")}>
+                <button className="add-file-btn" onClick={() => navigate("/upload")}>
                   + Add File
                 </button>
               </div>

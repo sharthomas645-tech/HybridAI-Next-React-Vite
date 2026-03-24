@@ -1,12 +1,12 @@
-import { redirect } from "next/navigation";
+import { Navigate } from "react-router-dom";
 import { getSession } from "@/lib/auth";
 import FileUploadClient from "@/components/FileUpload";
 import AuroraBackground from "@/components/AuroraBackground";
 import Header from "@/components/Header";
 
-export default async function UploadPage() {
-  const session = await getSession();
-  if (!session) redirect("/");
+export default function UploadPage() {
+  const session = getSession();
+  if (!session) return <Navigate to="/" replace />;
 
   return (
     <>

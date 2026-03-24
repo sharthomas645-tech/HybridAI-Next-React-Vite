@@ -1,8 +1,6 @@
-import { cookies } from "next/headers";
 import { decodeJwtPayload } from "./entra-auth";
 
-export const SESSION_COOKIE = "hybridai_session";
-export const COOKIE_MAX_AGE = 60 * 60; // 1 hour
+export const SESSION_KEY = "hybridai_session";
 
 export interface SessionData {
   accessToken: string;
@@ -14,19 +12,30 @@ export interface SessionData {
   awsToken?: string;
 }
 
-/** Read and validate the session from httpOnly cookie (server-side only) */
-export async function getSession(): Promise<SessionData | null> {
-  const cookieStore = await cookies();
-  const raw = cookieStore.get(SESSION_COOKIE)?.value;
-  if (!raw) return null;
-
+/** Read and validate the session from sessionStorage (client-side) */
+export function getSession(): SessionData | null {
   try {
+    const raw = sessionStorage.getItem(SESSION_KEY);
+    if (!raw) return null;
     const session = JSON.parse(raw) as SessionData;
-    if (Date.now() > session.expiresAt) return null;
+    if (Date.now() > session.expiresAt) {
+      sessionStorage.removeItem(SESSION_KEY);
+      return null;
+    }
     return session;
   } catch {
     return null;
   }
+}
+
+/** Persist session to sessionStorage */
+export function saveSession(session: SessionData): void {
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+}
+
+/** Clear the current session */
+export function clearSession(): void {
+  sessionStorage.removeItem(SESSION_KEY);
 }
 
 /** Build session data from Entra ID token response and optional AWS token */
