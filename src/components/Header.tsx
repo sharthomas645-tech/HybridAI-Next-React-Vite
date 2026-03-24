@@ -1,73 +1,104 @@
-import { ReactNode } from "react";
-import "./HybridHero.css";
+"use client";
 
-interface HybridHeroProps {
-  children?: ReactNode;
+import { useRouter } from "next/navigation";
+import { buildLogoutUrl } from "@/lib/entra-auth";
+
+interface HeaderProps {
+  user: {
+    username: string;
+    email: string;
+  };
 }
 
-export default function HybridHero({ children }: HybridHeroProps) {
+export default function Header({ user }: HeaderProps) {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch {
+      // ignore
+    }
+    window.location.href = buildLogoutUrl();
+  };
+
+  const handleBack = () => {
+    router.push("/dashboard");
+  };
+
   return (
-    <section className="hh-root" aria-label="HybridAI hero banner">
-      {/* Deep-blue gradient background is applied via CSS on hh-root */}
+    <nav
+      style={{
+        position: "relative",
+        zIndex: 20,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: "0.75rem 1.5rem",
+        background: "var(--glass-bg)",
+        borderBottom: "1px solid var(--glass-border)",
+        backdropFilter: "blur(12px)",
+      }}
+    >
+      {/* Brand */}
+      <button
+        onClick={handleBack}
+        style={{
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          gap: "0.5rem",
+          color: "var(--text-primary)",
+          fontSize: "1rem",
+          fontWeight: 600,
+        }}
+      >
+        <svg width="28" height="28" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="navLogoStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#ffffff" />
+              <stop offset="100%" stopColor="#7ff0ff" />
+            </linearGradient>
+          </defs>
+          <polygon points="50,8 88,30 88,70 50,92 12,70 12,30" fill="rgba(255,255,255,0.1)" stroke="url(#navLogoStroke)" strokeWidth="2" />
+          <g transform="translate(50,50)">
+            <path d="M -15,-15 L -15,15 M 15,-15 L 15,15 M -15,0 L 15,0" stroke="url(#navLogoStroke)" strokeWidth="7" strokeLinecap="round" fill="none" />
+          </g>
+        </svg>
+        <span className="gradient-text-inline">HybridAI</span>
+      </button>
 
-      {/* Starfield layer */}
-      <div className="hh-starfield" aria-hidden="true" />
-
-      {/* Aurora / light-streak layers */}
-      <div className="hh-aurora hh-aurora-1" aria-hidden="true" />
-      <div className="hh-aurora hh-aurora-2" aria-hidden="true" />
-      <div className="hh-aurora hh-aurora-3" aria-hidden="true" />
-
-      {/* Ambient center glow */}
-      <div className="hh-glow-center" aria-hidden="true" />
-
-      {/* Hero branding content */}
-      <div className="hh-content">
-        <div className="hh-brand">
-
-          {/* Wordmark + subtitle */}
-          <div className="hh-text">
-            <h1 className="hh-title" aria-label="HybridAI">
-              {/* H Logo SVG */}
-              <svg className="hh-logo" width="70" height="70" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <defs>
-                  <linearGradient id="hLogoBg" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="rgba(255,255,255,0.15)" />
-                    <stop offset="100%" stopColor="rgba(0,200,255,0.25)" />
-                  </linearGradient>
-                  <linearGradient id="hLogoStroke" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#ffffff" />
-                    <stop offset="100%" stopColor="#7ff0ff" />
-                  </linearGradient>
-                </defs>
-                {/* Hexagonal background */}
-                <polygon points="50,8 88,30 88,70 50,92 12,70 12,30" fill="url(#hLogoBg)" stroke="url(#hLogoStroke)" strokeWidth="1.5" />
-                {/* H letter */}
-                <g transform="translate(50,50)">
-                  <path d="M -15,-15 L -15,15 M 15,-15 L 15,15 M -15,0 L 15,0" stroke="url(#hLogoStroke)" strokeWidth="6" strokeLinecap="round" fill="none" />
-                </g>
-              </svg>
-
-              <span className="hh-hybrid">Hybrid</span>
-              <span className="hh-ai-wrap">
-                <sup className="hh-tm">™</sup>
-                <span className="hh-ai">AI</span>
-              </span>
-            </h1>
-            <p className="hh-sub1">Medical Chronology &amp; Analyzer</p>
-            <p className="hh-sub2">Intelligence System</p>
-            <div className="hh-divider" aria-hidden="true" />
-          </div>
-
-        </div>
+      {/* User info + logout */}
+      <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+        <span
+          style={{
+            fontSize: "0.875rem",
+            color: "var(--text-muted)",
+            maxWidth: "200px",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {user.email || user.username}
+        </span>
+        <button
+          onClick={handleLogout}
+          style={{
+            background: "rgba(100,160,255,0.12)",
+            border: "1px solid var(--glass-border)",
+            borderRadius: "6px",
+            color: "var(--text-primary)",
+            cursor: "pointer",
+            fontSize: "0.8rem",
+            padding: "0.35rem 0.85rem",
+          }}
+        >
+          Sign Out
+        </button>
       </div>
-
-      {/* Slot for centered overlay content (e.g. login card) */}
-      {children && (
-        <div className="hh-slot">
-          {children}
-        </div>
-      )}
-    </section>
+    </nav>
   );
 }
