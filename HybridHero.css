@@ -1,0 +1,5 @@
+.hh-title {
+    white-space: nowrap;
+    gap: 0.2em;
+    flex-wrap: nowrap;
+}
