@@ -1,0 +1,18 @@
+{
+  "httpMethod": "POST",
+  "headers": {
+    "Content-Type": "application/json",
+    "Origin": "https://hybridai-next-react-vite-gxf6h5deegewg3bp.westus2-01.azurewebsites.net"
+  },
+  "requestContext": {
+    "requestId": "test-rn-request-001",
+    "http": {
+      "method": "POST",
+      "path": "/rn/request"
+    },
+    "authorizer": {
+      "firmId": "firm-12345"
+    }
+  },
+  "body": "{\"firmId\": \"firm-12345\", \"caseId\": \"case-abc-123\", \"licensureNumbers\": [\"RN-CA-123456\", \"RN-TX-654321\"], \"notes\": \"Urgent review requested for post-operative care records.\"}"
+}

@@ -1,0 +1,18 @@
+{
+  "httpMethod": "POST",
+  "headers": {
+    "Content-Type": "application/json",
+    "Origin": "https://hybridai-next-react-vite-gxf6h5deegewg3bp.westus2-01.azurewebsites.net"
+  },
+  "requestContext": {
+    "requestId": "test-rn-completed-001",
+    "http": {
+      "method": "POST",
+      "path": "/rn/completed"
+    },
+    "authorizer": {
+      "firmId": "firm-12345"
+    }
+  },
+  "body": "{\"firmId\": \"firm-12345\", \"caseId\": \"case-abc-123\", \"verificationStatus\": \"approved\", \"findings\": {\"licensureValid\": true, \"stateBoard\": \"California\", \"expirationDate\": \"2027-06-30\", \"disciplinaryActions\": false}, \"summary\": \"RN license verified and in good standing. No disciplinary actions found. Approved for case participation.\"}"
+}

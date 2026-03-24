@@ -1,0 +1,14 @@
+{
+  "name": "rn-verification-request",
+  "version": "1.0.0",
+  "description": "AWS Lambda — Receives and stores RN verification requests with KMS encryption",
+  "main": "index.js",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "export-case-chronology",
+  "version": "1.0.0",
+  "description": "AWS Lambda — Exports case chronology data to S3 with KMS encryption (ES Modules)",
+  "type": "module",
+  "main": "index.js",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
