@@ -1,5 +1,4 @@
-# This is the updated content for the main_hybridai-next-react-vite.yml file.
-# Updated push branch trigger from master to main.
+name: Build and Deploy HybridAI Next React Vite
 
 on:
   push:
@@ -15,4 +14,47 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      # other steps here
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build application
+        run: npm run build
+
+      - name: Create web.config for Azure
+        run: |
+          cat > web.config << 'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+          <configuration>
+            <system.webServer>
+              <rewrite>
+                <rules>
+                  <rule name="SPA" stopProcessing="true">
+                    <match url="^(?!.*\.(js|css|svg|png|jpg|jpeg|gif|ico|json)$).*$" />
+                    <action type="Rewrite" url="index.html" />
+                  </rule>
+                </rules>
+              </rewrite>
+              <httpTypes>
+                <mimeMap fileExtension=".js" mimeType="application/javascript; charset=utf-8" />
+              </httpTypes>
+              <staticContent>
+                <mimeMap fileExtension=".json" mimeType="application/json" />
+                <mimeMap fileExtension=".woff" mimeType="application/font-woff" />
+                <mimeMap fileExtension=".woff2" mimeType="application/font-woff2" />
+              </staticContent>
+            </system.webServer>
+          </configuration>
+          EOF
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'hybridai-next-react-vite'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./dist
