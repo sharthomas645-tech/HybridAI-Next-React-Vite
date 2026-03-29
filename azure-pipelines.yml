@@ -1,0 +1,28 @@
+# Azure Pipelines Configuration
+
+# This pipeline will build and deploy a Vite application
+
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '16.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm run build
+  displayName: 'Install Dependencies and Build'
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: '<your-azure-subscription>'
+    appType: 'webApp'
+    appName: '<your-app-name>'
+    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+  displayName: 'Deploy to Azure Web App'
