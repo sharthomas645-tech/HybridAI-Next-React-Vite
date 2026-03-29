@@ -19,6 +19,10 @@
 
 # production
 /build
+/dist
+
+# TypeScript incremental build info
+tsconfig.tsbuildinfo
 
 # misc
 .DS_Store
