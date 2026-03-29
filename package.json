@@ -3,14 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
     "lint": "biome check",
     "format": "biome format --write"
   },
   "dependencies": {
-    "next": "16.2.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-router-dom": "^7.13.2"
@@ -21,8 +20,9 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "babel-plugin-react-compiler": "1.0.0",
+    "@vitejs/plugin-react": "^4.4.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vite": "^6.3.2"
   }
 }
