@@ -1,16 +1,11 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { exchangeCodeForTokens } from "@/lib/entra-auth";
 import { buildSession, saveSession } from "@/lib/auth";
-import { AWS_APIS } from "@/lib/constants";
+import { exchangeEntraIdTokenForAWSCredentials } from "@/lib/aws-token-exchange";
 import AuroraBackground from "@/components/AuroraBackground";
-
-interface AwsTokenExchangeResponse {
-  token?: string;
-  access_token?: string;
-  expires_in?: number;
-  message?: string;
-}
 
 export default function CallbackPage() {
   const navigate = useNavigate();
@@ -52,26 +47,7 @@ export default function CallbackPage() {
         const tokens = await exchangeCodeForTokens(code, codeVerifier, redirectUri);
 
         // Step 2: Exchange Entra ID id_token for AWS token (best-effort)
-        let awsToken: string | undefined;
-        try {
-          const awsRes = await fetch(
-            `${AWS_APIS.TOKEN_EXCHANGE}/token-exchange`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${tokens.id_token}`,
-              },
-              body: JSON.stringify({ id_token: tokens.id_token }),
-            }
-          );
-          if (awsRes.ok) {
-            const awsData = (await awsRes.json()) as AwsTokenExchangeResponse;
-            awsToken = awsData.token ?? awsData.access_token;
-          }
-        } catch {
-          // AWS exchange is best-effort; don't block login
-        }
+        const awsToken = await exchangeEntraIdTokenForAWSCredentials(tokens.id_token);
 
         const session = buildSession(
           tokens.access_token,

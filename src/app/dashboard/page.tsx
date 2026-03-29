@@ -1,3 +1,5 @@
+"use client";
+
 import { getSession } from "@/lib/auth";
 import { Navigate } from "react-router-dom";
 import DashboardClient from "@/components/Dashboard";
